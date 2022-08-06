@@ -46,7 +46,7 @@ class _ListEditorState extends State<ChipListEditor> {
 
   @override
   Widget build(BuildContext context) {
-    FocusScope.of(context).requestFocus(_focusNode);
+//    FocusScope.of(context).requestFocus(_focusNode);
     return Container(
       color: Colors.white,
       child: Padding(

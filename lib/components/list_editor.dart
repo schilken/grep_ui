@@ -45,7 +45,7 @@ class _ListEditorState extends State<ListEditor> {
 
   @override
   Widget build(BuildContext context) {
-    FocusScope.of(context).requestFocus(_focusNode);
+//    FocusScope.of(context).requestFocus(_focusNode);
     return Container(
       color: Colors.white,
       child: Padding(
@@ -99,6 +99,7 @@ class _ListEditorState extends State<ListEditor> {
                 Expanded(
                   child: MacosTextField(
                     controller: _textEditingController,
+                    autofocus: true,
                     focusNode: _focusNode,
                     onChanged: (value) {},
                     onSubmitted: addItem,
