@@ -3,12 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:provider/provider.dart';
 import 'cubit/app_cubit.dart';
-import 'toolbar_searchfield.dart';
-import 'toolbar_widget_toggle.dart';
+import 'components/toolbar_searchfield.dart';
+import 'components/toolbar_widget_toggle.dart';
 
 ToolBar getCustomToolBar(BuildContext context) {
   return ToolBar(
-    title: const Text('USB File Finder'),
+    title: const Text('CLI Wrapper'),
     titleWidth: 250.0,
     actions: [
       ToolBarIconButton(
@@ -27,7 +27,7 @@ ToolBar getCustomToolBar(BuildContext context) {
         tooltipMessage: "Perform tasks with the selected items",
         items: [
           MacosPulldownMenuItem(
-            title: const Text("Open Folder to scan all Files"),
+            title: const Text("Example FolderPicker"),
             onTap: () async {
               String? selectedDirectory = await FilePicker.platform
                   .getDirectoryPath(initialDirectory: '/Volumes');
@@ -49,15 +49,6 @@ ToolBar getCustomToolBar(BuildContext context) {
             context.read<AppCubit>().setPrimarySearchWord(word),
         onSubmitted: (word) {
           context.read<AppCubit>().setPrimarySearchWord(word);
-          context.read<AppCubit>().search();
-        },
-      ),
-      ToolbarSearchfield(
-        placeholder: 'Secondary word',
-        onChanged: (word) =>
-            context.read<AppCubit>().setSecondarySearchWord(word),
-        onSubmitted: (word) {
-          context.read<AppCubit>().setSecondarySearchWord(word);
           context.read<AppCubit>().search();
         },
       ),

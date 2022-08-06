@@ -5,8 +5,7 @@ import 'package:macos_ui/macos_ui.dart';
 import 'cubit/app_cubit.dart';
 import 'detail_tile.dart';
 import 'get_custom_toolbar.dart';
-import 'highlighted_text.dart';
-import 'textfield_dialog.dart';
+import 'components/textfield_dialog.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({super.key});
@@ -31,7 +30,7 @@ class MainPage extends StatelessWidget {
       textAlign: TextAlign.center,
     );
     if (exclusionWord != null) {
-      await context.read<AppCubit>().addExclusionWord(exclusionWord);
+      await context.read<AppCubit>().exampleCall(exclusionWord);
     }
   }
 
@@ -58,31 +57,13 @@ class MainPage extends StatelessWidget {
                                 buttonSize: ButtonSize.large,
                                 isSecondary: true,
                                 color: Colors.white,
-                                child: const Text('Exclude'),
+                                child: const Text('Example Button'),
                                 onPressed: () => promptString(context),
                               ),
                               const SizedBox(
                                 width: 8,
                               ),
-                              Text(state.currentSearchParameters),
-                              if (state.currentSearchParameters.contains(':'))
-                                MacosIconButton(
-                                  backgroundColor: Colors.transparent,
-                                  icon: const MacosIcon(
-                                    CupertinoIcons.clear_circled,
-                                  ),
-                                  shape: BoxShape.circle,
-                                  onPressed: () =>
-                                      context.read<AppCubit>().clearExcludes(),
-                                ),
                               const Spacer(),
-                              if (state.isScanRunning)
-                                TextButton(
-                                    onPressed:
-                                        context.read<AppCubit>().cancelScan,
-                                    child: const Text('Cancel Scan')),
-                              Text(
-                                  'found ${state.primaryHitCount}(${state.secondaryHitCount}) of ${state.fileCount} Files'),
                             ],
                           ),
                         ),
@@ -97,34 +78,12 @@ class MainPage extends StatelessWidget {
                             itemCount: state.details.length,
                             itemBuilder: (context, index) {
                               final highlights = [
-                                state.primaryWord ?? '@',
-                                state.secondaryWord ?? '@',
+                                state.primaryWord ?? '@@'
                               ];
-
                               final detail = state.details[index];
-                              if (state.displayLineCount == 1) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 8.0, right: 8),
-                                  child: Row(children: [
-                                    HighlightedText(
-                                      text: detail.filePath ?? 'no preview',
-                                      highlights: highlights,
-                                    ),
-                                    const SizedBox(width: 12),
-                                    const Spacer(),
-                                    NameWithOpenInEditor(
-                                      name: detail.folderPath ?? 'no name',
-                                      path: detail.filePathName,
-                                    ),
-                                  ]),
-                                );
-                              }
                               return DetailTile(
                                 detail: detail,
                                 highlights: highlights,
-                                displayLinesCount: state.displayLineCount ?? 1,
-                                fileType: state.fileType,
                               );
                             },
                             separatorBuilder:

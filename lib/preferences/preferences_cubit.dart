@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import '../files_repository.dart';
 
-import '../preferences_repository.dart';
+import 'preferences_repository.dart';
 
 part 'preferences_state.dart';
 

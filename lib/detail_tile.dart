@@ -6,26 +6,22 @@ import 'package:macos_ui/macos_ui.dart';
 import 'package:provider/provider.dart';
 
 import 'cubit/app_cubit.dart';
-import 'highlighted_text.dart';
+import 'components/highlighted_text.dart';
 
 class DetailTile extends StatelessWidget {
   const DetailTile({
     super.key,
     required this.detail,
     required this.highlights,
-    required this.displayLinesCount,
-    this.fileType,
   });
   final Detail detail;
   final List<String> highlights;
-  final int displayLinesCount;
-  final String? fileType;
 
   @override
   Widget build(BuildContext context) {
     return MacosListTile(
       title: HighlightedText(
-        text: detail.filePath ?? 'no filepath',
+        text: detail.title ?? 'no title',
         highlights: highlights,
       ),
       subtitle: Padding(
@@ -33,14 +29,10 @@ class DetailTile extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              detail.storageName ?? 'no storage',
-            ),
-            const SizedBox(width: 12),
             ListTilePullDownMenu(detail: detail),
             const SizedBox(width: 12),
             HighlightedText(
-              text: detail.folderPath ?? 'no filename',
+              text: detail.filePathName ?? 'no filename',
               style: const TextStyle(
                 color: Colors.blueGrey,
               ),
@@ -67,27 +59,6 @@ class ListTilePullDownMenu extends StatelessWidget {
     return MacosPulldownButton(
       icon: CupertinoIcons.ellipsis_circle,
       items: [
-        MacosPulldownMenuItem(
-          title: const Text('hide selected file'),
-          onTap: () => debugPrint("hide selected file"),
-        ),
-        MacosPulldownMenuItem(
-          title: const Text('hide all in same folder'),
-          onTap: () => debugPrint("hide all in same folder"),
-        ),
-        MacosPulldownMenuItem(
-          title: const Text('hide all with same extension'),
-          onTap: () => debugPrint("hide all with same extension"),
-        ),
-        const MacosPulldownMenuDivider(),
-        MacosPulldownMenuItem(
-          title: const Text('show only files of this folder'),
-          onTap: () => context.read<AppCubit>().menuAction(
-                SearchResultAction.showOnlyFilesInsameFolder,
-                detail.folderPath,
-              ),
-        ),
-        const MacosPulldownMenuDivider(),
         MacosPulldownMenuItem(
           title: const Text('Show File in Finder'),
           onTap: () => detail.filePathName == null

@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'cubit/filter_cubit.dart';
-import 'device_list_view.dart';
-import 'macos_checkbox_list_tile.dart';
+import 'components/macos_checkbox_list_tile.dart';
 
 class FilterSidebar extends StatelessWidget {
   const FilterSidebar({
@@ -68,12 +67,6 @@ class FilterSidebar extends StatelessWidget {
                       .toggleSearchOption('searchInFoldername', value ?? false),
                   value: state.searchInFoldername,
                 ),
-              ),
-              const SizedBox(height: 20),
-              const SizedBox(
-                height: 315,
-                width: 220,
-                child: DeviceListView(),
               ),
               const SizedBox(height: 16),
             ],

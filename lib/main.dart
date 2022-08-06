@@ -8,18 +8,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'about_window.dart';
 import 'cubit/app_cubit.dart';
-import 'cubit/device_cubit.dart';
-import 'cubit/preferences_cubit.dart';
+import 'preferences/preferences_cubit.dart';
 import 'cubit/filter_cubit.dart';
 import 'event_bus.dart';
 import 'files_repository.dart';
 import 'filter_sidebar.dart';
 import 'main_page.dart';
 import 'overview_window.dart';
-import 'preferences_page.dart';
+import 'preferences/preferences_page.dart';
 
 import 'logger_page.dart';
-import 'preferences_repository.dart';
+import 'preferences/preferences_repository.dart';
 
 void main(List<String> args) {
   print('main: $args');
@@ -82,11 +81,6 @@ class App extends StatelessWidget {
                     context.read<PreferencesRepository>(),
                     context.read<FilesRepository>(),
                   )..load(),
-                ),
-                BlocProvider<DeviceCubit>(
-                  create: (context) =>
-                      DeviceCubit(context.read<FilesRepository>())
-                        ..initialize(),
                 ),
               ],
               child: MacosApp(

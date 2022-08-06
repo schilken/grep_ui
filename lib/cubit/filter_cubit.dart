@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import '../event_bus.dart';
 
-import '../preferences_repository.dart';
+import '../preferences/preferences_repository.dart';
 
 part 'filter_state.dart';
 

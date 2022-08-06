@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart' hide OverlayVisibilityMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:macos_ui/macos_ui.dart';
-import 'cubit/preferences_cubit.dart';
+import '../preferences/preferences_cubit.dart';
 
 class ChipListEditor extends StatefulWidget {
   const ChipListEditor({Key? key}) : super(key: key);

@@ -1,5 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'event_bus.dart';
+import '../event_bus.dart';
 
 class PreferencesRepository {
   PreferencesRepository() {
