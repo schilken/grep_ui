@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
+import 'event_bus.dart';
 import 'models/detail.dart';
 
 typedef IntCallback = void Function(
@@ -14,12 +15,14 @@ typedef IntCallback = void Function(
 class FilesRepository {
 
   final _pathNames = <String>[];
+  String? _lastFolderPath;
 
   Future<StreamSubscription<File>> scanFolder({
     required String folderPath,
     required IntCallback progressCallback,
     required IntCallback onScanDone,
   }) async {
+    _lastFolderPath = folderPath;
     _pathNames.clear();
     var dir = Directory(folderPath);
     var fileCount = 0;
@@ -75,6 +78,38 @@ class FilesRepository {
             ))
         .toList();
     return details;
+  }
+
+  Future<void> runCommand(String exampleParameter) async {
+    final workingDirectory = _lastFolderPath;
+    final process = await Process.start(
+      'grep',
+      ['-R', '--include', '*.dart', exampleParameter],
+      workingDirectory: workingDirectory,
+    );
+    process.stdout
+        .transform(utf8.decoder)
+        .transform(const LineSplitter())
+        .forEach(
+      (line) {
+        eventBus.fire('stdout> $line');
+        print(line);
+      },
+    ).whenComplete(() {
+      eventBus.fire('Stream closed in whenComplete');
+      return;
+    }).onError(
+      (error, stackTrace) {
+        eventBus.fire('Stream closed onError');
+        return;
+      },
+    );
+    process.stderr
+        .transform(utf8.decoder)
+        .transform(const LineSplitter())
+        .forEach((line) {
+      eventBus.fire('stderr> $line');
+    });
   }
 
 }

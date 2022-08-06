@@ -105,7 +105,6 @@ class MainView extends StatefulWidget {
 }
 
 class _MainViewState extends State<MainView> {
-  int _pageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -138,45 +137,54 @@ class _MainViewState extends State<MainView> {
           ],
         ),
       ],
-      body: MacosWindow(
-        sidebar: Sidebar(
-          minWidth: 240,
-          top: const FilterSidebar(),
-          builder: (context, scrollController) => SidebarItems(
-            currentIndex: _pageIndex,
-            scrollController: scrollController,
-            onChanged: (index) {
-              setState(() => _pageIndex = index);
-            },
-            items: const [
-              SidebarItem(
-                leading: MacosIcon(CupertinoIcons.search),
-                label: Text('Search Result'),
+      body: BlocBuilder<AppCubit, AppState>(
+        builder: (context, state) {
+          if (state is DetailsLoaded) {
+            return MacosWindow(
+              sidebar: Sidebar(
+                minWidth: 240,
+                top: const FilterSidebar(),
+                builder: (context, scrollController) => SidebarItems(
+                  currentIndex: state.sidebarPageIndex,
+                  scrollController: scrollController,
+                  onChanged: (index) =>
+                      context.read<AppCubit>().sidebarChanged(index),
+                  items: const [
+                    SidebarItem(
+                      leading: MacosIcon(CupertinoIcons.search),
+                      label: Text('Search Result'),
+                    ),
+                    SidebarItem(
+                      leading: MacosIcon(CupertinoIcons.graph_square),
+                      label: Text('Preferences'),
+                    ),
+                    SidebarItem(
+                      leading: MacosIcon(CupertinoIcons.graph_square),
+                      label: Text('Logger'),
+                    ),
+                  ],
+                ),
+                bottom: const MacosListTile(
+                  leading: MacosIcon(CupertinoIcons.profile_circled),
+                  title: Text('Alfred Schilken'),
+                  subtitle: Text('alfred@schilken.de'),
+                ),
               ),
-              SidebarItem(
-                leading: MacosIcon(CupertinoIcons.graph_square),
-                label: Text('Preferences'),
+              child: IndexedStack(
+                index: state.sidebarPageIndex,
+                children: [
+                  MainPage(),
+                  PreferencesPage(),
+                  LoggerPage(eventBus.streamController.stream),
+                ],
               ),
-              SidebarItem(
-                leading: MacosIcon(CupertinoIcons.graph_square),
-                label: Text('Logger'),
-              ),
-            ],
-          ),
-          bottom: const MacosListTile(
-            leading: MacosIcon(CupertinoIcons.profile_circled),
-            title: Text('Alfred Schilken'),
-            subtitle: Text('alfred@schilken.de'),
-          ),
-        ),
-        child: IndexedStack(
-          index: _pageIndex,
-          children: [
-            MainPage(),
-            PreferencesPage(),
-            LoggerPage(eventBus.streamController.stream),
-          ],
-        ),
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
     );
   }

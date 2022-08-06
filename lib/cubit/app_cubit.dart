@@ -78,6 +78,7 @@ class AppCubit extends Cubit<AppState> {
   void _applyFilters(PreferencesChanged newSettings) {
     print('_applyFilters: $newSettings');
 //    filesRepository.includeHiddenFolders = newSettings.showHiddenFiles;
+    emitDetailsLoaded();
   }
 
   void openEditor(String? filePathName) {
@@ -91,6 +92,9 @@ class AppCubit extends Cubit<AppState> {
 
   exampleCall(String exampleParameter) {
     print('exampleCall: $exampleParameter');
+    filesRepository.runCommand(exampleParameter);
+    final currentState = state as DetailsLoaded;
+    emit(currentState.copyWith(sidebarPageIndex: 2));
   }
 
 
@@ -124,5 +128,10 @@ class AppCubit extends Cubit<AppState> {
       caseSensitiv: _searchCaseSensitiv,
     );
     emitDetailsLoaded(details: details);
+  }
+
+  sidebarChanged(int index) {
+    final currentState = state as DetailsLoaded;
+    emit(currentState.copyWith(sidebarPageIndex: index));
   }
 }

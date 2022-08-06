@@ -23,10 +23,12 @@ class DetailsLoaded extends AppState {
   final List<Detail> details;
   final int fileCount;
   final String? message;
+  final int sidebarPageIndex;
 
   const DetailsLoaded({
     required this.details,
     required this.fileCount,
+    this.sidebarPageIndex = 0,
     this.message,
     super.primaryWord,
   });
@@ -37,11 +39,13 @@ class DetailsLoaded extends AppState {
     int? fileCount,
     int? primaryHitCount,
     String? message,
+    int? sidebarPageIndex, 
   }) {
     return DetailsLoaded(
       details: details ?? this.details,
       fileCount: fileCount ?? this.fileCount,
       message: message ?? this.message,
+      sidebarPageIndex: sidebarPageIndex ?? this.sidebarPageIndex,
     );
   }
 
@@ -50,5 +54,6 @@ class DetailsLoaded extends AppState {
         fileCount,
         message,
         details,
+        sidebarPageIndex,
       ];
 }
