@@ -64,6 +64,7 @@ class MainPage extends StatelessWidget {
                                 width: 8,
                               ),
                               const Spacer(),
+                              Text('${state.fileCount} Files'),
                             ],
                           ),
                         ),

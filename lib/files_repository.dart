@@ -6,6 +6,8 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
+import 'models/detail.dart';
+
 typedef IntCallback = void Function(
   int fileCount,
 );
@@ -21,7 +23,7 @@ class FilesRepository {
     Stream<File> scannedFiles = scanningFilesWithAsyncRecursive(dir);
 
     final subscription = scannedFiles.listen((File file) async {
-      if (++fileCount % 100 == 0) {
+      if (++fileCount % 1000 == 0) {
         progressCallback(fileCount);
       }
     });
@@ -58,6 +60,16 @@ class FilesRepository {
   Future<void> runEjectCommand(String volumeName) async {
     var process = await Process.run('diskutil', ['eject', volumeName]);
     print('runEjectCommand: stdout:  ${process.stdout} err: ${process.stderr}');
+  }
+
+  List<Detail> search({String? primaryWord, required bool caseSensitiv}) {
+    final details = <Detail>[
+      Detail(
+        title: 'File 1',
+        filePathName: '/Users/user/Desktop/file1.txt',
+      ),
+    ];
+    return details;
   }
 
 }

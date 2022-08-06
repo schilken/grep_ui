@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 import '../event_bus.dart';
 import '../files_repository.dart';
+import '../models/detail.dart';
 
 part 'app_state.dart';
 
@@ -89,9 +90,8 @@ class AppCubit extends Cubit<AppState> {
     _searchCaseSensitiv = caseSensitiv;
   }
 
-  exampleCall(String exclusionWord) {
-    print('addExclusionWord: $exclusionWord');
-//    _exclusionWords.add(exclusionWord);
+  exampleCall(String exampleParameter) {
+    print('exampleCall: $exampleParameter');
   }
 
 
@@ -112,5 +112,12 @@ class AppCubit extends Cubit<AppState> {
     Process.run('open', ['-a', 'iTerm', dirname]);
   }
 
-  void search() {}
+  void search() {
+    print('search: $_primaryWord');
+    final details = filesRepository.search(
+      primaryWord: _primaryWord,
+      caseSensitiv: _searchCaseSensitiv,
+    );
+    emitDetailsLoaded(details: details);
+  }
 }

@@ -14,26 +14,6 @@ class AppInitial extends AppState {
   List<Object?> get props => [];
 }
 
-class Detail {
-  final String? title;
-  final String? filePathName;
-
-  Detail({
-    this.title,
-    this.filePathName,
-  });
-
-  Detail copyWith({
-    String? title,
-    String? filePathName,
-  }) {
-    return Detail(
-      title: title ?? title,
-      filePathName: filePathName ?? this.filePathName,
-    );
-  }
-}
-
 class DetailsLoading extends AppState {
   @override
   List<Object?> get props => [];
