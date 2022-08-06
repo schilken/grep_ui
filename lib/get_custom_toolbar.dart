@@ -44,11 +44,11 @@ ToolBar getCustomToolBar(BuildContext context) {
       const ToolBarDivider(),
       const ToolBarSpacer(spacerUnits: 1),
       ToolbarSearchfield(
-        placeholder: 'Primary word',
+        placeholder: 'Search word',
         onChanged: (word) =>
-            context.read<AppCubit>().setPrimarySearchWord(word),
+            context.read<AppCubit>().setSearchWord(word),
         onSubmitted: (word) {
-          context.read<AppCubit>().setPrimarySearchWord(word);
+          context.read<AppCubit>().setSearchWord(word);
           context.read<AppCubit>().search();
         },
       ),

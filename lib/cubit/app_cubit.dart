@@ -28,16 +28,13 @@ class AppCubit extends Cubit<AppState> {
         () => eventBus.fire(PreferencesTrigger()));
   }
   final FilesRepository filesRepository;
-  String? _primaryWord;
+  String? _searchWord;
   int _fileCount = 0;
   StreamSubscription<File>? _subscription;
   bool _searchCaseSensitiv = false;
 
-  void setPrimarySearchWord(String? word) {
-    _primaryWord = _searchCaseSensitiv ? word : word?.toLowerCase();
-    if (_primaryWord != null && (_primaryWord ?? '').isEmpty) {
-      _primaryWord = null;
-    }
+  void setSearchWord(String? word) {
+    _searchWord = word;
   }
 
   void progressCallback(int fileCount) {
@@ -66,13 +63,14 @@ class AppCubit extends Cubit<AppState> {
 
   void emitDetailsLoaded({
     List<Detail> details = const [],
-    String currentSearchParameters = '',
+    String? message,
   }) {
     emit(
       DetailsLoaded(
         fileCount: _fileCount,
         details: details,
-        primaryWord: _primaryWord,
+        primaryWord: _searchWord,
+        message: message,
       ),
     );
   }
@@ -88,6 +86,7 @@ class AppCubit extends Cubit<AppState> {
 
   void setCaseSentitiv(bool caseSensitiv) {
     _searchCaseSensitiv = caseSensitiv;
+    search();
   }
 
   exampleCall(String exampleParameter) {
@@ -113,9 +112,15 @@ class AppCubit extends Cubit<AppState> {
   }
 
   void search() {
-    print('search: $_primaryWord');
+    if (_searchWord == null) {
+      emitDetailsLoaded(message: 'No search word entered');
+      return;
+    }
+    final searchWord =
+        _searchCaseSensitiv ? _searchWord : _searchWord?.toLowerCase();
+    print('search: $searchWord');
     final details = filesRepository.search(
-      primaryWord: _primaryWord,
+      primaryWord: searchWord,
       caseSensitiv: _searchCaseSensitiv,
     );
     emitDetailsLoaded(details: details);

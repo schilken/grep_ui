@@ -49,9 +49,9 @@ class DetailTile extends StatelessWidget {
 
 class ListTilePullDownMenu extends StatelessWidget {
   const ListTilePullDownMenu({
-    Key? key,
+    super.key,
     required this.detail,
-  }) : super(key: key);
+  });
 
   final Detail detail;
 
@@ -83,39 +83,6 @@ class ListTilePullDownMenu extends StatelessWidget {
           onTap: () => detail.filePathName == null
               ? null
               : context.read<AppCubit>().openEditor(detail.filePathName!),
-        ),
-      ],
-    );
-  }
-}
-
-class NameWithOpenInEditor extends StatelessWidget {
-  const NameWithOpenInEditor({
-    super.key,
-    required this.name,
-    this.highlights,
-    this.path,
-  });
-  final String name;
-  final List<String>? highlights;
-  final String? path;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        HighlightedText(
-          text: name,
-          highlights: highlights ?? [],
-        ),
-        MacosIconButton(
-          icon: const MacosIcon(
-            CupertinoIcons.link,
-          ),
-          shape: BoxShape.circle,
-          onPressed: () {
-            context.read<AppCubit>().openEditor(path);
-          },
         ),
       ],
     );

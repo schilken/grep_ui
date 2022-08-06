@@ -13,16 +13,20 @@ typedef IntCallback = void Function(
 );
 class FilesRepository {
 
+  final _pathNames = <String>[];
+
   Future<StreamSubscription<File>> scanFolder({
     required String folderPath,
     required IntCallback progressCallback,
     required IntCallback onScanDone,
   }) async {
+    _pathNames.clear();
     var dir = Directory(folderPath);
     var fileCount = 0;
     Stream<File> scannedFiles = scanningFilesWithAsyncRecursive(dir);
 
     final subscription = scannedFiles.listen((File file) async {
+      _pathNames.add(file.path);
       if (++fileCount % 1000 == 0) {
         progressCallback(fileCount);
       }
@@ -63,12 +67,13 @@ class FilesRepository {
   }
 
   List<Detail> search({String? primaryWord, required bool caseSensitiv}) {
-    final details = <Detail>[
-      Detail(
-        title: 'File 1',
-        filePathName: '/Users/user/Desktop/file1.txt',
-      ),
-    ];
+    final details = _pathNames
+        .where((name) => name.contains(primaryWord ?? ''))
+        .map((name) => Detail(
+              title: p.basename(name),
+              filePathName: name,
+            ))
+        .toList();
     return details;
   }
 
