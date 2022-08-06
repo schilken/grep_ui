@@ -21,8 +21,7 @@ class FilesRepository {
     Stream<File> scannedFiles = scanningFilesWithAsyncRecursive(dir);
 
     final subscription = scannedFiles.listen((File file) async {
-        if (++fileCount % 1000 == 0) {
-          final components = p.split(file.path);
+      if (++fileCount % 100 == 0) {
         progressCallback(fileCount);
       }
     });

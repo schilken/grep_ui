@@ -9,7 +9,7 @@ part 'filter_state.dart';
 
 class FilterCubit extends Cubit<FilterState> {
   FilterCubit(this._preferencesRepository) : super(SettingsInitial()) {
-    print('create FilterCubit');
+//    print('create FilterCubit');
     eventBus.on<PreferencesChanged>().listen((event) async {
       _emitFilterLoaded(event);
     });

@@ -5,7 +5,7 @@ import 'package:macos_ui/macos_ui.dart';
 import '../preferences/preferences_cubit.dart';
 
 class ListEditor extends StatefulWidget {
-  const ListEditor({Key? key}) : super(key: key);
+  const ListEditor({super.key});
 
   @override
   State<ListEditor> createState() => _ListEditorState();
@@ -16,6 +16,7 @@ class _ListEditorState extends State<ListEditor> {
   late ScrollController _scrollController;
   late FocusNode _focusNode;
 
+  @override
   initState() {
     super.initState();
     _textEditingController = TextEditingController();
@@ -24,13 +25,13 @@ class _ListEditorState extends State<ListEditor> {
   }
 
   addItem(String newItem) {
-    print('Adding $newItem');
+//    print('Adding $newItem');
     if (newItem.isEmpty) {
       return;
     }
     context.read<PreferencesCubit>().addIgnoredFolder(newItem);
     _textEditingController.clear();
-    Future.delayed(Duration(milliseconds: 100), () => _scrollToEnd());
+    Future.delayed(const Duration(milliseconds: 100), () => _scrollToEnd());
     FocusScope.of(context).requestFocus(_focusNode);
   }
 
@@ -51,8 +52,8 @@ class _ListEditorState extends State<ListEditor> {
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
+            const Padding(
+              padding: EdgeInsets.only(bottom: 8.0),
               child: Text('ListEditor'),
             ),
             Expanded(
@@ -77,8 +78,8 @@ class _ListEditorState extends State<ListEditor> {
                             );
                           });
                     } else if (state is PreferencesLoading) {
-                      return Center(
-                        child: const CupertinoActivityIndicator(),
+                      return const Center(
+                        child: CupertinoActivityIndicator(),
                       );
                     }
                     return Center(
@@ -93,8 +94,8 @@ class _ListEditorState extends State<ListEditor> {
             ),
             Row(
               children: [
-                Text('Add String to the List:'),
-                SizedBox(width: 20.0),
+                const Text('Add String to the List:'),
+                const SizedBox(width: 20.0),
                 Expanded(
                   child: MacosTextField(
                     controller: _textEditingController,
