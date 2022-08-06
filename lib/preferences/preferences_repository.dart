@@ -5,7 +5,6 @@ class PreferencesRepository {
   PreferencesRepository() {
     print('create PreferencesRepository');
     eventBus.on<PreferencesTrigger>().listen((event) async {
-      print('PreferencesTrigger received');
       _firePreferencesChanged();
     });
   }

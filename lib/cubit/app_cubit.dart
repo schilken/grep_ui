@@ -29,7 +29,6 @@ class AppCubit extends Cubit<AppState> {
   final FilesRepository filesRepository;
   String? _primaryWord;
   int _fileCount = 0;
-  int _primaryHitCount = 0;
   StreamSubscription<File>? _subscription;
   bool _searchCaseSensitiv = false;
 
@@ -52,7 +51,6 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Future<void> scanFolder({required String folderPath}) async {
-    _primaryHitCount = 0;
     _subscription = await filesRepository.scanFolder(
       folderPath: folderPath,
       progressCallback: progressCallback,
@@ -96,13 +94,6 @@ class AppCubit extends Cubit<AppState> {
 //    _exclusionWords.add(exclusionWord);
   }
 
-  clearExcludes() {
-//    _exclusionWords.clear();
-  }
-
-  void addToIgnoreFolderList() {
-//    _skipFolderPath = _folderPath;
-  }
 
   showInFinder(String filePath) {
     Process.run('open', ['-R', filePath]);

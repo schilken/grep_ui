@@ -53,27 +53,4 @@ class FilterCubit extends Cubit<FilterState> {
     return _preferencesRepository.getSearchOption(option);
   }
 
-  List<String> get ignoredFolders {
-    return _preferencesRepository.ignoredFolders;
-  }
-
-  List<String> get exclusionWords {
-    return _preferencesRepository.exclusionWords;
-  }
-
-  Future<void> addIgnoredFolder(String folder) async {
-    await _preferencesRepository.addIgnoredFolder(folder);
-  }
-
-  Future<void> removeIgnoredFolder(String folder) async {
-    await _preferencesRepository.removeIgnoredFolder(folder);
-  }
-
-  Future<void> addExclusionWord(String exclusionWord) async {
-    await _preferencesRepository.addExclusionWord(exclusionWord);
-  }
-
-  Future<void> removeExclusionWord(String exclusionWord) async {
-    await _preferencesRepository.removeExclusionWord(exclusionWord);
-  }
 }
