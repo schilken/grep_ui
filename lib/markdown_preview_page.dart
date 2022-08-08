@@ -79,6 +79,8 @@ class MarkdownPreviewPage extends StatelessWidget {
                             //            controller: controller,
                             data: state.content,
                             selectable: true,
+                            imageDirectory:
+                                '/Users/aschilken/Library/Mobile Documents/9CR7T2DMDG~com~ngocluu~onewriter/Documents/zk/',
                             styleSheet: MarkdownStyleSheet().copyWith(
                               h1Padding:
                                   const EdgeInsets.only(top: 12, bottom: 4),

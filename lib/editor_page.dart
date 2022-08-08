@@ -77,7 +77,7 @@ class EditorPage extends StatelessWidget {
                           child: SingleChildScrollView(
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text(state.content),
+                              child: SelectableText(state.content),
                             ),
                             controller: ScrollController(),
                           ),
