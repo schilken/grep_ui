@@ -112,4 +112,9 @@ class FilesRepository {
     });
   }
 
+  String readFile({required String filePath}) {
+    final file = File(filePath);
+    return file.readAsStringSync();
+  }
+
 }

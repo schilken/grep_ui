@@ -1,14 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'cubit/app_cubit.dart';
 import 'detail_tile.dart';
 import 'get_custom_toolbar.dart';
 import 'components/textfield_dialog.dart';
 
-class MainPage extends StatelessWidget {
-  const MainPage({super.key});
+class MarkdownPreviewPage extends StatelessWidget {
+  const MarkdownPreviewPage({super.key});
 
   promptString(BuildContext context) async {
     final exclusionWord = await textFieldDialog(
@@ -74,12 +75,27 @@ class MainPage extends StatelessWidget {
                               color: Colors.red[100],
                               child: Text(state.message!)),
                         Expanded(
-                          child: SingleChildScrollView(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(state.content),
+                          child: Markdown(
+                            //            controller: controller,
+                            data: state.content,
+                            selectable: true,
+                            styleSheet: MarkdownStyleSheet().copyWith(
+                              h1Padding:
+                                  const EdgeInsets.only(top: 12, bottom: 4),
+                              h1: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              h2Padding:
+                                  const EdgeInsets.only(top: 12, bottom: 4),
+                              h2: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              p: const TextStyle(
+                                fontSize: 16,
+                              ),
                             ),
-                            controller: ScrollController(),
                           ),
                         ),
                       ],

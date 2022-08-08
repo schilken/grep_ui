@@ -1,4 +1,4 @@
-# cli_wrapper
+# medium_mate
 
 A starter Flutter app for macOS with `macos_ui`.
 

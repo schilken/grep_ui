@@ -24,7 +24,7 @@ class OverviewWindow extends StatelessWidget {
       ..sort((e1, e2) => e1.key.compareTo(e2.key));
     final dateFormat = DateFormat("yyyy-MM-dd HH:mm");
     return MacosApp(
-      title: 'cli_wrapper',
+      title: 'medium_mate',
       theme: MacosThemeData.light(),
       darkTheme: MacosThemeData.dark(),
       themeMode: ThemeMode.system,

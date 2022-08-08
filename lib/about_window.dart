@@ -15,7 +15,7 @@ class AboutWindow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MacosApp(
-      title: 'cli_wrapper',
+      title: 'Medium Mate',
       theme: MacosThemeData.light(),
       darkTheme: MacosThemeData.dark(),
       themeMode: ThemeMode.system,

@@ -1,4 +1,4 @@
-name: cli_wrapper
+name: medium_mate
 description: wrapper on CLI tool
 publish_to: 'none'
 version: 1.0.0+1
@@ -28,6 +28,7 @@ dependencies:
   meta: ^1.7.0
   event_bus: ^2.0.0
   intl: ^0.17.0
+  flutter_markdown: ^0.6.10+3
 
 dev_dependencies:
   flutter_test:

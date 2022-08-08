@@ -28,6 +28,7 @@ class AppCubit extends Cubit<AppState> {
         () => eventBus.fire(PreferencesTrigger()));
   }
   final FilesRepository filesRepository;
+  String _content = 'no file loaded';
   String? _searchWord;
   int _fileCount = 0;
   StreamSubscription<File>? _subscription;
@@ -67,6 +68,7 @@ class AppCubit extends Cubit<AppState> {
   }) {
     emit(
       DetailsLoaded(
+        content: _content,
         fileCount: _fileCount,
         details: details,
         primaryWord: _searchWord,
@@ -133,5 +135,11 @@ class AppCubit extends Cubit<AppState> {
   sidebarChanged(int index) {
     final currentState = state as DetailsLoaded;
     emit(currentState.copyWith(sidebarPageIndex: index));
+  }
+
+  void readFile({required String filePath}) {
+    print('readFile: $filePath');
+    _content = filesRepository.readFile(filePath: filePath);
+    emitDetailsLoaded();
   }
 }

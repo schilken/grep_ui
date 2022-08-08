@@ -20,12 +20,14 @@ class DetailsLoading extends AppState {
 }
 
 class DetailsLoaded extends AppState {
+  final String content;
   final List<Detail> details;
   final int fileCount;
   final String? message;
   final int sidebarPageIndex;
 
   const DetailsLoaded({
+    required this.content,
     required this.details,
     required this.fileCount,
     this.sidebarPageIndex = 0,
@@ -34,6 +36,7 @@ class DetailsLoaded extends AppState {
   });
 
   DetailsLoaded copyWith({
+    String? content,
     List<Detail>? details,
     String? currentSearchParameters,
     int? fileCount,
@@ -42,6 +45,7 @@ class DetailsLoaded extends AppState {
     int? sidebarPageIndex, 
   }) {
     return DetailsLoaded(
+      content: content ?? this.content,
       details: details ?? this.details,
       fileCount: fileCount ?? this.fileCount,
       message: message ?? this.message,
@@ -51,6 +55,7 @@ class DetailsLoaded extends AppState {
 
   @override
   List<Object?> get props => [
+        content,
         fileCount,
         message,
         details,
