@@ -7,8 +7,10 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 import '../event_bus.dart';
-import '../files_repository.dart';
+import '../services_repository.dart';
 import '../models/detail.dart';
+import '../models/gist_model.dart';
+import '../preferences/preferences_repository.dart';
 
 part 'app_state.dart';
 
@@ -18,7 +20,9 @@ enum SearchResultAction {
 
 class AppCubit extends Cubit<AppState> {
   AppCubit(
-    this.filesRepository) : super(AppInitial()) {
+    this._filesRepository,
+    this._preferencesRepository,
+  ) : super(AppInitial()) {
 //    print('create AppCubit');
     eventBus.on<PreferencesChanged>().listen((event) async {
       _applyFilters(event);
@@ -27,7 +31,9 @@ class AppCubit extends Cubit<AppState> {
         const Duration(milliseconds: 100),
         () => eventBus.fire(PreferencesTrigger()));
   }
-  final FilesRepository filesRepository;
+  final ServicesRepository _filesRepository;
+  final PreferencesRepository _preferencesRepository;
+
   String _content = 'no file loaded';
   String? _searchWord;
   int _fileCount = 0;
@@ -50,7 +56,7 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Future<void> scanFolder({required String folderPath}) async {
-    _subscription = await filesRepository.scanFolder(
+    _subscription = await _filesRepository.scanFolder(
       folderPath: folderPath,
       progressCallback: progressCallback,
       onScanDone: onScanDone,
@@ -94,7 +100,7 @@ class AppCubit extends Cubit<AppState> {
 
   exampleCall(String exampleParameter) {
     print('exampleCall: $exampleParameter');
-    filesRepository.runCommand(exampleParameter);
+    _filesRepository.runCommand(exampleParameter);
     final currentState = state as DetailsLoaded;
     emit(currentState.copyWith(sidebarPageIndex: 2));
   }
@@ -125,7 +131,7 @@ class AppCubit extends Cubit<AppState> {
     final searchWord =
         _searchCaseSensitiv ? _searchWord : _searchWord?.toLowerCase();
     print('search: $searchWord');
-    final details = filesRepository.search(
+    final details = _filesRepository.search(
       primaryWord: searchWord,
       caseSensitiv: _searchCaseSensitiv,
     );
@@ -139,7 +145,25 @@ class AppCubit extends Cubit<AppState> {
 
   void readFile({required String filePath}) {
     print('readFile: $filePath');
-    _content = filesRepository.readFile(filePath: filePath);
+    _content = _filesRepository.readFile(filePath: filePath);
     emitDetailsLoaded();
+  }
+
+  Future<String> embedGistURL(String contents, TextSelection selection) async {
+    String newContents = contents;
+    var endOfSelection = selection.extentOffset;
+    String snippet = contents.substring(selection.baseOffset, endOfSelection);
+    var trimmed = snippet.trim();
+    if (trimmed.startsWith("```") && trimmed.endsWith("```")) {
+      String gistHtmlUrl = await _filesRepository.createGist(
+          GistModel(content: trimmed), _preferencesRepository.githubToken);
+      print("gistHtmlUrl: $gistHtmlUrl");
+      newContents = contents.replaceRange(
+          endOfSelection, endOfSelection, '\n$gistHtmlUrl\n');
+    } else {
+      print("|$trimmed| endOfSelection: $endOfSelection");
+      print("Snippet should begin and end with ```");
+    }
+    return newContents;
   }
 }

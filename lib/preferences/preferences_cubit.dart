@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../files_repository.dart';
+import '../services_repository.dart';
 
 import 'preferences_repository.dart';
 
@@ -12,7 +12,7 @@ class PreferencesCubit extends Cubit<PreferencesState> {
     this._filesRepository,
   ) : super(PreferencesInitial());
 
-  final FilesRepository _filesRepository;
+  final ServicesRepository _filesRepository;
   final PreferencesRepository _preferencesRepository;
 
   void load() async {
