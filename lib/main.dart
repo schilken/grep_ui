@@ -18,7 +18,7 @@ import 'editor_page.dart';
 import 'overview_window.dart';
 import 'preferences/preferences_page.dart';
 
-import 'services/logger_page.dart';
+import 'logger_page.dart';
 import 'preferences/preferences_repository.dart';
 
 void main(List<String> args) {
@@ -179,7 +179,6 @@ class _MainViewState extends State<MainView> {
                 index: state.sidebarPageIndex,
                 children: [
                   EditorPage(),
-//                  EditorPage(),
                   MarkdownPreviewPage(),
                   PreferencesPage(),
                   LoggerPage(eventBus.streamController.stream),
