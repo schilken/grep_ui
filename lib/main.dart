@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:macos_ui/macos_ui.dart';
+import 'package:mixin_logger/mixin_logger.dart';
 import 'pages/about_window.dart';
 import 'cubit/app_cubit.dart';
 import 'preferences/preferences_cubit.dart';
@@ -19,8 +20,10 @@ import 'preferences/preferences_page.dart';
 import 'pages/logger_page.dart';
 import 'preferences/preferences_repository.dart';
 
-void main(List<String> args) {
+void main(List<String> args) async {
   print('main: $args');
+  await initLogger('/tmp/macos_cli_wrapper_log');
+  i('after initLogger');
   if (args.firstOrNull == 'multi_window') {
     final windowId = int.parse(args[1]);
     final arguments = args[2].isEmpty
