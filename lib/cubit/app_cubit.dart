@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
+import 'package:mixin_logger/mixin_logger.dart';
 import 'package:path/path.dart' as p;
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,9 +13,6 @@ import '../models/detail.dart';
 
 part 'app_state.dart';
 
-enum SearchResultAction {
-  showOnlyFilesInsameFolder,
-}
 
 class AppCubit extends Cubit<AppState> {
   AppCubit(
@@ -90,20 +88,16 @@ class AppCubit extends Cubit<AppState> {
     search();
   }
 
-  exampleCall(String exampleParameter) {
+  exampleCall(String exampleParameter) async {
     print('exampleCall: $exampleParameter');
-    filesRepository.runCommand(exampleParameter);
+    final command = await filesRepository.runCommand(exampleParameter);
+    i('command: $command');
     final currentState = state as DetailsLoaded;
     emit(currentState.copyWith(sidebarPageIndex: 2));
   }
 
-
   showInFinder(String filePath) {
     Process.run('open', ['-R', filePath]);
-  }
-
-  menuAction(SearchResultAction menuAction, String? folderPath) {
-//    _onlyInThisFolder = folderPath;
   }
 
   copyToClipboard(String path) {

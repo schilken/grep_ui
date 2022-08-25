@@ -80,13 +80,16 @@ class FilesRepository {
     return details;
   }
 
-  Future<void> runCommand(String exampleParameter) async {
+  Future<String> runCommand(String exampleParameter) async {
     final workingDirectory = _lastFolderPath;
+    final programm = 'grep';
+    final parameters = ['-R', '--include', '*.dart', exampleParameter];
     final process = await Process.start(
-      'grep',
-      ['-R', '--include', '*.dart', exampleParameter],
+      programm,
+      parameters,
       workingDirectory: workingDirectory,
     );
+    final commandAsString = '$programm ${parameters.join(' ')}';
     process.stdout
         .transform(utf8.decoder)
         .transform(const LineSplitter())
@@ -110,5 +113,6 @@ class FilesRepository {
         .forEach((line) {
       eventBus.fire('stderr> $line');
     });
+    return commandAsString;
   }
 }
