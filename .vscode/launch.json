@@ -5,18 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "medium_mate",
+            "name": "cli_wrapper",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "medium_mate (profile mode)",
+            "name": "cli_wrapper (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "medium_mate (release mode)",
+            "name": "cli_wrapper (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

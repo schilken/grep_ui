@@ -74,12 +74,25 @@ class MainPage extends StatelessWidget {
                               color: Colors.red[100],
                               child: Text(state.message!)),
                         Expanded(
-                          child: SingleChildScrollView(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(state.content),
-                            ),
+                          child: ListView.separated(
                             controller: ScrollController(),
+                            itemCount: state.details.length,
+                            itemBuilder: (context, index) {
+                              final highlights = [
+                                state.primaryWord ?? '@@'
+                              ];
+                              final detail = state.details[index];
+                              return DetailTile(
+                                detail: detail,
+                                highlights: highlights,
+                              );
+                            },
+                            separatorBuilder:
+                                (BuildContext context, int index) {
+                              return const Divider(
+                                thickness: 2,
+                              );
+                            },
                           ),
                         ),
                       ],

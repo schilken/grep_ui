@@ -8,7 +8,7 @@ import 'components/toolbar_widget_toggle.dart';
 
 ToolBar getCustomToolBar(BuildContext context) {
   return ToolBar(
-    title: const Text('Medium Mate'),
+    title: const Text('CLI Wrapper'),
     titleWidth: 250.0,
     actions: [
       ToolBarIconButton(
@@ -27,15 +27,14 @@ ToolBar getCustomToolBar(BuildContext context) {
         tooltipMessage: "Perform tasks with the selected items",
         items: [
           MacosPulldownMenuItem(
-            title: const Text("Open Markdown File"),
+            title: const Text("Example FolderPicker"),
             onTap: () async {
-              final pickerResult =
-                  await FilePicker.platform.pickFiles(initialDirectory: '.');
-              if (pickerResult != null &&
-                  pickerResult.files.first.path != null) {
+              String? selectedDirectory = await FilePicker.platform
+                  .getDirectoryPath(initialDirectory: '/Volumes');
+              if (selectedDirectory != null) {
                 context
                     .read<AppCubit>()
-                    .readFile(filePath: pickerResult.files.first.path!);
+                    .scanFolder(folderPath: selectedDirectory);
               }
             },
           ),

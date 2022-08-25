@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:macos_ui/macos_ui.dart';
-import 'package:medium_mate/markdown_preview_page.dart';
 import 'about_window.dart';
 import 'cubit/app_cubit.dart';
 import 'preferences/preferences_cubit.dart';
@@ -85,7 +84,7 @@ class App extends StatelessWidget {
                 ),
               ],
               child: MacosApp(
-                title: 'medium_mate',
+                title: 'cli_wrapper',
                 theme: MacosThemeData.light(),
                 darkTheme: MacosThemeData.dark(),
                 themeMode: ThemeMode.system,
@@ -112,7 +111,7 @@ class _MainViewState extends State<MainView> {
     return PlatformMenuBar(
       menus: [
         PlatformMenu(
-          label: 'Medium Mate',
+          label: 'OpenSourceBrowser',
           menus: [
             PlatformMenuItem(
               label: 'About',
@@ -128,7 +127,7 @@ class _MainViewState extends State<MainView> {
                 window
                   ..setFrame(const Offset(0, 0) & const Size(350, 350))
                   ..center()
-                  ..setTitle('About medium_mate')
+                  ..setTitle('About cli_wrapper')
                   ..show();
               },
             ),
@@ -153,11 +152,7 @@ class _MainViewState extends State<MainView> {
                   items: const [
                     SidebarItem(
                       leading: MacosIcon(CupertinoIcons.search),
-                      label: Text('Editor'),
-                    ),
-                    SidebarItem(
-                      leading: MacosIcon(CupertinoIcons.search),
-                      label: Text('Markdown Preview'),
+                      label: Text('Search Result'),
                     ),
                     SidebarItem(
                       leading: MacosIcon(CupertinoIcons.graph_square),
@@ -179,7 +174,6 @@ class _MainViewState extends State<MainView> {
                 index: state.sidebarPageIndex,
                 children: [
                   MainPage(),
-                  MarkdownPreviewPage(),
                   PreferencesPage(),
                   LoggerPage(eventBus.streamController.stream),
                 ],
