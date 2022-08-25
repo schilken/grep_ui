@@ -63,6 +63,7 @@ class MainPage extends StatelessWidget {
                               const SizedBox(
                                 width: 8,
                               ),
+                              SelectableText(state.commandAsString ?? ''),
                               const Spacer(),
                               Text('${state.fileCount} Files'),
                             ],

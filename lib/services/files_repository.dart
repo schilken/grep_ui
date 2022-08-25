@@ -3,100 +3,23 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
-
 import 'event_bus.dart';
-import '../models/detail.dart';
-
-typedef IntCallback = void Function(
-  int fileCount,
-);
 
 class FilesRepository {
-  final _pathNames = <String>[];
-  String? _lastFolderPath;
 
-  Future<StreamSubscription<File>> scanFolder({
-    required String folderPath,
-    required IntCallback progressCallback,
-    required IntCallback onScanDone,
-  }) async {
-    _lastFolderPath = folderPath;
-    _pathNames.clear();
-    var dir = Directory(folderPath);
-    var fileCount = 0;
-    Stream<File> scannedFiles = scanningFilesWithAsyncRecursive(dir);
-
-    final subscription = scannedFiles.listen((File file) async {
-      _pathNames.add(file.path);
-      if (++fileCount % 1000 == 0) {
-        progressCallback(fileCount);
-      }
-    });
-    subscription.onDone(
-      () async {
-//        closeAllSinks();
-        onScanDone(fileCount);
-      },
-    );
-    subscription.onError((e) {
-//      closeAllSinks();
-    });
-    return subscription;
-  }
-
-//async* + yield* for recursive functions
-  Stream<File> scanningFilesWithAsyncRecursive(Directory dir) async* {
-    //dirList is FileSystemEntity list for every directories/subdirectories
-    //entities in this list might be file, directory or link
-    try {
-      var dirList = dir.list(followLinks: false);
-      await for (final FileSystemEntity entity in dirList) {
-        if (entity is File) {
-          yield entity;
-        } else if (entity is Directory) {
-          yield* scanningFilesWithAsyncRecursive(Directory(entity.path));
-        }
-      }
-    } on Exception catch (e) {
-      print('exception: $e');
-    }
-  }
-
-  Future<void> runEjectCommand(String volumeName) async {
-    var process = await Process.run('diskutil', ['eject', volumeName]);
-    print('runEjectCommand: stdout:  ${process.stdout} err: ${process.stderr}');
-  }
-
-  List<Detail> search({String? primaryWord, required bool caseSensitiv}) {
-    final details = _pathNames
-        .where((name) => name.contains(primaryWord ?? ''))
-        .map((name) => Detail(
-              title: p.basename(name),
-              filePathName: name,
-            ))
-        .toList();
-    return details;
-  }
-
-  Future<String> runCommand(String exampleParameter) async {
-    final workingDirectory = _lastFolderPath;
-    final programm = 'grep';
-    final parameters = ['-R', '--include', '*.dart', exampleParameter];
+  Future<int> runCommand(
+      String programm, List<String> parameters, String workingDirectory) async {
     final process = await Process.start(
       programm,
       parameters,
       workingDirectory: workingDirectory,
     );
-    final commandAsString = '$programm ${parameters.join(' ')}';
     process.stdout
         .transform(utf8.decoder)
         .transform(const LineSplitter())
         .forEach(
       (line) {
         eventBus.fire('stdout> $line');
-        print(line);
       },
     ).whenComplete(() {
       eventBus.fire('Stream closed in whenComplete');
@@ -113,6 +36,6 @@ class FilesRepository {
         .forEach((line) {
       eventBus.fire('stderr> $line');
     });
-    return commandAsString;
+    return process.exitCode;
   }
 }

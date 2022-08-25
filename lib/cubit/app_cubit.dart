@@ -28,40 +28,21 @@ class AppCubit extends Cubit<AppState> {
   final FilesRepository filesRepository;
   String? _searchWord;
   int _fileCount = 0;
-  StreamSubscription<File>? _subscription;
   bool _searchCaseSensitiv = false;
+  String _currentFolder = '.';
 
   void setSearchWord(String? word) {
     _searchWord = word;
   }
 
-  void progressCallback(int fileCount) {
-    _fileCount = fileCount;
-    emitDetailsLoaded();
-  }
-
-  void onScanDone(int fileCount) {
-    _fileCount = fileCount;
-    emitDetailsLoaded();
-    eventBus.fire(const DevicesChanged());
-  }
-
-  Future<void> scanFolder({required String folderPath}) async {
-    _subscription = await filesRepository.scanFolder(
-      folderPath: folderPath,
-      progressCallback: progressCallback,
-      onScanDone: onScanDone,
-    );
-  }
-
-  Future<void> cancelScan() async {
-    await _subscription?.cancel();
-    emitDetailsLoaded();
+  Future<void> setFolder({required String folderPath}) async {
+    _currentFolder = folderPath;
   }
 
   void emitDetailsLoaded({
     List<Detail> details = const [],
     String? message,
+    String? commandAsString,
   }) {
     emit(
       DetailsLoaded(
@@ -69,6 +50,7 @@ class AppCubit extends Cubit<AppState> {
         details: details,
         primaryWord: _searchWord,
         message: message,
+        commandAsString: commandAsString,
       ),
     );
   }
@@ -86,11 +68,19 @@ class AppCubit extends Cubit<AppState> {
   void setCaseSentitiv(bool caseSensitiv) {
     _searchCaseSensitiv = caseSensitiv;
     search();
-  }
+  } 
 
   exampleCall(String exampleParameter) async {
     print('exampleCall: $exampleParameter');
-    final command = await filesRepository.runCommand(exampleParameter);
+    final programm = 'grep';
+    final parameters = ['-R', '--include', '*.dart', exampleParameter];
+    final commandAsString = '$programm ${parameters.join(' ')} $_currentFolder';
+    emitDetailsLoaded(
+      commandAsString: commandAsString,
+    );
+    await Future.delayed(const Duration(milliseconds: 500));
+    final command =
+        await filesRepository.runCommand(programm, parameters, _currentFolder);
     i('command: $command');
     final currentState = state as DetailsLoaded;
     emit(currentState.copyWith(sidebarPageIndex: 2));
@@ -114,14 +104,7 @@ class AppCubit extends Cubit<AppState> {
       emitDetailsLoaded(message: 'No search word entered');
       return;
     }
-    final searchWord =
-        _searchCaseSensitiv ? _searchWord : _searchWord?.toLowerCase();
-    print('search: $searchWord');
-    final details = filesRepository.search(
-      primaryWord: searchWord,
-      caseSensitiv: _searchCaseSensitiv,
-    );
-    emitDetailsLoaded(details: details);
+    emitDetailsLoaded(details: []);
   }
 
   sidebarChanged(int index) {

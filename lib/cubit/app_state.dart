@@ -2,12 +2,7 @@
 part of 'app_cubit.dart';
 
 @immutable
-abstract class AppState extends Equatable {
-  final String? primaryWord;
-  const AppState({
-    this.primaryWord,
-  });
-}
+abstract class AppState extends Equatable {}
 
 class AppInitial extends AppState {
   @override
@@ -24,13 +19,16 @@ class DetailsLoaded extends AppState {
   final int fileCount;
   final String? message;
   final int sidebarPageIndex;
+  final String? commandAsString;
+  final String? primaryWord;
 
-  const DetailsLoaded({
+  DetailsLoaded({
     required this.details,
     required this.fileCount,
     this.sidebarPageIndex = 0,
     this.message,
-    super.primaryWord,
+    this.commandAsString,
+    this.primaryWord,
   });
 
   DetailsLoaded copyWith({
@@ -40,12 +38,16 @@ class DetailsLoaded extends AppState {
     int? primaryHitCount,
     String? message,
     int? sidebarPageIndex, 
+    String? commandAsString,
+    String? primaryWord,
   }) {
     return DetailsLoaded(
       details: details ?? this.details,
       fileCount: fileCount ?? this.fileCount,
       message: message ?? this.message,
       sidebarPageIndex: sidebarPageIndex ?? this.sidebarPageIndex,
+      commandAsString: commandAsString ?? this.commandAsString,
+      primaryWord: primaryWord ?? this.primaryWord,
     );
   }
 
@@ -55,5 +57,6 @@ class DetailsLoaded extends AppState {
         message,
         details,
         sidebarPageIndex,
+        commandAsString,
       ];
 }
