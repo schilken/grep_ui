@@ -69,12 +69,20 @@ class AppCubit extends Cubit<AppState> {
 
   void setCaseSentitiv(bool caseSensitiv) {
     _searchCaseSensitiv = caseSensitiv;
-    search();
+    print('setCaseSentitiv: $_searchCaseSensitiv');
   } 
 
   exampleCall(String exampleParameter) async {
     const programm = 'grep';
-    final parameters = ['-R', '--include', '*.dart', exampleParameter];
+    final parameters = [
+      '-R',
+      '--include',
+      '*.dart',
+    ];
+    if (_searchCaseSensitiv == false) {
+      parameters.add('-i');
+    }
+    parameters.add(exampleParameter);
     final commandAsString = '$programm ${parameters.join(' ')} $_currentFolder';
     emitDetailsLoaded(
       message: commandAsString,
@@ -101,11 +109,11 @@ class AppCubit extends Cubit<AppState> {
   }
 
   void search() {
-    if (_searchWord == null) {
-      emitDetailsLoaded(message: 'No search word entered');
+    if (_searchWord == null || _searchWord!.length < 2) {
+      emitDetailsLoaded(message: 'No search word entered or lenght < 2');
       return;
     }
-    emitDetailsLoaded(details: []);
+    exampleCall(_searchWord!);
   }
 
   sidebarChanged(int index) {
