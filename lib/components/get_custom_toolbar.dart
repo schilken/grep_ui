@@ -2,9 +2,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:provider/provider.dart';
-import 'cubit/app_cubit.dart';
-import 'components/toolbar_searchfield.dart';
-import 'components/toolbar_widget_toggle.dart';
+import '../cubit/app_cubit.dart';
+import 'toolbar_searchfield.dart';
+import 'toolbar_widget_toggle.dart';
 
 ToolBar getCustomToolBar(BuildContext context) {
   return ToolBar(
@@ -45,8 +45,7 @@ ToolBar getCustomToolBar(BuildContext context) {
       const ToolBarSpacer(spacerUnits: 1),
       ToolbarSearchfield(
         placeholder: 'Search word',
-        onChanged: (word) =>
-            context.read<AppCubit>().setSearchWord(word),
+        onChanged: (word) => context.read<AppCubit>().setSearchWord(word),
         onSubmitted: (word) {
           context.read<AppCubit>().setSearchWord(word);
           context.read<AppCubit>().search();

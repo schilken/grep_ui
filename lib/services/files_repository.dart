@@ -7,13 +7,13 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import 'event_bus.dart';
-import 'models/detail.dart';
+import '../models/detail.dart';
 
 typedef IntCallback = void Function(
   int fileCount,
 );
-class FilesRepository {
 
+class FilesRepository {
   final _pathNames = <String>[];
   String? _lastFolderPath;
 
@@ -111,5 +111,4 @@ class FilesRepository {
       eventBus.fire('stderr> $line');
     });
   }
-
 }

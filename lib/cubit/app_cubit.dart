@@ -6,8 +6,8 @@ import 'package:path/path.dart' as p;
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
-import '../event_bus.dart';
-import '../files_repository.dart';
+import '../services/event_bus.dart';
+import '../services/files_repository.dart';
 import '../models/detail.dart';
 
 part 'app_state.dart';

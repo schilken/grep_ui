@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:macos_ui/macos_ui.dart';
-import 'cubit/filter_cubit.dart';
-import 'components/macos_checkbox_list_tile.dart';
+import '../cubit/filter_cubit.dart';
+import 'macos_checkbox_list_tile.dart';
 
 class FilterSidebar extends StatelessWidget {
   const FilterSidebar({
@@ -13,7 +13,7 @@ class FilterSidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FilterCubit, FilterState>(
       builder: (context, state) {
-//        print('FilterSidebar builder: ${state}');
+        print('FilterSidebar builder: ${state}');
 
         if (state is FilterLoaded) {
           return Column(

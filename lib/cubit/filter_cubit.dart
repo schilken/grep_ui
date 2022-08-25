@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import '../event_bus.dart';
+import '../services/event_bus.dart';
 
 import '../preferences/preferences_repository.dart';
 
@@ -27,6 +27,19 @@ class FilterCubit extends Cubit<FilterState> {
     'Dart Files',
   ];
 
+  void init() {
+    emit(FilterLoaded(
+      showHiddenFiles:
+          _preferencesRepository.getSearchOption('showHiddenFiles'),
+      fileTypeFilter: fileTypeFilter,
+      searchInFilename:
+          _preferencesRepository.getSearchOption('searchInFilename'),
+      searchInFoldername:
+          _preferencesRepository.getSearchOption('searchInFoldername'),
+      ignoredFolders: _preferencesRepository.ignoredFolders,
+      exclusionWords: _preferencesRepository.exclusionWords,
+    ));
+  }
 
   void _emitFilterLoaded(PreferencesChanged preferencesChanged) {
     emit(FilterLoaded(

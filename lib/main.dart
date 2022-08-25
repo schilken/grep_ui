@@ -6,18 +6,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:macos_ui/macos_ui.dart';
-import 'about_window.dart';
+import 'pages/about_window.dart';
 import 'cubit/app_cubit.dart';
 import 'preferences/preferences_cubit.dart';
 import 'cubit/filter_cubit.dart';
-import 'event_bus.dart';
-import 'files_repository.dart';
-import 'filter_sidebar.dart';
-import 'main_page.dart';
-import 'overview_window.dart';
+import 'services/event_bus.dart';
+import 'services/files_repository.dart';
+import 'components/filter_sidebar.dart';
+import 'pages/main_page.dart';
 import 'preferences/preferences_page.dart';
 
-import 'logger_page.dart';
+import 'pages/logger_page.dart';
 import 'preferences/preferences_repository.dart';
 
 void main(List<String> args) {
@@ -29,11 +28,6 @@ void main(List<String> args) {
         : jsonDecode(args[2]) as Map<String, dynamic>;
     if (arguments['args1'] == 'About') {
       runApp(AboutWindow(
-        windowController: WindowController.fromWindowId(windowId),
-        args: arguments,
-      ));
-    } else if (arguments['args1'] == 'Overview') {
-      runApp(OverviewWindow(
         windowController: WindowController.fromWindowId(windowId),
         args: arguments,
       ));
@@ -70,7 +64,7 @@ class App extends StatelessWidget {
                 BlocProvider(
                   create: (context) => FilterCubit(
                     context.read<PreferencesRepository>(),
-                  ),
+                  )..init(),
                 ),
                 BlocProvider(
                   create: (context) =>

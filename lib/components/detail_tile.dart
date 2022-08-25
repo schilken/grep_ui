@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:provider/provider.dart';
 
-import 'cubit/app_cubit.dart';
-import 'components/highlighted_text.dart';
-import 'models/detail.dart';
+import '../cubit/app_cubit.dart';
+import 'highlighted_text.dart';
+import '../models/detail.dart';
 
 class DetailTile extends StatelessWidget {
   const DetailTile({

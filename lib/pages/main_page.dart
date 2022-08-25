@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:macos_ui/macos_ui.dart';
-import 'cubit/app_cubit.dart';
-import 'detail_tile.dart';
-import 'get_custom_toolbar.dart';
-import 'components/textfield_dialog.dart';
+import '../cubit/app_cubit.dart';
+import '../components/detail_tile.dart';
+import '../components/get_custom_toolbar.dart';
+import '../components/textfield_dialog.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({super.key});
@@ -78,9 +78,7 @@ class MainPage extends StatelessWidget {
                             controller: ScrollController(),
                             itemCount: state.details.length,
                             itemBuilder: (context, index) {
-                              final highlights = [
-                                state.primaryWord ?? '@@'
-                              ];
+                              final highlights = [state.primaryWord ?? '@@'];
                               final detail = state.details[index];
                               return DetailTile(
                                 detail: detail,
