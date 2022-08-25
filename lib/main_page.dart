@@ -7,8 +7,8 @@ import 'detail_tile.dart';
 import 'get_custom_toolbar.dart';
 import 'components/textfield_dialog.dart';
 
-class EditorPage extends StatelessWidget {
-  const EditorPage({super.key});
+class MainPage extends StatelessWidget {
+  const MainPage({super.key});
 
   promptString(BuildContext context) async {
     final exclusionWord = await textFieldDialog(

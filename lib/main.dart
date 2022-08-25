@@ -14,7 +14,7 @@ import 'cubit/filter_cubit.dart';
 import 'event_bus.dart';
 import 'files_repository.dart';
 import 'filter_sidebar.dart';
-import 'editor_page.dart';
+import 'main_page.dart';
 import 'overview_window.dart';
 import 'preferences/preferences_page.dart';
 
@@ -178,7 +178,7 @@ class _MainViewState extends State<MainView> {
               child: IndexedStack(
                 index: state.sidebarPageIndex,
                 children: [
-                  EditorPage(),
+                  MainPage(),
                   MarkdownPreviewPage(),
                   PreferencesPage(),
                   LoggerPage(eventBus.streamController.stream),
