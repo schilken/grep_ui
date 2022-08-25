@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:macos_ui/macos_ui.dart';
+import '../components/message_bar.dart';
 import '../cubit/app_cubit.dart';
 import '../components/detail_tile.dart';
 import '../components/get_custom_toolbar.dart';
@@ -63,17 +64,19 @@ class MainPage extends StatelessWidget {
                               const SizedBox(
                                 width: 8,
                               ),
-                              SelectableText(state.commandAsString ?? ''),
+                              SelectableText(
+                                  state.currentFolder ?? 'no folder set'),
                               const Spacer(),
                               Text('${state.fileCount} Files'),
                             ],
                           ),
                         ),
                         if (state.message != null)
-                          Container(
-                              padding: const EdgeInsets.all(20),
-                              color: Colors.red[100],
-                              child: Text(state.message!)),
+                          MessageBar(
+                            message: state.message!,
+                            onDismiss: () =>
+                                context.read<AppCubit>().removeMessage(),
+                          ),
                         Expanded(
                           child: ListView.separated(
                             controller: ScrollController(),

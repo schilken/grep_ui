@@ -21,6 +21,7 @@ class DetailsLoaded extends AppState {
   final int sidebarPageIndex;
   final String? commandAsString;
   final String? primaryWord;
+  final String? currentFolder;
 
   DetailsLoaded({
     required this.details,
@@ -29,6 +30,7 @@ class DetailsLoaded extends AppState {
     this.message,
     this.commandAsString,
     this.primaryWord,
+    this.currentFolder,
   });
 
   DetailsLoaded copyWith({
@@ -40,6 +42,7 @@ class DetailsLoaded extends AppState {
     int? sidebarPageIndex, 
     String? commandAsString,
     String? primaryWord,
+    String? currentFolder,
   }) {
     return DetailsLoaded(
       details: details ?? this.details,
@@ -48,6 +51,7 @@ class DetailsLoaded extends AppState {
       sidebarPageIndex: sidebarPageIndex ?? this.sidebarPageIndex,
       commandAsString: commandAsString ?? this.commandAsString,
       primaryWord: primaryWord ?? this.primaryWord,
+      currentFolder: currentFolder ?? this.currentFolder,
     );
   }
 
@@ -58,5 +62,6 @@ class DetailsLoaded extends AppState {
         details,
         sidebarPageIndex,
         commandAsString,
+        currentFolder,
       ];
 }

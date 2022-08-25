@@ -37,6 +37,7 @@ class AppCubit extends Cubit<AppState> {
 
   Future<void> setFolder({required String folderPath}) async {
     _currentFolder = folderPath;
+    emitDetailsLoaded();
   }
 
   void emitDetailsLoaded({
@@ -51,6 +52,7 @@ class AppCubit extends Cubit<AppState> {
         primaryWord: _searchWord,
         message: message,
         commandAsString: commandAsString,
+        currentFolder: _currentFolder,
       ),
     );
   }
@@ -71,12 +73,11 @@ class AppCubit extends Cubit<AppState> {
   } 
 
   exampleCall(String exampleParameter) async {
-    print('exampleCall: $exampleParameter');
-    final programm = 'grep';
+    const programm = 'grep';
     final parameters = ['-R', '--include', '*.dart', exampleParameter];
     final commandAsString = '$programm ${parameters.join(' ')} $_currentFolder';
     emitDetailsLoaded(
-      commandAsString: commandAsString,
+      message: commandAsString,
     );
     await Future.delayed(const Duration(milliseconds: 500));
     final command =
@@ -110,5 +111,9 @@ class AppCubit extends Cubit<AppState> {
   sidebarChanged(int index) {
     final currentState = state as DetailsLoaded;
     emit(currentState.copyWith(sidebarPageIndex: index));
+  }
+
+  void removeMessage() {
+    emitDetailsLoaded();
   }
 }
