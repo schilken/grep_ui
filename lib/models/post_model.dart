@@ -7,7 +7,7 @@ class PostModel {
   String userId;
 
   void setTagList(String tagsAsString) {
-    tags = tagsAsString.replaceAll(' ', '').split(RegExp(r','));
+    tags = tagsAsString.trim().split(RegExp(r' +'));
   }
 
   Map<String, dynamic> toJson() => {

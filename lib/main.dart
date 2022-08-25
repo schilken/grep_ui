@@ -5,7 +5,6 @@ import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/io_client.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:medium_mate/markdown_preview_page.dart';
 import 'about_window.dart';
@@ -13,7 +12,7 @@ import 'cubit/app_cubit.dart';
 import 'preferences/preferences_cubit.dart';
 import 'cubit/filter_cubit.dart';
 import 'event_bus.dart';
-import 'services_repository.dart';
+import 'files_repository.dart';
 import 'filter_sidebar.dart';
 import 'editor_page.dart';
 import 'overview_window.dart';
@@ -60,14 +59,11 @@ class App extends StatelessWidget {
           }
           return MultiRepositoryProvider(
             providers: [
+              RepositoryProvider(
+                create: (context) => FilesRepository(),
+              ),
               RepositoryProvider<PreferencesRepository>.value(
                 value: snapshot.data!,
-              ),
-              RepositoryProvider(
-                create: (context) => ServicesRepository(
-                  IOClient(),
-                  context.read<PreferencesRepository>(),
-                ),
               ),
             ],
             child: MultiBlocProvider(
@@ -79,15 +75,12 @@ class App extends StatelessWidget {
                 ),
                 BlocProvider(
                   create: (context) =>
-                      AppCubit(
-                    context.read<ServicesRepository>(),
-                    context.read<PreferencesRepository>(),
-                  ),
+                      AppCubit(context.read<FilesRepository>()),
                 ),
                 BlocProvider(
                   create: (context) => PreferencesCubit(
                     context.read<PreferencesRepository>(),
-                    context.read<ServicesRepository>(),
+                    context.read<FilesRepository>(),
                   )..load(),
                 ),
               ],
