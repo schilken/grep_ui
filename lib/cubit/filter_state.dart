@@ -11,17 +11,17 @@ class SettingsInitial extends FilterState {
 
 class FilterLoaded extends FilterState {
   String fileTypeFilter;
-  bool showHiddenFiles;
-  bool searchInFilename;
-  bool searchInFoldername;
+  bool showWithContext;
+  bool ignoreCase;
+  bool useRegex;
   final List<String> ignoredFolders;
   final List<String> exclusionWords;
 
   FilterLoaded({
     required this.fileTypeFilter,
-    required this.showHiddenFiles,
-    required this.searchInFilename,
-    required this.searchInFoldername,
+    required this.showWithContext,
+    required this.ignoreCase,
+    required this.useRegex,
     required this.ignoredFolders,
     required this.exclusionWords,
   });
@@ -29,9 +29,9 @@ class FilterLoaded extends FilterState {
   @override
   List<Object?> get props => [
         fileTypeFilter,
-        showHiddenFiles,
-        searchInFilename,
-        searchInFoldername,
+        showWithContext,
+        ignoreCase,
+        useRegex,
         ignoredFolders,
         exclusionWords,
       ];

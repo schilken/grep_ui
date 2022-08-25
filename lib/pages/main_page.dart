@@ -13,9 +13,9 @@ class MainPage extends StatelessWidget {
   promptString(BuildContext context) async {
     final exclusionWord = await textFieldDialog(
       context,
-      title: const Text('Enter an exclusion word'),
+      title: const Text('Enter pattern'),
       description: const Text(
-          'Only lines NOT containing the entered word\nwill remain in the list.'),
+          'The grep command is run with this pattern.'),
       initialValue: '',
       textOK: const Text('OK'),
       textCancel: const Text('Abbrechen'),
@@ -57,7 +57,7 @@ class MainPage extends StatelessWidget {
                                 buttonSize: ButtonSize.large,
                                 isSecondary: true,
                                 color: Colors.white,
-                                child: const Text('Example Button'),
+                                child: const Text('Run grep Command'),
                                 onPressed: () => promptString(context),
                               ),
                               const SizedBox(

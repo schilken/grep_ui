@@ -41,31 +41,31 @@ class FilterSidebar extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 4, 0),
                 child: MacosCheckBoxListTile(
-                  title: Text('Include Hidden Folders'),
+                  title: Text('Ignore case'),
                   onChanged: (value) => context
                       .read<FilterCubit>()
-                      .toggleSearchOption('showHiddenFiles', value ?? false),
-                  value: state.showHiddenFiles,
+                      .toggleSearchOption('ignoreCase', value ?? false),
+                  value: state.ignoreCase,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 4, 0),
                 child: MacosCheckBoxListTile(
-                  title: Text('Search in Filename'),
+                  title: Text('Use regex'),
                   onChanged: (value) => context
                       .read<FilterCubit>()
-                      .toggleSearchOption('searchInFilename', value ?? false),
-                  value: state.searchInFilename,
+                      .toggleSearchOption('useRegex', value ?? false),
+                  value: state.useRegex,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 4, 0),
                 child: MacosCheckBoxListTile(
-                  title: Text('Search in Foldername'),
+                  title: Text('With 2 context lines'),
                   onChanged: (value) => context
                       .read<FilterCubit>()
-                      .toggleSearchOption('searchInFoldername', value ?? false),
-                  value: state.searchInFoldername,
+                      .toggleSearchOption('showWithContext', value ?? false),
+                  value: state.showWithContext,
                 ),
               ),
               const SizedBox(height: 16),

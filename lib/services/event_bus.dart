@@ -12,24 +12,24 @@ class PreferencesTrigger {}
 
 class PreferencesChanged {
   String fileTypeFilter;
-  bool showHiddenFiles;
-  bool searchInFilename;
-  bool searchInFoldername;
+  bool ignoreCase;
+  bool useRegex;
+  bool showWithContext;
   final List<String> ignoredFolders;
   final List<String> exclusionWords;
 
   PreferencesChanged({
     required this.fileTypeFilter,
-    required this.showHiddenFiles,
-    required this.searchInFilename,
-    required this.searchInFoldername,
+    required this.ignoreCase,
+    required this.useRegex,
+    required this.showWithContext,
     required this.ignoredFolders,
     required this.exclusionWords,
   });
 
   @override
   String toString() {
-    return 'PreferencesChanged(fileTypeFilter: $fileTypeFilter, showHiddenFiles: $showHiddenFiles, searchInFilename: $searchInFilename, searchInFoldername: $searchInFoldername, ignoredFolders: $ignoredFolders, exclusionWords: $exclusionWords)';
+    return 'PreferencesChanged(fileTypeFilter: $fileTypeFilter, ignoreCase: $ignoreCase, useRegex: $useRegex, showWithContext: $showWithContext, ignoredFolders: $ignoredFolders, exclusionWords: $exclusionWords)';
   }
 }
 class RescanDevice {

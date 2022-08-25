@@ -19,22 +19,20 @@ class FilterCubit extends Cubit<FilterState> {
 
   final allFileTypes = <String>[
     'Text Files',
-    'Audio Files',
-    'Video Files',
-    'Image Files',
-    'Misc Files',
-    'ZIP Files',
     'Dart Files',
+    'Swift Files',
+    'Markdown Files',
+    'YAML Files',
   ];
 
   void init() {
     emit(FilterLoaded(
-      showHiddenFiles:
+      showWithContext:
           _preferencesRepository.getSearchOption('showHiddenFiles'),
       fileTypeFilter: fileTypeFilter,
-      searchInFilename:
+      ignoreCase:
           _preferencesRepository.getSearchOption('searchInFilename'),
-      searchInFoldername:
+      useRegex:
           _preferencesRepository.getSearchOption('searchInFoldername'),
       ignoredFolders: _preferencesRepository.ignoredFolders,
       exclusionWords: _preferencesRepository.exclusionWords,
@@ -44,9 +42,9 @@ class FilterCubit extends Cubit<FilterState> {
   void _emitFilterLoaded(PreferencesChanged preferencesChanged) {
     emit(FilterLoaded(
       fileTypeFilter: fileTypeFilter,
-      showHiddenFiles: preferencesChanged.showHiddenFiles,
-      searchInFilename: preferencesChanged.searchInFilename,
-      searchInFoldername: preferencesChanged.searchInFoldername,
+      showWithContext: preferencesChanged.showWithContext,
+      ignoreCase: preferencesChanged.ignoreCase,
+      useRegex: preferencesChanged.useRegex,
       ignoredFolders: preferencesChanged.ignoredFolders,
       exclusionWords: preferencesChanged.exclusionWords,
     ));

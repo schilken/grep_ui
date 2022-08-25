@@ -27,9 +27,9 @@ class PreferencesRepository {
   void _firePreferencesChanged() {
     final settingsLoaded = PreferencesChanged(
       fileTypeFilter: fileTypeFilter,
-      showHiddenFiles: getSearchOption('showHiddenFiles'),
-      searchInFilename: getSearchOption('searchInFilename'),
-      searchInFoldername: getSearchOption('searchInFoldername'),
+      showWithContext: getSearchOption('showWithContext'),
+      ignoreCase: getSearchOption('ignoreCase'),
+      useRegex: getSearchOption('useRegex'),
       ignoredFolders: ignoredFolders,
       exclusionWords: exclusionWords,
     );
