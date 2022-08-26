@@ -79,6 +79,8 @@ class AppCubit extends Cubit<AppState> {
     const programm = 'grep';
     final parameters = [
       '-R',
+      '-I',
+      '-n',
       '--include',
       '*.$_fileExtension',
     ];
