@@ -97,20 +97,20 @@ class AppCubit extends Cubit<AppState> {
       message: commandAsString,
     );
     await Future.delayed(const Duration(milliseconds: 500));
-    handleCommandOutput(eventBus.streamController.stream);
+    final subscription = handleCommandOutput(eventBus.streamController.stream);
     final command =
         await filesRepository.runCommand(programm, parameters, _currentFolder);
     i('command: $command');
     final currentState = state as DetailsLoaded;
     final details = detailsFromSectionMap();
+    subscription.cancel();
     emit(currentState.copyWith(details: details, fileCount: details.length));
   }
 
-  handleCommandOutput(Stream<dynamic> stream) {
+  StreamSubscription<dynamic> handleCommandOutput(Stream<dynamic> stream) {
     sectionsMap.clear();
     final pattern = RegExp(r'^stdout> (.*)(-|:)([0-9]+)(-|:)(.*)$');
-    stream.listen((line) {
-//      print('line: $line');
+    final subscription = stream.listen((line) {
       final match = pattern.matchAsPrefix(line);
       if (match != null) {
         final String? filepath = match[1];
@@ -127,6 +127,7 @@ class AppCubit extends Cubit<AppState> {
         }
       }
     });
+    return subscription;
   }
 
   List<Detail> detailsFromSectionMap() {
