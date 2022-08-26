@@ -29,6 +29,7 @@ class AppCubit extends Cubit<AppState> {
   String? _searchWord;
   final int _fileCount = 0;
   bool _searchCaseSensitiv = false;
+  bool _showWithContext = false;
   String _currentFolder = '.';
   String? _fileExtension = 'dart';
 
@@ -61,7 +62,7 @@ class AppCubit extends Cubit<AppState> {
   void _applyFilters(PreferencesChanged newSettings) {
     print('_applyFilters: $newSettings');
     _fileExtension = newSettings.fileTypeFilter;
-//    filesRepository.includeHiddenFolders = newSettings.showHiddenFiles;
+    _showWithContext = newSettings.showWithContext;
     search();
   }
 
@@ -83,6 +84,9 @@ class AppCubit extends Cubit<AppState> {
     ];
     if (_searchCaseSensitiv == false) {
       parameters.add('-i');
+    }
+    if (_showWithContext == true) {
+      parameters.add('-C4');
     }
     parameters.add(exampleParameter);
     final commandAsString = '$programm ${parameters.join(' ')} $_currentFolder';

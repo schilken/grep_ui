@@ -61,7 +61,7 @@ class FilterSidebar extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 4, 0),
                 child: MacosCheckBoxListTile(
-                  title: const Text('With 2 context lines'),
+                  title: const Text('With 4 context lines'),
                   onChanged: (value) => context
                       .read<FilterCubit>()
                       .toggleSearchOption('showWithContext', value ?? false),
