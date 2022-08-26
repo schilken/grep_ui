@@ -13,13 +13,13 @@ class FilterSidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FilterCubit, FilterState>(
       builder: (context, state) {
-        print('FilterSidebar builder: ${state}');
+        print('FilterSidebar builder: $state');
 
         if (state is FilterLoaded) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Filter Files',
+              const Text('Filter Files with extension',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 16),
               MacosPopupButton<String>(
@@ -29,7 +29,7 @@ class FilterSidebar extends StatelessWidget {
                 },
                 items: context
                     .read<FilterCubit>()
-                    .allFileTypes
+                    .allFileExtensions
                     .map<MacosPopupMenuItem<String>>((String value) {
                   return MacosPopupMenuItem<String>(
                     value: value,
@@ -41,7 +41,7 @@ class FilterSidebar extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 4, 0),
                 child: MacosCheckBoxListTile(
-                  title: Text('Ignore case'),
+                  title: const Text('Ignore case'),
                   onChanged: (value) => context
                       .read<FilterCubit>()
                       .toggleSearchOption('ignoreCase', value ?? false),
@@ -51,7 +51,7 @@ class FilterSidebar extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 4, 0),
                 child: MacosCheckBoxListTile(
-                  title: Text('Use regex'),
+                  title: const Text('Use regex'),
                   onChanged: (value) => context
                       .read<FilterCubit>()
                       .toggleSearchOption('useRegex', value ?? false),
@@ -61,7 +61,7 @@ class FilterSidebar extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 4, 0),
                 child: MacosCheckBoxListTile(
-                  title: Text('With 2 context lines'),
+                  title: const Text('With 2 context lines'),
                   onChanged: (value) => context
                       .read<FilterCubit>()
                       .toggleSearchOption('showWithContext', value ?? false),

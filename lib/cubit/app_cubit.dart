@@ -27,9 +27,10 @@ class AppCubit extends Cubit<AppState> {
   }
   final FilesRepository filesRepository;
   String? _searchWord;
-  int _fileCount = 0;
+  final int _fileCount = 0;
   bool _searchCaseSensitiv = false;
   String _currentFolder = '.';
+  String? _fileExtension = 'dart';
 
   void setSearchWord(String? word) {
     _searchWord = word;
@@ -59,8 +60,9 @@ class AppCubit extends Cubit<AppState> {
 
   void _applyFilters(PreferencesChanged newSettings) {
     print('_applyFilters: $newSettings');
+    _fileExtension = newSettings.fileTypeFilter;
 //    filesRepository.includeHiddenFolders = newSettings.showHiddenFiles;
-    emitDetailsLoaded();
+    search();
   }
 
   void openEditor(String? filePathName) {
@@ -77,7 +79,7 @@ class AppCubit extends Cubit<AppState> {
     final parameters = [
       '-R',
       '--include',
-      '*.dart',
+      '*.$_fileExtension',
     ];
     if (_searchCaseSensitiv == false) {
       parameters.add('-i');

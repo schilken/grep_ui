@@ -17,12 +17,12 @@ class FilterCubit extends Cubit<FilterState> {
   }
   final PreferencesRepository _preferencesRepository;
 
-  final allFileTypes = <String>[
-    'Text Files',
-    'Dart Files',
-    'Swift Files',
-    'Markdown Files',
-    'YAML Files',
+  final allFileExtensions = <String>[
+    'dart',
+    'yaml',
+    'swift',
+    'md',
+    'txt',
   ];
 
   void init() {

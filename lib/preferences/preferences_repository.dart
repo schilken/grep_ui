@@ -10,7 +10,7 @@ class PreferencesRepository {
   }
   late SharedPreferences _prefs;
 
-  get fileTypeFilter => _prefs.getString('fileTypeFilter') ?? 'Text Files';
+  get fileTypeFilter => _prefs.getString('fileTypeFilter') ?? 'dart';
 
   Future<PreferencesRepository> initialize() async {
     await Future.delayed(const Duration(milliseconds: 1000));
