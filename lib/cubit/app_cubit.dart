@@ -114,9 +114,9 @@ class AppCubit extends Cubit<AppState> {
       final match = pattern.matchAsPrefix(line);
       if (match != null) {
         final String? filepath = match[1];
-        final String? separator1 = match[2];
-        final String? lineNumber = match[3];
-        final String? separator2 = match[4];
+        // final String? separator1 = match[2];
+        // final String? lineNumber = match[3];
+        // final String? separator2 = match[4];
         final String? sourceCode = match[5];
         if (filepath != null && sourceCode != null) {
           if (sectionsMap.containsKey(filepath)) {
@@ -134,6 +134,7 @@ class AppCubit extends Cubit<AppState> {
         .map((key) => Detail(
               title: p.dirname(key).replaceFirst('./', ''),
               filePathName: key,
+              lines: sectionsMap[key] ?? [],
             ))
         .toList();
   }

@@ -21,19 +21,26 @@ class DetailTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MacosListTile(
+      // leading: HighlightedText(
+      //   text: detail.title ?? 'no title',
+      //   highlights: highlights,
+      // ),
       title: HighlightedText(
-        text: detail.title ?? 'no title',
+        text: detail.filePathName ?? 'no filename',
         highlights: highlights,
       ),
       subtitle: Padding(
-        padding: const EdgeInsets.only(top: 4),
+        padding: const EdgeInsets.only(
+          top: 8,
+        ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             ListTilePullDownMenu(detail: detail),
             const SizedBox(width: 12),
             HighlightedText(
-              text: detail.filePathName ?? 'no filename',
+              text: detail.lines.join('\n'),
               style: const TextStyle(
                 color: Colors.blueGrey,
               ),
