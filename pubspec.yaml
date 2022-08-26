@@ -28,7 +28,11 @@ dependencies:
   meta: ^1.7.0
   event_bus: ^2.0.0
   intl: ^0.17.0
-  mixin_logger: ^0.0.1
+  mixin_logger: 
+    git:
+      url: https://github.com/schilken/flutter-plugins.git
+      path: packages/mixin_logger
+      ref: main
 
 dev_dependencies:
   flutter_test:
