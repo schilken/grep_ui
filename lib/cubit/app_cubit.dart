@@ -32,6 +32,7 @@ class AppCubit extends Cubit<AppState> {
   bool _showWithContext = false;
   String _currentFolder = '.';
   String? _fileExtension = 'dart';
+  final sectionsMap = <String, List<String>>{};
 
   void setSearchWord(String? word) {
     _searchWord = word;
@@ -96,11 +97,45 @@ class AppCubit extends Cubit<AppState> {
       message: commandAsString,
     );
     await Future.delayed(const Duration(milliseconds: 500));
+    handleCommandOutput(eventBus.streamController.stream);
     final command =
         await filesRepository.runCommand(programm, parameters, _currentFolder);
     i('command: $command');
     final currentState = state as DetailsLoaded;
-    emit(currentState.copyWith(sidebarPageIndex: 2));
+    final details = detailsFromSectionMap();
+    emit(currentState.copyWith(details: details, fileCount: details.length));
+  }
+
+  handleCommandOutput(Stream<dynamic> stream) {
+    sectionsMap.clear();
+    final pattern = RegExp(r'^stdout> (.*)(-|:)([0-9]+)(-|:)(.*)$');
+    stream.listen((line) {
+//      print('line: $line');
+      final match = pattern.matchAsPrefix(line);
+      if (match != null) {
+        final String? filepath = match[1];
+        final String? separator1 = match[2];
+        final String? lineNumber = match[3];
+        final String? separator2 = match[4];
+        final String? sourceCode = match[5];
+        if (filepath != null && sourceCode != null) {
+          if (sectionsMap.containsKey(filepath)) {
+            sectionsMap[filepath]!.add(sourceCode);
+          } else {
+            sectionsMap[filepath] = [sourceCode];
+          }
+        }
+      }
+    });
+  }
+
+  List<Detail> detailsFromSectionMap() {
+    return sectionsMap.keys
+        .map((key) => Detail(
+              title: p.dirname(key).replaceFirst('./', ''),
+              filePathName: key,
+            ))
+        .toList();
   }
 
   showInFinder(String filePath) {
@@ -133,3 +168,5 @@ class AppCubit extends Cubit<AppState> {
     emitDetailsLoaded();
   }
 }
+
+
