@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
-import 'package:mixin_logger/mixin_logger.dart';
+import 'package:mixin_logger/mixin_logger.dart' as log;
 import 'package:path/path.dart' as p;
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
@@ -100,7 +100,7 @@ class AppCubit extends Cubit<AppState> {
     final subscription = handleCommandOutput(eventBus.streamController.stream);
     final command =
         await filesRepository.runCommand(programm, parameters, _currentFolder);
-    i('command: $command');
+    log.i('command: $command');
     final currentState = state as DetailsLoaded;
     final details = detailsFromSectionMap();
     subscription.cancel();

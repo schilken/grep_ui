@@ -6,9 +6,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:macos_ui/macos_ui.dart';
-import 'package:mixin_logger/mixin_logger.dart';
+import 'package:mixin_logger/mixin_logger.dart' as log;
 import 'pages/about_window.dart';
 import 'cubit/app_cubit.dart';
+import 'pages/help_page.dart';
 import 'preferences/preferences_cubit.dart';
 import 'cubit/filter_cubit.dart';
 import 'services/event_bus.dart';
@@ -22,8 +23,8 @@ import 'preferences/preferences_repository.dart';
 
 void main(List<String> args) async {
   print('main: $args');
-  await initLogger('/tmp/macos_cli_wrapper_log');
-  i('after initLogger');
+  await log.initLogger('/tmp/macos_cli_wrapper_log');
+  log.i('after initLogger');
   if (args.firstOrNull == 'multi_window') {
     final windowId = int.parse(args[1]);
     final arguments = args[2].isEmpty
@@ -149,7 +150,7 @@ class _MainViewState extends State<MainView> {
                   items: const [
                     SidebarItem(
                       leading: MacosIcon(CupertinoIcons.search),
-                      label: Text('Search Result'),
+                      label: Text('Search'),
                     ),
                     SidebarItem(
                       leading: MacosIcon(CupertinoIcons.graph_square),
@@ -157,7 +158,11 @@ class _MainViewState extends State<MainView> {
                     ),
                     SidebarItem(
                       leading: MacosIcon(CupertinoIcons.graph_square),
-                      label: Text('Logger'),
+                      label: Text('Realtime Logger'),
+                    ),
+                    SidebarItem(
+                      leading: MacosIcon(CupertinoIcons.graph_square),
+                      label: Text('Help'),
                     ),
                   ],
                 ),
@@ -170,14 +175,15 @@ class _MainViewState extends State<MainView> {
               child: IndexedStack(
                 index: state.sidebarPageIndex,
                 children: [
-                  MainPage(),
-                  PreferencesPage(),
+                  const MainPage(),
+                  const PreferencesPage(),
                   LoggerPage(eventBus.streamController.stream),
+                  const HelpPage(),
                 ],
               ),
             );
           } else {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }

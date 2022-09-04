@@ -33,6 +33,7 @@ dependencies:
       url: https://github.com/schilken/flutter-plugins.git
       path: packages/mixin_logger
       ref: main
+  flutter_markdown: ^0.6.10+5
 
 dev_dependencies:
   flutter_test:
