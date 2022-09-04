@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../components/get_custom_toolbar.dart';
 import '../services/files_repository.dart';
+import 'package:mixin_logger/mixin_logger.dart' as log;
 
 class FileContentPage extends StatelessWidget {
   const FileContentPage({super.key, required this.filePath});
@@ -14,6 +15,8 @@ class FileContentPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double windowHeight = MediaQuery.of(context).size.height;
+    log.i('MediaQuery.height $windowHeight');
     return MacosScaffold(
       toolBar: getCustomToolBar(context),
       children: [
@@ -38,18 +41,28 @@ class FileContentPage extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(12, 20, 20, 20),
-                  child: FutureBuilder<String>(
-                      future:
-                          context.read<FilesRepository>().readFile(filePath),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return Text(snapshot.data!,
-                              style: const TextStyle(fontFeatures: [
-                                FontFeature.tabularFigures(),
-                              ]));
-                        }
-                        return const CircularProgressIndicator();
-                      }),
+                  child: SizedBox(
+                    height: windowHeight - 150,
+                    child: LayoutBuilder(builder: (context, constraints) {
+                      log.i('LayoutBuilder ${constraints.maxHeight}');
+                      return SingleChildScrollView(
+                        controller: ScrollController(),
+                        child: FutureBuilder<String>(
+                            future: context
+                                .read<FilesRepository>()
+                                .readFile(filePath),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return Text(snapshot.data!,
+                                    style: const TextStyle(fontFeatures: [
+                                      FontFeature.tabularFigures(),
+                                    ]));
+                              }
+                              return const CircularProgressIndicator();
+                            }),
+                      );
+                    }),
+                  ),
                 ),
               ],
             );
