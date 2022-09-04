@@ -9,6 +9,7 @@ import 'package:macos_ui/macos_ui.dart';
 import 'package:mixin_logger/mixin_logger.dart' as log;
 import 'pages/about_window.dart';
 import 'cubit/app_cubit.dart';
+import 'pages/file_content_page.dart';
 import 'pages/help_page.dart';
 import 'preferences/preferences_cubit.dart';
 import 'cubit/filter_cubit.dart';
@@ -21,9 +22,11 @@ import 'preferences/preferences_page.dart';
 import 'pages/logger_page.dart';
 import 'preferences/preferences_repository.dart';
 
+const loggerFolder = '/tmp/macos_cli_wrapper_log';
+
 void main(List<String> args) async {
   print('main: $args');
-  await log.initLogger('/tmp/macos_cli_wrapper_log');
+  await log.initLogger(loggerFolder);
   log.i('after initLogger');
   if (args.firstOrNull == 'multi_window') {
     final windowId = int.parse(args[1]);
@@ -153,7 +156,7 @@ class _MainViewState extends State<MainView> {
                       label: Text('Search'),
                     ),
                     SidebarItem(
-                      leading: MacosIcon(CupertinoIcons.graph_square),
+                      leading: MacosIcon(CupertinoIcons.gear),
                       label: Text('Preferences'),
                     ),
                     SidebarItem(
@@ -161,7 +164,11 @@ class _MainViewState extends State<MainView> {
                       label: Text('Realtime Logger'),
                     ),
                     SidebarItem(
-                      leading: MacosIcon(CupertinoIcons.graph_square),
+                      leading: MacosIcon(CupertinoIcons.archivebox),
+                      label: Text('Show Log file'),
+                    ),
+                    SidebarItem(
+                      leading: MacosIcon(CupertinoIcons.info_circle),
                       label: Text('Help'),
                     ),
                   ],
@@ -178,6 +185,7 @@ class _MainViewState extends State<MainView> {
                   const MainPage(),
                   const PreferencesPage(),
                   LoggerPage(eventBus.streamController.stream),
+                  const FileContentPage(filePath: '$loggerFolder/log_0.log'),
                   const HelpPage(),
                 ],
               ),

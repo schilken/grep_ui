@@ -38,4 +38,13 @@ class FilesRepository {
     });
     return process.exitCode;
   }
+
+  Future<String> readFile(String filePath) async {
+    try {
+      final file = File(filePath);
+      return await file.readAsString();
+    } on Exception catch (e) {
+      return e.toString();
+    }
+  }
 }

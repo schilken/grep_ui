@@ -35,10 +35,12 @@ class AppCubit extends Cubit<AppState> {
   final sectionsMap = <String, List<String>>{};
 
   void setSearchWord(String? word) {
+    log.i('setSearchWord: $word');
     _searchWord = word;
   }
 
   Future<void> setFolder({required String folderPath}) async {
+    log.i('setFolder: $folderPath');
     _currentFolder = folderPath;
     emitDetailsLoaded();
   }
@@ -48,6 +50,7 @@ class AppCubit extends Cubit<AppState> {
     String? message,
     String? commandAsString,
   }) {
+    log.i('emitDetailsLoaded: message: $message');
     emit(
       DetailsLoaded(
         fileCount: _fileCount,
@@ -61,7 +64,7 @@ class AppCubit extends Cubit<AppState> {
   }
 
   void _applyFilters(PreferencesChanged newSettings) {
-    print('_applyFilters: $newSettings');
+    log.i('_applyFilters: $newSettings');
     _fileExtension = newSettings.fileTypeFilter;
     _showWithContext = newSettings.showWithContext;
     search();
@@ -73,7 +76,7 @@ class AppCubit extends Cubit<AppState> {
 
   void setCaseSentitiv(bool caseSensitiv) {
     _searchCaseSensitiv = caseSensitiv;
-    print('setCaseSentitiv: $_searchCaseSensitiv');
+    log.i('setCaseSentitiv: $_searchCaseSensitiv');
   } 
 
   exampleCall(String exampleParameter) async {
@@ -93,6 +96,7 @@ class AppCubit extends Cubit<AppState> {
     }
     parameters.add(exampleParameter);
     final commandAsString = '$programm ${parameters.join(' ')} $_currentFolder';
+    log.i('call $commandAsString');
     emitDetailsLoaded(
       message: commandAsString,
     );
@@ -100,7 +104,7 @@ class AppCubit extends Cubit<AppState> {
     final subscription = handleCommandOutput(eventBus.streamController.stream);
     final command =
         await filesRepository.runCommand(programm, parameters, _currentFolder);
-    log.i('command: $command');
+    log.i('command returns with rc:: $command');
     final currentState = state as DetailsLoaded;
     final details = detailsFromSectionMap();
     subscription.cancel();
@@ -162,11 +166,13 @@ class AppCubit extends Cubit<AppState> {
   }
 
   sidebarChanged(int index) {
+    log.i('sidebarChanged to index $index');
     final currentState = state as DetailsLoaded;
     emit(currentState.copyWith(sidebarPageIndex: index));
   }
 
   void removeMessage() {
+    log.i('removeMessage');
     emitDetailsLoaded();
   }
 }
