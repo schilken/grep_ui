@@ -70,10 +70,6 @@ class AppCubit extends Cubit<AppState> {
     search();
   }
 
-  void openEditor(String? filePathName) {
-    Process.run('code', [filePathName!]);
-  }
-
   void setCaseSentitiv(bool caseSensitiv) {
     _searchCaseSensitiv = caseSensitiv;
     log.i('setCaseSentitiv: $_searchCaseSensitiv');
@@ -144,17 +140,25 @@ class AppCubit extends Cubit<AppState> {
         .toList();
   }
 
-  showInFinder(String filePath) {
-    Process.run('open', ['-R', filePath]);
+  showInFinder(String path) {
+    final fullPath = p.join(_currentFolder, path);
+    Process.run('open', ['-R', fullPath]);
   }
 
   copyToClipboard(String path) {
-    Clipboard.setData(ClipboardData(text: path));
+    final fullPath = p.join(_currentFolder, path);
+    Clipboard.setData(ClipboardData(text: fullPath));
   }
 
   showInTerminal(String path) {
-    final dirname = p.dirname(path);
+    final fullPath = p.join(_currentFolder, path);
+    final dirname = p.dirname(fullPath);
     Process.run('open', ['-a', 'iTerm', dirname]);
+  }
+
+  void openEditor(String? path) {
+    final fullPath = p.join(_currentFolder, path);
+    Process.run('code', [fullPath]);
   }
 
   void search() {
