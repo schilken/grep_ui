@@ -29,7 +29,7 @@ class PreferencesRepository {
       fileTypeFilter: fileTypeFilter,
       showWithContext: getSearchOption('showWithContext'),
       ignoreCase: getSearchOption('ignoreCase'),
-      useRegex: getSearchOption('useRegex'),
+      combineIntersection: getSearchOption('combineIntersection'),
       ignoredFolders: ignoredFolders,
       exclusionWords: exclusionWords,
     );

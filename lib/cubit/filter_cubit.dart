@@ -32,7 +32,7 @@ class FilterCubit extends Cubit<FilterState> {
       fileTypeFilter: fileTypeFilter,
       ignoreCase:
           _preferencesRepository.getSearchOption('searchInFilename'),
-      useRegex:
+      combineIntersection:
           _preferencesRepository.getSearchOption('searchInFoldername'),
       ignoredFolders: _preferencesRepository.ignoredFolders,
       exclusionWords: _preferencesRepository.exclusionWords,
@@ -44,7 +44,7 @@ class FilterCubit extends Cubit<FilterState> {
       fileTypeFilter: fileTypeFilter,
       showWithContext: preferencesChanged.showWithContext,
       ignoreCase: preferencesChanged.ignoreCase,
-      useRegex: preferencesChanged.useRegex,
+      combineIntersection: preferencesChanged.combineIntersection,
       ignoredFolders: preferencesChanged.ignoredFolders,
       exclusionWords: preferencesChanged.exclusionWords,
     ));

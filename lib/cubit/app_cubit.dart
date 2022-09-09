@@ -30,6 +30,8 @@ class AppCubit extends Cubit<AppState> {
   final int _fileCount = 0;
   bool _searchCaseSensitiv = false;
   bool _showWithContext = false;
+  bool _combineIntersection = false;
+
   String _currentFolder = '.';
   String? _fileExtension = 'dart';
   final sectionsMap = <String, List<String>>{};
@@ -68,6 +70,7 @@ class AppCubit extends Cubit<AppState> {
     log.i('_applyFilters: $newSettings');
     _fileExtension = newSettings.fileTypeFilter;
     _showWithContext = newSettings.showWithContext;
+    _combineIntersection = newSettings.combineIntersection;
     search();
   }
 
@@ -205,7 +208,10 @@ class AppCubit extends Cubit<AppState> {
       }
     }
     final currentState = state as DetailsLoaded;
-    final details = detailsFromSectionMap();
+    var details = detailsFromSectionMap();
+    if (_combineIntersection) {
+      details = filterDetails(details, highLights);
+    }
     emit(currentState.copyWith(
         details: details,
         fileCount: details.length,
@@ -233,6 +239,23 @@ class AppCubit extends Cubit<AppState> {
         }
       }
     }
+  }
+  
+  List<Detail> filterDetails(List<Detail> fullList, List<String> highLights) {
+    final filteredList = <Detail>[];
+    for (final detail in fullList) {
+      final joinedDetails = detail.lines.join(' ');
+      bool skip = false;
+      for (var ix = 0; ix < highLights.length && !skip; ix++) {
+        if (!joinedDetails.contains(highLights[ix])) {
+          skip = true;
+        }
+      }
+      if (skip == false) {
+        filteredList.add(detail);
+      }
+    }
+    return filteredList;
   }
 }
 

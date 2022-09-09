@@ -13,7 +13,7 @@ class FilterLoaded extends FilterState {
   String fileTypeFilter;
   bool showWithContext;
   bool ignoreCase;
-  bool useRegex;
+  bool combineIntersection;
   final List<String> ignoredFolders;
   final List<String> exclusionWords;
 
@@ -21,7 +21,7 @@ class FilterLoaded extends FilterState {
     required this.fileTypeFilter,
     required this.showWithContext,
     required this.ignoreCase,
-    required this.useRegex,
+    required this.combineIntersection,
     required this.ignoredFolders,
     required this.exclusionWords,
   });
@@ -31,7 +31,7 @@ class FilterLoaded extends FilterState {
         fileTypeFilter,
         showWithContext,
         ignoreCase,
-        useRegex,
+        combineIntersection,
         ignoredFolders,
         exclusionWords,
       ];

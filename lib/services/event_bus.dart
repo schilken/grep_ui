@@ -13,7 +13,7 @@ class PreferencesTrigger {}
 class PreferencesChanged {
   String fileTypeFilter;
   bool ignoreCase;
-  bool useRegex;
+  bool combineIntersection;
   bool showWithContext;
   final List<String> ignoredFolders;
   final List<String> exclusionWords;
@@ -21,7 +21,7 @@ class PreferencesChanged {
   PreferencesChanged({
     required this.fileTypeFilter,
     required this.ignoreCase,
-    required this.useRegex,
+    required this.combineIntersection,
     required this.showWithContext,
     required this.ignoredFolders,
     required this.exclusionWords,
@@ -29,7 +29,7 @@ class PreferencesChanged {
 
   @override
   String toString() {
-    return 'PreferencesChanged(fileTypeFilter: $fileTypeFilter, ignoreCase: $ignoreCase, useRegex: $useRegex, showWithContext: $showWithContext, ignoredFolders: $ignoredFolders, exclusionWords: $exclusionWords)';
+    return 'PreferencesChanged(fileTypeFilter: $fileTypeFilter, ignoreCase: $ignoreCase, combineIntersection: $combineIntersection, showWithContext: $showWithContext, ignoredFolders: $ignoredFolders, exclusionWords: $exclusionWords)';
   }
 }
 class RescanDevice {
