@@ -179,6 +179,14 @@ class AppCubit extends Cubit<AppState> {
     log.i('removeMessage');
     emitDetailsLoaded();
   }
+
+  void saveSearchResult({String? filePath}) {
+    print('saveSearchResult $filePath');
+  }
+
+  void combineSearchResults({required List<String?> filePaths}) {
+    print('loadSearchResults $filePaths');
+  }
 }
 
 

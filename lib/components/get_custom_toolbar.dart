@@ -27,7 +27,7 @@ ToolBar getCustomToolBar(BuildContext context) {
         tooltipMessage: "Perform tasks with the selected items",
         items: [
           MacosPulldownMenuItem(
-            title: const Text("Example FolderPicker"),
+            title: const Text("Choose Folder to scan"),
             onTap: () async {
               String? selectedDirectory = await FilePicker.platform
                   .getDirectoryPath(initialDirectory: '/Volumes');
@@ -35,6 +35,36 @@ ToolBar getCustomToolBar(BuildContext context) {
                 context
                     .read<AppCubit>()
                     .setFolder(folderPath: selectedDirectory);
+              }
+            },
+          ),
+          MacosPulldownMenuDivider(),
+          MacosPulldownMenuItem(
+            title: const Text("Save last search result"),
+            onTap: () async {
+              final selectedFile = await FilePicker.platform.saveFile(
+                  initialDirectory: '/Users/aschilken/flutterdev',
+                  dialogTitle: 'Choose file to save search result',
+                  fileName: 'last-search.txt');
+              if (selectedFile != null) {
+                context
+                    .read<AppCubit>()
+                    .saveSearchResult(filePath: selectedFile);
+              }
+            },
+          ),
+          MacosPulldownMenuItem(
+            title: const Text("Combine search results"),
+            onTap: () async {
+              final selectedFiles = await FilePicker.platform.pickFiles(
+                initialDirectory: '/Users/aschilken/flutterdev',
+                dialogTitle: 'Choose search results to combine',
+                allowMultiple: true,
+              );
+              if (selectedFiles != null) {
+                context
+                    .read<AppCubit>()
+                    .combineSearchResults(filePaths: selectedFiles.paths);
               }
             },
           ),
