@@ -82,7 +82,7 @@ class MainPage extends StatelessWidget {
                             controller: ScrollController(),
                             itemCount: state.details.length,
                             itemBuilder: (context, index) {
-                              final highlights = [state.primaryWord ?? '@@'];
+                              final highlights = state.highlights ?? [];
                               final detail = state.details[index];
                               return DetailTile(
                                 detail: detail,

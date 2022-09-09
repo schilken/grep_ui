@@ -47,4 +47,15 @@ class FilesRepository {
       return e.toString();
     }
   }
+
+  Future<String> writeFile(String filePath, String contents) async {
+    try {
+      final file = File(filePath);
+      await file.writeAsString(contents);
+      return 'ok';
+    } on Exception catch (e) {
+      return e.toString();
+    }
+  }
+
 }

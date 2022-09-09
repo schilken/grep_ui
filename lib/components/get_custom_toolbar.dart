@@ -49,7 +49,7 @@ ToolBar getCustomToolBar(BuildContext context) {
               if (selectedFile != null) {
                 context
                     .read<AppCubit>()
-                    .saveSearchResult(filePath: selectedFile);
+                    .saveSearchResult(selectedFile);
               }
             },
           ),

@@ -33,6 +33,7 @@ class AppCubit extends Cubit<AppState> {
   String _currentFolder = '.';
   String? _fileExtension = 'dart';
   final sectionsMap = <String, List<String>>{};
+  final _searchResult = <String>[];
 
   void setSearchWord(String? word) {
     log.i('setSearchWord: $word');
@@ -104,13 +105,19 @@ class AppCubit extends Cubit<AppState> {
     final currentState = state as DetailsLoaded;
     final details = detailsFromSectionMap();
     subscription.cancel();
-    emit(currentState.copyWith(details: details, fileCount: details.length));
+    emit(currentState.copyWith(
+        details: details,
+        fileCount: details.length,
+        highlights: [_searchWord ?? '@@']));
   }
 
   StreamSubscription<dynamic> handleCommandOutput(Stream<dynamic> stream) {
     sectionsMap.clear();
+    _searchResult.clear();
+    _searchResult.add(_searchWord ?? '');
     final pattern = RegExp(r'^stdout> (.*)(-|:)([0-9]+)(-|:)(.*)$');
     final subscription = stream.listen((line) {
+      _searchResult.add(line);
       final match = pattern.matchAsPrefix(line);
       if (match != null) {
         final String? filepath = match[1];
@@ -180,12 +187,52 @@ class AppCubit extends Cubit<AppState> {
     emitDetailsLoaded();
   }
 
-  void saveSearchResult({String? filePath}) {
+  void saveSearchResult(String filePath) {
     print('saveSearchResult $filePath');
+    filesRepository.writeFile(filePath, _searchResult.join('\n'));
   }
 
-  void combineSearchResults({required List<String?> filePaths}) {
+  Future<void> combineSearchResults({required List<String?> filePaths}) async {
+    sectionsMap.clear();
+    final highLights = <String>[];
     print('loadSearchResults $filePaths');
+    for (final filePath in filePaths) {
+      if (filePath != null) {
+        final contents = await filesRepository.readFile(filePath);
+        final lines = contents.split('\n');
+        highLights.add(lines.removeAt(0));
+        mergeLinesIntoSectionsMap(lines);
+      }
+    }
+    final currentState = state as DetailsLoaded;
+    final details = detailsFromSectionMap();
+    emit(currentState.copyWith(
+        details: details,
+        fileCount: details.length,
+        highlights: highLights,
+        message: 'Combined: ${highLights.join(' ')}'));
+  }
+
+  void mergeLinesIntoSectionsMap(List<String> lines) {
+    final pattern = RegExp(r'^stdout> (.*)(-|:)([0-9]+)(-|:)(.*)$');
+
+    for (final line in lines) {
+      final match = pattern.matchAsPrefix(line);
+      if (match != null) {
+        final String? filepath = match[1];
+        // final String? separator1 = match[2];
+        // final String? lineNumber = match[3];
+        // final String? separator2 = match[4];
+        final String? sourceCode = match[5];
+        if (filepath != null && sourceCode != null) {
+          if (sectionsMap.containsKey(filepath)) {
+            sectionsMap[filepath]!.add(sourceCode);
+          } else {
+            sectionsMap[filepath] = [sourceCode];
+          }
+        }
+      }
+    }
   }
 }
 
