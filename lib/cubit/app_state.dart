@@ -1,20 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'app_cubit.dart';
 
-@immutable
-abstract class AppState extends Equatable {}
-
-class AppInitial extends AppState {
-  @override
-  List<Object?> get props => [];
-}
-
-class DetailsLoading extends AppState {
-  @override
-  List<Object?> get props => [];
-}
-
-class DetailsLoaded extends AppState {
+class AppState {
   final List<Detail> details;
   final int fileCount;
   final String? message;
@@ -23,8 +10,9 @@ class DetailsLoaded extends AppState {
   final String? primaryWord;
   final String? currentFolder;
   final List<String>? highlights;
+  final bool isLoading;
 
-  DetailsLoaded({
+  AppState({
     required this.details,
     required this.fileCount,
     this.sidebarPageIndex = 0,
@@ -33,9 +21,10 @@ class DetailsLoaded extends AppState {
     this.primaryWord,
     this.currentFolder,
     this.highlights,
+    required this.isLoading,
   });
 
-  DetailsLoaded copyWith({
+  AppState copyWith({
     List<Detail>? details,
     String? currentSearchParameters,
     int? fileCount,
@@ -46,8 +35,9 @@ class DetailsLoaded extends AppState {
     String? primaryWord,
     String? currentFolder,
     List<String>? highlights,
+    bool? isLoading,
   }) {
-    return DetailsLoaded(
+    return AppState(
       details: details ?? this.details,
       fileCount: fileCount ?? this.fileCount,
       message: message ?? this.message,
@@ -56,6 +46,7 @@ class DetailsLoaded extends AppState {
       primaryWord: primaryWord ?? this.primaryWord,
       currentFolder: currentFolder ?? this.currentFolder,
       highlights: highlights ?? this.highlights,
+      isLoading: isLoading ?? this.isLoading,
     );
   }
 
@@ -68,5 +59,6 @@ class DetailsLoaded extends AppState {
         commandAsString,
         currentFolder,
         highlights,
+        isLoading,
       ];
 }

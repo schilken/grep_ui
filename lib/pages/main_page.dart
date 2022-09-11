@@ -45,7 +45,6 @@ class MainPage extends StatelessWidget {
             builder: (context, scrollController) {
               return BlocBuilder<AppCubit, AppState>(
                 builder: (context, state) {
-                  if (state is DetailsLoaded) {
                     return Column(
                       children: [
                         Container(
@@ -77,6 +76,13 @@ class MainPage extends StatelessWidget {
                             onDismiss: () =>
                                 context.read<AppCubit>().removeMessage(),
                           ),
+                      if (state.isLoading == false && state.details.isEmpty)
+                        Center(
+                            child: Padding(
+                          padding: const EdgeInsets.only(top: 32),
+                          child: Text('No search result.'),
+                        )),
+                      if (state.isLoading == false && state.details.isNotEmpty)  
                         Expanded(
                           child: ListView.separated(
                             controller: ScrollController(),
@@ -97,11 +103,14 @@ class MainPage extends StatelessWidget {
                             },
                           ),
                         ),
+                      if (state.isLoading == true)
+                        Center(
+                            child: Padding(
+                          padding: const EdgeInsets.only(top: 32),
+                          child: const CupertinoActivityIndicator(),
+                        ))
                       ],
-                    );
-                  } else if (state is DetailsLoading) {
-                    return const CupertinoActivityIndicator();
-                  }
+                  );
                   return const Center(child: Text('No file selected'));
                 },
               );

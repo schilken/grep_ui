@@ -1,12 +1,9 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
 import 'package:mixin_logger/mixin_logger.dart' as log;
 import 'package:path/path.dart' as p;
 import 'package:bloc/bloc.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:meta/meta.dart';
 import '../services/event_bus.dart';
 import '../services/files_repository.dart';
 import '../models/detail.dart';
@@ -16,7 +13,12 @@ part 'app_state.dart';
 
 class AppCubit extends Cubit<AppState> {
   AppCubit(
-    this.filesRepository) : super(AppInitial()) {
+    this.filesRepository)
+      : super(AppState(
+          fileCount: 0,
+          details: [],
+          isLoading: false,
+        )) {
 //    print('create AppCubit');
     eventBus.on<PreferencesChanged>().listen((event) async {
       _applyFilters(event);
@@ -47,23 +49,25 @@ class AppCubit extends Cubit<AppState> {
   Future<void> setFolder({required String folderPath}) async {
     log.i('setFolder: $folderPath');
     _currentFolder = folderPath;
-    emitDetailsLoaded();
+    emitAppState();
   }
 
-  void emitDetailsLoaded({
+  void emitAppState({
     List<Detail> details = const [],
     String? message,
     String? commandAsString,
+    bool? isLoading,
   }) {
     log.i('emitDetailsLoaded: message: $message');
     emit(
-      DetailsLoaded(
+      AppState(
         fileCount: _fileCount,
         details: details,
         primaryWord: _searchWord,
         message: message,
         commandAsString: commandAsString,
         currentFolder: _currentFolder,
+        isLoading: isLoading ?? false,
       ),
     );
   }
@@ -99,21 +103,25 @@ class AppCubit extends Cubit<AppState> {
     parameters.add(exampleParameter);
     final commandAsString = '$programm ${parameters.join(' ')} $_currentFolder';
     log.i('call $commandAsString');
-    emitDetailsLoaded(
+    emitAppState(
       message: commandAsString,
+      isLoading: true,
     );
     await Future.delayed(const Duration(milliseconds: 500));
     final subscription = handleCommandOutput(eventBus.streamController.stream);
     final command =
         await filesRepository.runCommand(programm, parameters, _currentFolder);
     log.i('command returns with rc:: $command');
-    final currentState = state as DetailsLoaded;
     final details = detailsFromSectionMap();
     subscription.cancel();
-    emit(currentState.copyWith(
+    emit(
+      state.copyWith(
         details: details,
         fileCount: details.length,
-        highlights: [_searchWord ?? '@@']));
+        highlights: [_searchWord ?? '@@'],
+        isLoading: false,
+      ),
+    );
   }
 
   StreamSubscription<dynamic> handleCommandOutput(Stream<dynamic> stream) {
@@ -175,7 +183,7 @@ class AppCubit extends Cubit<AppState> {
 
   void search() {
     if (_searchWord == null || _searchWord!.length < 2) {
-      emitDetailsLoaded(message: 'No search word entered or lenght < 2');
+      emitAppState(message: 'No search word entered or lenght < 2');
       return;
     }
     exampleCall(_searchWord!);
@@ -183,13 +191,12 @@ class AppCubit extends Cubit<AppState> {
 
   sidebarChanged(int index) {
     log.i('sidebarChanged to index $index');
-    final currentState = state as DetailsLoaded;
-    emit(currentState.copyWith(sidebarPageIndex: index));
+    emit(state.copyWith(sidebarPageIndex: index));
   }
 
   void removeMessage() {
     log.i('removeMessage');
-    emitDetailsLoaded();
+    emitAppState();
   }
 
   void saveSearchResult(String filePath) {
@@ -209,12 +216,11 @@ class AppCubit extends Cubit<AppState> {
         mergeLinesIntoSectionsMap(lines);
       }
     }
-    final currentState = state as DetailsLoaded;
     var details = detailsFromSectionMap();
     if (_combineIntersection) {
       details = filterDetails(details, highLights);
     }
-    emit(currentState.copyWith(
+    emit(state.copyWith(
         details: details,
         fileCount: details.length,
         highlights: highLights,

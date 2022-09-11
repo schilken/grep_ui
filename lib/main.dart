@@ -140,7 +140,6 @@ class _MainViewState extends State<MainView> {
       ],
       body: BlocBuilder<AppCubit, AppState>(
         builder: (context, state) {
-          if (state is DetailsLoaded) {
             return MacosWindow(
               sidebar: Sidebar(
                 minWidth: 240,
@@ -189,13 +188,8 @@ class _MainViewState extends State<MainView> {
                   const HelpPage(),
                 ],
               ),
-            );
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
+        );
+      }
       ),
     );
   }
