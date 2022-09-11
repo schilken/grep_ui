@@ -8,18 +8,18 @@ class AppState {
   final int sidebarPageIndex;
   final String? commandAsString;
   final String? primaryWord;
-  final String? currentFolder;
+  final String currentFolder;
   final List<String>? highlights;
   final bool isLoading;
 
   AppState({
     required this.details,
     required this.fileCount,
+    required this.currentFolder,
     this.sidebarPageIndex = 0,
     this.message,
     this.commandAsString,
     this.primaryWord,
-    this.currentFolder,
     this.highlights,
     required this.isLoading,
   });

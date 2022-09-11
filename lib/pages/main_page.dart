@@ -64,7 +64,7 @@ class MainPage extends StatelessWidget {
                                 width: 8,
                               ),
                               SelectableText(
-                                  state.currentFolder ?? 'no folder set'),
+                                  state.currentFolder),
                               const Spacer(),
                               Text('${state.fileCount} Files'),
                             ],

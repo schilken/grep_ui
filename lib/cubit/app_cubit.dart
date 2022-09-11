@@ -17,7 +17,8 @@ class AppCubit extends Cubit<AppState> {
       : super(AppState(
           fileCount: 0,
           details: [],
-          isLoading: false,
+          isLoading: false, 
+          currentFolder: '.',
         )) {
 //    print('create AppCubit');
     eventBus.on<PreferencesChanged>().listen((event) async {
@@ -34,7 +35,6 @@ class AppCubit extends Cubit<AppState> {
   bool _combineIntersection = false;
   var _ignoredFolders = <String>[];
 
-  String _currentFolder = '.';
   String? _fileExtension = 'dart';
   final sectionsMap = <String, List<String>>{};
   final _searchResult = <String>[];
@@ -48,7 +48,11 @@ class AppCubit extends Cubit<AppState> {
 
   Future<void> setFolder({required String folderPath}) async {
     log.i('setFolder: $folderPath');
-    _currentFolder = folderPath;
+    emit(
+      state.copyWith(
+        currentFolder: folderPath,
+      ),
+    );
     emitAppState();
   }
 
@@ -66,7 +70,7 @@ class AppCubit extends Cubit<AppState> {
         primaryWord: _searchWord,
         message: message,
         commandAsString: commandAsString,
-        currentFolder: _currentFolder,
+        currentFolder: state.currentFolder,
         isLoading: isLoading ?? false,
       ),
     );
@@ -108,7 +112,8 @@ class AppCubit extends Cubit<AppState> {
       });
     }
     parameters.add(exampleParameter);
-    final commandAsString = '$programm ${parameters.join(' ')} $_currentFolder';
+    final commandAsString =
+        '$programm ${parameters.join(' ')} ${state.currentFolder}';
     log.i('call $commandAsString');
     emitAppState(
       message: commandAsString,
@@ -117,7 +122,8 @@ class AppCubit extends Cubit<AppState> {
     await Future.delayed(const Duration(milliseconds: 500));
     final subscription = handleCommandOutput(eventBus.streamController.stream);
     final command =
-        await filesRepository.runCommand(programm, parameters, _currentFolder);
+        await filesRepository.runCommand(
+        programm, parameters, state.currentFolder);
     log.i('command returns with rc:: $command');
     final details = detailsFromSectionMap();
     subscription.cancel();
@@ -168,23 +174,23 @@ class AppCubit extends Cubit<AppState> {
   }
 
   showInFinder(String path) {
-    final fullPath = p.join(_currentFolder, path);
+    final fullPath = p.join(state.currentFolder, path);
     Process.run('open', ['-R', fullPath]);
   }
 
   copyToClipboard(String path) {
-    final fullPath = p.join(_currentFolder, path);
+    final fullPath = p.join(state.currentFolder, path);
     Clipboard.setData(ClipboardData(text: fullPath));
   }
 
   showInTerminal(String path) {
-    final fullPath = p.join(_currentFolder, path);
+    final fullPath = p.join(state.currentFolder, path);
     final dirname = p.dirname(fullPath);
     Process.run('open', ['-a', 'iTerm', dirname]);
   }
 
   void openEditor(String? path) {
-    final fullPath = p.join(_currentFolder, path);
+    final fullPath = p.join(state.currentFolder, path);
     Process.run('code', [fullPath]);
   }
 
