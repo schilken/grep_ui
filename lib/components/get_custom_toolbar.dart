@@ -7,6 +7,7 @@ import 'toolbar_searchfield.dart';
 import 'toolbar_widget_toggle.dart';
 
 ToolBar getCustomToolBar(BuildContext context) {
+  final appCubit = context.read<AppCubit>();
   return ToolBar(
     title: const Text('CLI Wrapper'),
     titleWidth: 250.0,
@@ -32,8 +33,7 @@ ToolBar getCustomToolBar(BuildContext context) {
               String? selectedDirectory = await FilePicker.platform
                   .getDirectoryPath(initialDirectory: '/Volumes');
               if (selectedDirectory != null) {
-                context
-                    .read<AppCubit>()
+                appCubit
                     .setFolder(folderPath: selectedDirectory);
               }
             },
@@ -45,11 +45,9 @@ ToolBar getCustomToolBar(BuildContext context) {
               final selectedFile = await FilePicker.platform.saveFile(
                   initialDirectory: '/Users/aschilken/flutterdev',
                   dialogTitle: 'Choose file to save search result',
-                  fileName: 'last-search.txt');
+                  fileName: 'search-result.txt');
               if (selectedFile != null) {
-                context
-                    .read<AppCubit>()
-                    .saveSearchResult(selectedFile);
+                appCubit.saveSearchResult(selectedFile);
               }
             },
           ),
@@ -62,9 +60,7 @@ ToolBar getCustomToolBar(BuildContext context) {
                 allowMultiple: true,
               );
               if (selectedFiles != null) {
-                context
-                    .read<AppCubit>()
-                    .combineSearchResults(filePaths: selectedFiles.paths);
+                appCubit.combineSearchResults(filePaths: selectedFiles.paths);
               }
             },
           ),
@@ -75,14 +71,14 @@ ToolBar getCustomToolBar(BuildContext context) {
       const ToolBarSpacer(spacerUnits: 1),
       ToolbarSearchfield(
         placeholder: 'Search word',
-        onChanged: (word) => context.read<AppCubit>().setSearchWord(word),
+        onChanged: (word) => appCubit.setSearchWord(word),
         onSubmitted: (word) {
-          context.read<AppCubit>().setSearchWord(word);
-          context.read<AppCubit>().search();
+          appCubit.setSearchWord(word);
+          appCubit.search();
         },
       ),
       ToolbarWidgetToggle(
-          onChanged: context.read<AppCubit>().setCaseSentitiv,
+          onChanged: appCubit.setCaseSentitiv,
           child: const Text('Aa'),
           tooltipMessage: 'Search case sentitiv'),
       ToolBarIconButton(
@@ -90,7 +86,7 @@ ToolBar getCustomToolBar(BuildContext context) {
           icon: const MacosIcon(
             CupertinoIcons.search,
           ),
-          onPressed: () => context.read<AppCubit>().search(),
+          onPressed: () => appCubit.search(),
           showLabel: false,
           tooltipMessage: 'Start new Search'),
       const ToolBarDivider(),

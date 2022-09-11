@@ -42,6 +42,8 @@ class AppCubit extends Cubit<AppState> {
     _searchWord = word;
   }
 
+  String? get searchWord => _searchWord;
+
   Future<void> setFolder({required String folderPath}) async {
     log.i('setFolder: $folderPath');
     _currentFolder = folderPath;
