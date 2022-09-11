@@ -84,23 +84,26 @@ class MainPage extends StatelessWidget {
                         )),
                       if (state.isLoading == false && state.details.isNotEmpty)  
                         Expanded(
-                          child: ListView.separated(
-                            controller: ScrollController(),
-                            itemCount: state.details.length,
-                            itemBuilder: (context, index) {
-                              final highlights = state.highlights ?? [];
-                              final detail = state.details[index];
-                              return DetailTile(
-                                detail: detail,
-                                highlights: highlights,
-                              );
-                            },
-                            separatorBuilder:
-                                (BuildContext context, int index) {
-                              return const Divider(
-                                thickness: 2,
-                              );
-                            },
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: ListView.separated(
+                              controller: ScrollController(),
+                              itemCount: state.details.length,
+                              itemBuilder: (context, index) {
+                                final highlights = state.highlights ?? [];
+                                final detail = state.details[index];
+                                return DetailTile(
+                                  detail: detail,
+                                  highlights: highlights,
+                                );
+                              },
+                              separatorBuilder:
+                                  (BuildContext context, int index) {
+                                return const Divider(
+                                  thickness: 2,
+                                );
+                              },
+                            ),
                           ),
                         ),
                       if (state.isLoading == true)

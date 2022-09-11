@@ -33,6 +33,7 @@ class AppCubit extends Cubit<AppState> {
   bool _searchCaseSensitiv = false;
   bool _showWithContext = false;
   bool _combineIntersection = false;
+  var _ignoredFolders = <String>[];
 
   String _currentFolder = '.';
   String? _fileExtension = 'dart';
@@ -77,6 +78,7 @@ class AppCubit extends Cubit<AppState> {
     _fileExtension = newSettings.fileTypeFilter;
     _showWithContext = newSettings.showWithContext;
     _combineIntersection = newSettings.combineIntersection;
+    _ignoredFolders = newSettings.ignoredFolders;
     search();
   }
 
@@ -99,6 +101,11 @@ class AppCubit extends Cubit<AppState> {
     }
     if (_showWithContext == true) {
       parameters.add('-C4');
+    }
+    if (_ignoredFolders.isNotEmpty) {
+      _ignoredFolders.forEach((element) {
+        parameters.add('--exclude-dir=$element');
+      });
     }
     parameters.add(exampleParameter);
     final commandAsString = '$programm ${parameters.join(' ')} $_currentFolder';
