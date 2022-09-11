@@ -19,6 +19,7 @@ class AppCubit extends Cubit<AppState> {
           details: [],
           isLoading: false, 
           currentFolder: '.',
+          searchWord: '',
         )) {
 //    print('create AppCubit');
     eventBus.on<PreferencesChanged>().listen((event) async {
@@ -29,7 +30,6 @@ class AppCubit extends Cubit<AppState> {
         () => eventBus.fire(PreferencesTrigger()));
   }
   final FilesRepository filesRepository;
-  String? _searchWord;
   bool _searchCaseSensitiv = false;
   bool _showWithContext = false;
   bool _combineIntersection = false;
@@ -41,10 +41,14 @@ class AppCubit extends Cubit<AppState> {
 
   void setSearchWord(String? word) {
     log.i('setSearchWord: $word');
-    _searchWord = word;
+    emit(
+      state.copyWith(
+        searchWord: word,
+      ),
+    );
   }
 
-  String? get searchWord => _searchWord;
+  String? get searchWord => state.searchWord;
 
   Future<void> setFolder({required String folderPath}) async {
     log.i('setFolder: $folderPath');
@@ -67,7 +71,7 @@ class AppCubit extends Cubit<AppState> {
       AppState(
         fileCount: details.length,
         details: details,
-        primaryWord: _searchWord,
+        searchWord: state.searchWord,
         message: message,
         commandAsString: commandAsString,
         currentFolder: state.currentFolder,
@@ -131,7 +135,7 @@ class AppCubit extends Cubit<AppState> {
       state.copyWith(
         details: details,
         fileCount: details.length,
-        highlights: [_searchWord ?? '@@'],
+        highlights: [state.searchWord ?? '@@'],
         isLoading: false,
       ),
     );
@@ -140,7 +144,7 @@ class AppCubit extends Cubit<AppState> {
   StreamSubscription<dynamic> handleCommandOutput(Stream<dynamic> stream) {
     sectionsMap.clear();
     _searchResult.clear();
-    _searchResult.add(_searchWord ?? '');
+    _searchResult.add(state.searchWord ?? '');
     final pattern = RegExp(r'^stdout> (.*)(-|:)([0-9]+)(-|:)(.*)$');
     final subscription = stream.listen((line) {
       _searchResult.add(line);
@@ -195,11 +199,11 @@ class AppCubit extends Cubit<AppState> {
   }
 
   void search() {
-    if (_searchWord == null || _searchWord!.length < 2) {
+    if (state.searchWord == null || state.searchWord!.length < 2) {
       emitAppState(message: 'No search word entered or lenght < 2');
       return;
     }
-    exampleCall(_searchWord!);
+    exampleCall(state.searchWord!);
   }
 
   sidebarChanged(int index) {
