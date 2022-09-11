@@ -31,7 +31,7 @@ class MainPage extends StatelessWidget {
       textAlign: TextAlign.center,
     );
     if (exclusionWord != null) {
-      await context.read<AppCubit>().exampleCall(exclusionWord);
+      await context.read<AppCubit>().grepCall(exclusionWord);
     }
   }
 

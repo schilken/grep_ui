@@ -28,7 +28,6 @@ class AppState {
     List<Detail>? details,
     String? currentSearchParameters,
     int? fileCount,
-    int? primaryHitCount,
     String? message,
     int? sidebarPageIndex, 
     String? commandAsString,
