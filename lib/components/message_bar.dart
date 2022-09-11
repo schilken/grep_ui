@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:macos_ui/macos_ui.dart';
+import 'package:mixin_logger/mixin_logger.dart' as log;
 
 class MessageBar extends StatelessWidget {
   const MessageBar({
@@ -30,13 +31,20 @@ class MessageBar extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SelectableText(message),
+            Expanded(
+              child: Text(
+                message,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+              ),
+            ),
               MacosIconButton(
                 icon: const MacosIcon(CupertinoIcons.clear),
                 onPressed: onDismiss,
               )
             ],
-          )),
+        ),
+      ),
     );
   }
 }
