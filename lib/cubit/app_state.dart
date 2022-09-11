@@ -7,7 +7,7 @@ class AppState {
   final String? message;
   final int sidebarPageIndex;
   final String? commandAsString;
-  final String? primaryWord;
+  final String? searchWord;
   final String currentFolder;
   final List<String>? highlights;
   final bool isLoading;
@@ -16,10 +16,10 @@ class AppState {
     required this.details,
     required this.fileCount,
     required this.currentFolder,
+    required this.searchWord,
     this.sidebarPageIndex = 0,
     this.message,
     this.commandAsString,
-    this.primaryWord,
     this.highlights,
     required this.isLoading,
   });
@@ -32,7 +32,7 @@ class AppState {
     String? message,
     int? sidebarPageIndex, 
     String? commandAsString,
-    String? primaryWord,
+    String? searchWord,
     String? currentFolder,
     List<String>? highlights,
     bool? isLoading,
@@ -40,10 +40,10 @@ class AppState {
     return AppState(
       details: details ?? this.details,
       fileCount: fileCount ?? this.fileCount,
-      message: message ?? this.message,
+      message: message, // special, because must be settable to null
       sidebarPageIndex: sidebarPageIndex ?? this.sidebarPageIndex,
       commandAsString: commandAsString ?? this.commandAsString,
-      primaryWord: primaryWord ?? this.primaryWord,
+      searchWord: searchWord ?? this.searchWord,
       currentFolder: currentFolder ?? this.currentFolder,
       highlights: highlights ?? this.highlights,
       isLoading: isLoading ?? this.isLoading,
@@ -60,5 +60,6 @@ class AppState {
         currentFolder,
         highlights,
         isLoading,
+        searchWord,
       ];
 }

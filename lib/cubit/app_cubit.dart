@@ -36,7 +36,7 @@ class AppCubit extends Cubit<AppState> {
   var _ignoredFolders = <String>[];
 
   String? _fileExtension = 'dart';
-  final sectionsMap = <String, List<String>>{};
+  final _sectionsMap = <String, List<String>>{};
   final _searchResult = <String>[];
 
   void setSearchWord(String? word) {
@@ -48,34 +48,11 @@ class AppCubit extends Cubit<AppState> {
     );
   }
 
-  String? get searchWord => state.searchWord;
-
   Future<void> setFolder({required String folderPath}) async {
     log.i('setFolder: $folderPath');
     emit(
       state.copyWith(
         currentFolder: folderPath,
-      ),
-    );
-    emitAppState();
-  }
-
-  void emitAppState({
-    List<Detail> details = const [],
-    String? message,
-    String? commandAsString,
-    bool? isLoading,
-  }) {
-    log.i('emitDetailsLoaded: message: $message');
-    emit(
-      AppState(
-        fileCount: details.length,
-        details: details,
-        searchWord: state.searchWord,
-        message: message,
-        commandAsString: commandAsString,
-        currentFolder: state.currentFolder,
-        isLoading: isLoading ?? false,
       ),
     );
   }
@@ -119,10 +96,10 @@ class AppCubit extends Cubit<AppState> {
     final commandAsString =
         '$programm ${parameters.join(' ')} ${state.currentFolder}';
     log.i('call $commandAsString');
-    emitAppState(
+    emit(state.copyWith(
       message: commandAsString,
       isLoading: true,
-    );
+    ));
     await Future.delayed(const Duration(milliseconds: 500));
     final subscription = handleCommandOutput(eventBus.streamController.stream);
     final command =
@@ -142,7 +119,7 @@ class AppCubit extends Cubit<AppState> {
   }
 
   StreamSubscription<dynamic> handleCommandOutput(Stream<dynamic> stream) {
-    sectionsMap.clear();
+    _sectionsMap.clear();
     _searchResult.clear();
     _searchResult.add(state.searchWord ?? '');
     final pattern = RegExp(r'^stdout> (.*)(-|:)([0-9]+)(-|:)(.*)$');
@@ -156,10 +133,10 @@ class AppCubit extends Cubit<AppState> {
         // final String? separator2 = match[4];
         final String? sourceCode = match[5];
         if (filepath != null && sourceCode != null) {
-          if (sectionsMap.containsKey(filepath)) {
-            sectionsMap[filepath]!.add(sourceCode);
+          if (_sectionsMap.containsKey(filepath)) {
+            _sectionsMap[filepath]!.add(sourceCode);
           } else {
-            sectionsMap[filepath] = [sourceCode];
+            _sectionsMap[filepath] = [sourceCode];
           }
         }
       }
@@ -168,11 +145,11 @@ class AppCubit extends Cubit<AppState> {
   }
 
   List<Detail> detailsFromSectionMap() {
-    return sectionsMap.keys
+    return _sectionsMap.keys
         .map((key) => Detail(
               title: p.dirname(key).replaceFirst('./', ''),
               filePathName: key,
-              lines: sectionsMap[key] ?? [],
+              lines: _sectionsMap[key] ?? [],
             ))
         .toList();
   }
@@ -200,7 +177,9 @@ class AppCubit extends Cubit<AppState> {
 
   void search() {
     if (state.searchWord == null || state.searchWord!.length < 2) {
-      emitAppState(message: 'No search word entered or lenght < 2');
+      emit(
+        state.copyWith(message: 'No search word entered or lenght < 2'),
+      );
       return;
     }
     exampleCall(state.searchWord!);
@@ -213,7 +192,7 @@ class AppCubit extends Cubit<AppState> {
 
   void removeMessage() {
     log.i('removeMessage');
-    emitAppState();
+    emit(state.copyWith(message: null));
   }
 
   void saveSearchResult(String filePath) {
@@ -222,7 +201,7 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Future<void> combineSearchResults({required List<String?> filePaths}) async {
-    sectionsMap.clear();
+    _sectionsMap.clear();
     final highLights = <String>[];
     print('loadSearchResults $filePaths');
     for (final filePath in filePaths) {
@@ -256,10 +235,10 @@ class AppCubit extends Cubit<AppState> {
         // final String? separator2 = match[4];
         final String? sourceCode = match[5];
         if (filepath != null && sourceCode != null) {
-          if (sectionsMap.containsKey(filepath)) {
-            sectionsMap[filepath]!.add(sourceCode);
+          if (_sectionsMap.containsKey(filepath)) {
+            _sectionsMap[filepath]!.add(sourceCode);
           } else {
-            sectionsMap[filepath] = [sourceCode];
+            _sectionsMap[filepath] = [sourceCode];
           }
         }
       }
