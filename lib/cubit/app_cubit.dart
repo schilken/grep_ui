@@ -29,7 +29,6 @@ class AppCubit extends Cubit<AppState> {
   }
   final FilesRepository filesRepository;
   String? _searchWord;
-  final int _fileCount = 0;
   bool _searchCaseSensitiv = false;
   bool _showWithContext = false;
   bool _combineIntersection = false;
@@ -62,7 +61,7 @@ class AppCubit extends Cubit<AppState> {
     log.i('emitDetailsLoaded: message: $message');
     emit(
       AppState(
-        fileCount: _fileCount,
+        fileCount: details.length,
         details: details,
         primaryWord: _searchWord,
         message: message,
