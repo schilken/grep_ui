@@ -58,6 +58,7 @@ class AppCubit extends Cubit<AppState> {
         currentFolder: folderPath,
       ),
     );
+    search();
   }
 
   void _applyFilters(PreferencesChanged newSettings) {
