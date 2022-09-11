@@ -85,6 +85,7 @@ class AppCubit extends Cubit<AppState> {
   void setCaseSentitiv(bool caseSensitiv) {
     _searchCaseSensitiv = caseSensitiv;
     log.i('setCaseSentitiv: $_searchCaseSensitiv');
+    search();
   } 
 
   exampleCall(String exampleParameter) async {

@@ -41,16 +41,6 @@ class FilterSidebar extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 8, 4, 0),
                 child: MacosCheckBoxListTile(
-                  title: const Text('Ignore case'),
-                  onChanged: (value) => context
-                      .read<FilterCubit>()
-                      .toggleSearchOption('ignoreCase', value ?? false),
-                  value: state.ignoreCase,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 8, 4, 0),
-                child: MacosCheckBoxListTile(
                   title: const Text('Combine intersection'),
                   onChanged: (value) => context
                       .read<FilterCubit>()
