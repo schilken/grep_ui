@@ -264,4 +264,31 @@ class AppCubit extends Cubit<AppState> {
     }
     return filteredList;
   }
+
+  void excludeProject(String title) {
+    removeFromSectionsMap(title);
+    final details = detailsFromSectionMap();
+    emit(
+      state.copyWith(
+        details: details,
+        fileCount: details.length,
+        highlights: [state.searchWord ?? '@@'],
+        isLoading: false,
+      ),
+    );
+  }
+
+  void removeFromSectionsMap(String title) {
+    final keysToRemove = <String>[];
+    final parts = title.split('/');
+    final projectName = parts.first;
+    _sectionsMap.keys.forEach((key) {
+      if (key.startsWith('./$projectName')) {
+        keysToRemove.add(key);
+      }
+    });
+    keysToRemove.forEach((key) {
+      _sectionsMap.remove(key);
+    });
+  }
 }

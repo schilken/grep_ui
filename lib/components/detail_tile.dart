@@ -85,6 +85,13 @@ class ListTilePullDownMenu extends StatelessWidget {
               ? null
               : context.read<AppCubit>().openEditor(detail.filePathName!),
         ),
+        const MacosPulldownMenuDivider(),
+        MacosPulldownMenuItem(
+          title: const Text('Exclude Project in List'),
+          onTap: () => detail.filePathName == null
+              ? null
+              : context.read<AppCubit>().excludeProject(detail.title!),
+        ),
       ],
     );
   }
