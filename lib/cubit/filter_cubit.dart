@@ -23,6 +23,7 @@ class FilterCubit extends Cubit<FilterState> {
     'swift',
     'md',
     'txt',
+    'http',
   ];
 
   void init() {
