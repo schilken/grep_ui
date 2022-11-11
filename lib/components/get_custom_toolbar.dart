@@ -9,18 +9,20 @@ import 'toolbar_widget_toggle.dart';
 ToolBar getCustomToolBar(BuildContext context) {
   final appCubit = context.read<AppCubit>();
   return ToolBar(
+    leading: MacosIconButton(
+      icon: const MacosIcon(
+        CupertinoIcons.sidebar_left,
+        size: 40,
+        color: CupertinoColors.black,
+      ),
+      onPressed: () {
+        MacosWindowScope.of(context).toggleSidebar();
+      },
+    ),
+
     title: const Text('CLI Wrapper'),
     titleWidth: 250.0,
     actions: [
-      ToolBarIconButton(
-        label: 'Toggle Sidebar',
-        icon: const MacosIcon(CupertinoIcons.sidebar_left),
-        showLabel: false,
-        tooltipMessage: 'Toggle Sidebar',
-        onPressed: () {
-          MacosWindowScope.of(context).toggleSidebar();
-        },
-      ),
       const ToolBarSpacer(spacerUnits: 3),
       ToolBarPullDownButton(
         label: "Actions",
