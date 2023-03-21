@@ -15,8 +15,7 @@ class MainPage extends StatelessWidget {
     final exclusionWord = await textFieldDialog(
       context,
       title: const Text('Enter pattern'),
-      description: const Text(
-          'The grep command is run with this pattern.'),
+      description: const Text('The grep command is run with this pattern.'),
       initialValue: '',
       textOK: const Text('OK'),
       textCancel: const Text('Abbrechen'),
@@ -45,44 +44,43 @@ class MainPage extends StatelessWidget {
             builder: (context, scrollController) {
               return BlocBuilder<AppCubit, AppState>(
                 builder: (context, state) {
-                    return Column(
-                      children: [
-                        Container(
-                          color: Colors.blueGrey[100],
-                          padding: const EdgeInsets.fromLTRB(12, 20, 20, 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              PushButton(
-                                buttonSize: ButtonSize.large,
-                                isSecondary: true,
-                                color: Colors.white,
-                                child: const Text('Run grep Command'),
-                                onPressed: () => promptString(context),
-                              ),
-                              const SizedBox(
-                                width: 8,
-                              ),
-                              SelectableText(
-                                  state.currentFolder),
-                              const Spacer(),
-                              Text('${state.fileCount} Files'),
-                            ],
-                          ),
+                  return Column(
+                    children: [
+                      Container(
+                        color: Colors.blueGrey[100],
+                        padding: const EdgeInsets.fromLTRB(12, 20, 20, 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            PushButton(
+                              buttonSize: ButtonSize.large,
+                              isSecondary: true,
+                              color: Colors.white,
+                              child: const Text('Run grep Command'),
+                              onPressed: () => promptString(context),
+                            ),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            SelectableText(state.currentFolder),
+                            const Spacer(),
+                            Text('${state.fileCount} Files'),
+                          ],
                         ),
-                        if (state.message != null)
-                          MessageBar(
-                            message: state.message!,
-                            onDismiss: () =>
-                                context.read<AppCubit>().removeMessage(),
-                          ),
+                      ),
+                      if (state.message != null)
+                        MessageBar(
+                          message: state.message!,
+                          onDismiss: () =>
+                              context.read<AppCubit>().removeMessage(),
+                        ),
                       if (state.isLoading == false && state.details.isEmpty)
-                        Center(
+                        const Center(
                             child: Padding(
-                          padding: const EdgeInsets.only(top: 32),
+                          padding: EdgeInsets.only(top: 32),
                           child: Text('No search result.'),
                         )),
-                      if (state.isLoading == false && state.details.isNotEmpty)  
+                      if (state.isLoading == false && state.details.isNotEmpty)
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 16),
@@ -107,12 +105,12 @@ class MainPage extends StatelessWidget {
                           ),
                         ),
                       if (state.isLoading == true)
-                        Center(
+                        const Center(
                             child: Padding(
-                          padding: const EdgeInsets.only(top: 32),
-                          child: const CupertinoActivityIndicator(),
+                          padding: EdgeInsets.only(top: 32),
+                          child: CupertinoActivityIndicator(),
                         ))
-                      ],
+                    ],
                   );
                   return const Center(child: Text('No file selected'));
                 },

@@ -106,7 +106,6 @@ class MainView extends StatefulWidget {
 }
 
 class _MainViewState extends State<MainView> {
-
   @override
   Widget build(BuildContext context) {
     return PlatformMenuBar(
@@ -138,59 +137,60 @@ class _MainViewState extends State<MainView> {
           ],
         ),
       ],
-      body: BlocBuilder<AppCubit, AppState>(
-        builder: (context, state) {
-            return MacosWindow(
-              sidebar: Sidebar(
-                minWidth: 240,
-                top: const FilterSidebar(),
-                builder: (context, scrollController) => SidebarItems(
-                  currentIndex: state.sidebarPageIndex,
-                  scrollController: scrollController,
-                  onChanged: (index) =>
-                      context.read<AppCubit>().sidebarChanged(index),
-                  items: const [
-                    SidebarItem(
-                      leading: MacosIcon(CupertinoIcons.search),
-                      label: Text('Search'),
-                    ),
-                    SidebarItem(
-                      leading: MacosIcon(CupertinoIcons.gear),
-                      label: Text('Preferences'),
-                    ),
-                    SidebarItem(
-                      leading: MacosIcon(CupertinoIcons.graph_square),
-                      label: Text('Realtime Logger'),
-                    ),
-                    SidebarItem(
-                      leading: MacosIcon(CupertinoIcons.archivebox),
-                      label: Text('Show Log file'),
-                    ),
-                    SidebarItem(
-                      leading: MacosIcon(CupertinoIcons.info_circle),
-                      label: Text('Help'),
-                    ),
-                  ],
+      child: BlocBuilder<AppCubit, AppState>(builder: (context, state) {
+        return MacosWindow(
+          sidebar: Sidebar(
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
+            ),
+            minWidth: 240,
+            top: const FilterSidebar(),
+            builder: (context, scrollController) => SidebarItems(
+              currentIndex: state.sidebarPageIndex,
+              scrollController: scrollController,
+              onChanged: (index) =>
+                  context.read<AppCubit>().sidebarChanged(index),
+              items: const [
+                SidebarItem(
+                  leading: MacosIcon(CupertinoIcons.search),
+                  label: Text('Search'),
                 ),
-                bottom: const MacosListTile(
-                  leading: MacosIcon(CupertinoIcons.profile_circled),
-                  title: Text('Alfred Schilken'),
-                  subtitle: Text('alfred@schilken.de'),
+                SidebarItem(
+                  leading: MacosIcon(CupertinoIcons.gear),
+                  label: Text('Preferences'),
                 ),
-              ),
-              child: IndexedStack(
-                index: state.sidebarPageIndex,
-                children: [
-                  const MainPage(),
-                  const PreferencesPage(),
-                  LoggerPage(eventBus.streamController.stream),
-                  const FileContentPage(filePath: '$loggerFolder/log_0.log'),
-                  const HelpPage(),
-                ],
-              ),
+                SidebarItem(
+                  leading: MacosIcon(CupertinoIcons.graph_square),
+                  label: Text('Realtime Logger'),
+                ),
+                SidebarItem(
+                  leading: MacosIcon(CupertinoIcons.archivebox),
+                  label: Text('Show Log file'),
+                ),
+                SidebarItem(
+                  leading: MacosIcon(CupertinoIcons.info_circle),
+                  label: Text('Help'),
+                ),
+              ],
+            ),
+            bottom: const MacosListTile(
+              leading: MacosIcon(CupertinoIcons.profile_circled),
+              title: Text('Alfred Schilken'),
+              subtitle: Text('alfred@schilken.de'),
+            ),
+          ),
+          child: IndexedStack(
+            index: state.sidebarPageIndex,
+            children: [
+              const MainPage(),
+              const PreferencesPage(),
+              LoggerPage(eventBus.streamController.stream),
+              const FileContentPage(filePath: '$loggerFolder/log_0.log'),
+              const HelpPage(),
+            ],
+          ),
         );
-      }
-      ),
+      }),
     );
   }
 }

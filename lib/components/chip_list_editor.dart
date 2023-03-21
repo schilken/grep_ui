@@ -66,8 +66,7 @@ class _ListEditorState extends State<ChipListEditor> {
                         var chips = state.exclusionWords
                             .map((item) => Chip(
                                   label: Text(item),
-                                  deleteIcon:
-                                      const MacosIcon(
+                                  deleteIcon: const MacosIcon(
                                       CupertinoIcons.clear_circled),
                                   onDeleted: () {
                                     context

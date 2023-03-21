@@ -29,7 +29,7 @@ class AppState {
     String? currentSearchParameters,
     int? fileCount,
     String? message,
-    int? sidebarPageIndex, 
+    int? sidebarPageIndex,
     String? commandAsString,
     String? searchWord,
     String? currentFolder,

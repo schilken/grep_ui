@@ -13,7 +13,6 @@ class FilterCubit extends Cubit<FilterState> {
     eventBus.on<PreferencesChanged>().listen((event) async {
       _emitFilterLoaded(event);
     });
-
   }
   final PreferencesRepository _preferencesRepository;
 
@@ -31,8 +30,7 @@ class FilterCubit extends Cubit<FilterState> {
       showWithContext:
           _preferencesRepository.getSearchOption('showHiddenFiles'),
       fileTypeFilter: fileTypeFilter,
-      ignoreCase:
-          _preferencesRepository.getSearchOption('searchInFilename'),
+      ignoreCase: _preferencesRepository.getSearchOption('searchInFilename'),
       combineIntersection:
           _preferencesRepository.getSearchOption('searchInFoldername'),
       ignoredFolders: _preferencesRepository.ignoredFolders,
@@ -52,7 +50,7 @@ class FilterCubit extends Cubit<FilterState> {
   }
 
   get fileTypeFilter => _preferencesRepository.fileTypeFilter;
-  
+
   Future<void> setFileTypeFilter(value) async {
     await _preferencesRepository.setFileTypeFilter(value);
   }
@@ -64,5 +62,4 @@ class FilterCubit extends Cubit<FilterState> {
   bool getSearchOption(String option) {
     return _preferencesRepository.getSearchOption(option);
   }
-
 }

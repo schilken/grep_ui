@@ -10,7 +10,6 @@ class LoggerPage extends StatefulWidget {
 
   @override
   State<LoggerPage> createState() => _LoggerPageState();
-
 }
 
 class _LoggerPageState extends State<LoggerPage> {
@@ -53,7 +52,7 @@ class _LoggerPageState extends State<LoggerPage> {
     scrollController.animateTo(
       scrollController.position.maxScrollExtent,
       curve: Curves.easeOut,
-      duration: Duration(milliseconds: 10),
+      duration: const Duration(milliseconds: 10),
     );
   }
 
@@ -76,7 +75,7 @@ class _LoggerPageState extends State<LoggerPage> {
                         'Logger Ausgabe',
                         style: MacosTheme.of(context).typography.largeTitle,
                       ),
-                      TextButton(onPressed: onClear, child: Text('clear'))
+                      TextButton(onPressed: onClear, child: const Text('clear'))
                     ],
                   ),
                   const SizedBox(height: 20),
@@ -84,15 +83,15 @@ class _LoggerPageState extends State<LoggerPage> {
                     'Command',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Expanded(
                     child: ListView.builder(
-                          controller: scrollController,
-                          itemCount: _lines.length,
-                          itemBuilder: (BuildContext context, int index) {
+                      controller: scrollController,
+                      itemCount: _lines.length,
+                      itemBuilder: (BuildContext context, int index) {
                         Future.delayed(Duration.zero, () {
                           _scrollToEnd(scrollController);
-                        }); 
+                        });
                         return Text(_lines[index]);
                       },
                     ),
@@ -105,5 +104,4 @@ class _LoggerPageState extends State<LoggerPage> {
       ],
     );
   }
-
 }

@@ -45,18 +45,7 @@ class HighlightedText extends StatelessWidget {
 //    this.strutStyle,
     this.textWidthBasis = TextWidthBasis.parent,
 //    this.textHeightBehavior,
-  })  : assert(text != null),
-        assert(highlights != null),
-        assert(color != null),
-        assert(style != null),
-        assert(caseSensitive != null),
-        assert(textAlign != null),
-        assert(softWrap != null),
-        assert(overflow != null),
-        assert(textScaleFactor != null),
-        assert(maxLines == null || maxLines > 0),
-        assert(textWidthBasis != null),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -26,11 +26,11 @@ class MessageBar extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-          padding: const EdgeInsets.all(20),
-          color: messageColor,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+        padding: const EdgeInsets.all(20),
+        color: messageColor,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
             Expanded(
               child: Text(
                 message,
@@ -38,11 +38,11 @@ class MessageBar extends StatelessWidget {
                 maxLines: 2,
               ),
             ),
-              MacosIconButton(
-                icon: const MacosIcon(CupertinoIcons.clear),
-                onPressed: onDismiss,
-              )
-            ],
+            MacosIconButton(
+              icon: const MacosIcon(CupertinoIcons.clear),
+              onPressed: onDismiss,
+            )
+          ],
         ),
       ),
     );

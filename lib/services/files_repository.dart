@@ -6,7 +6,6 @@ import 'dart:io';
 import 'event_bus.dart';
 
 class FilesRepository {
-
   Future<int> runCommand(
       String programm, List<String> parameters, String workingDirectory) async {
     final process = await Process.start(
@@ -57,5 +56,4 @@ class FilesRepository {
       return e.toString();
     }
   }
-
 }
