@@ -19,7 +19,6 @@ ToolBar getCustomToolBar(BuildContext context) {
         MacosWindowScope.of(context).toggleSidebar();
       },
     ),
-
     title: const Text('CLI Wrapper'),
     titleWidth: 250.0,
     actions: [
@@ -33,10 +32,11 @@ ToolBar getCustomToolBar(BuildContext context) {
             title: const Text("Choose Folder to scan"),
             onTap: () async {
               String? selectedDirectory = await FilePicker.platform
-                  .getDirectoryPath(initialDirectory: '/Volumes');
+                  .getDirectoryPath(
+                      initialDirectory:
+                          '/Users/aschilken'); // TODO(as) use HOME from env
               if (selectedDirectory != null) {
-                appCubit
-                    .setFolder(folderPath: selectedDirectory);
+                appCubit.setFolder(folderPath: selectedDirectory);
               }
             },
           ),

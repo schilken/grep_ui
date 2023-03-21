@@ -4,7 +4,7 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.17.0 <3.0.0"
+  sdk: ">=2.19.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -13,13 +13,13 @@ dependencies:
   cupertino_icons: ^1.0.4
   collection: ^1.16.0
   desktop_multi_window: ^0.2.0
-  macos_ui: ^1.7.4  
+  macos_ui: ^1.12.2  
   provider: ^6.0.2
   flutter_bloc: ^8.0.1
-  file_picker: ^4.6.1
+  file_picker: ^5.2.6
   flutter_hooks: ^0.18.5
   flutter_svg: ^1.1.0
-  shared_preferences: ^2.0.15
+  shared_preferences: ^2.0.18
   equatable: ^2.0.3
   yaml: ^3.1.1
   path: ^1.8.1
@@ -34,6 +34,9 @@ dependencies:
       path: packages/mixin_logger
       ref: main
   flutter_markdown: ^0.6.10+5
+
+dependency_overrides:
+  file: ^6.1.4
 
 dev_dependencies:
   flutter_test:
