@@ -2,10 +2,10 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
-import 'package:provider/provider.dart';
 
-import '../cubit/app_cubit.dart';
+import '../providers/providers.dart';
 import 'highlighted_text.dart';
 import '../models/detail.dart';
 
@@ -48,7 +48,7 @@ class DetailTile extends StatelessWidget {
   }
 }
 
-class ListTilePullDownMenu extends StatelessWidget {
+class ListTilePullDownMenu extends ConsumerWidget {
   const ListTilePullDownMenu({
     super.key,
     required this.detail,
@@ -57,7 +57,8 @@ class ListTilePullDownMenu extends StatelessWidget {
   final Detail detail;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appController = ref.watch(appControllerProvider.notifier);
     return MacosPulldownButton(
       icon: CupertinoIcons.ellipsis_circle,
       items: [
@@ -65,31 +66,31 @@ class ListTilePullDownMenu extends StatelessWidget {
           title: const Text('Show File in Finder'),
           onTap: () => detail.filePathName == null
               ? null
-              : context.read<AppCubit>().showInFinder(detail.filePathName!),
+              : appController.showInFinder(detail.filePathName!),
         ),
         MacosPulldownMenuItem(
           title: const Text('Open Terminal in Folder'),
           onTap: () => detail.filePathName == null
               ? null
-              : context.read<AppCubit>().showInTerminal(detail.filePathName!),
+              : appController.showInTerminal(detail.filePathName!),
         ),
         MacosPulldownMenuItem(
           title: const Text('Copy FilePath to Clipboard'),
           onTap: () => detail.filePathName == null
               ? null
-              : context.read<AppCubit>().copyToClipboard(detail.filePathName!),
+              : appController.copyToClipboard(detail.filePathName!),
         ),
         MacosPulldownMenuItem(
           title: const Text('Open File in VScode'),
           onTap: () => detail.filePathName == null
               ? null
-              : context.read<AppCubit>().openEditor(detail.filePathName!),
+              : appController.openEditor(detail.filePathName!),
         ),
         MacosPulldownMenuItem(
           title: const Text('Open File in VScode with Searchword on Clipboard'),
           onTap: () => detail.filePathName == null
               ? null
-              : context.read<AppCubit>().openEditor(
+              : appController.openEditor(
                     detail.filePathName!,
                     copySearchwordToClipboard: true,
                   ),
@@ -99,7 +100,7 @@ class ListTilePullDownMenu extends StatelessWidget {
           title: const Text('Exclude Project in List'),
           onTap: () => detail.filePathName == null
               ? null
-              : context.read<AppCubit>().excludeProject(detail.title!),
+              : appController.excludeProject(detail.title!),
         ),
       ],
     );

@@ -2,23 +2,24 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:provider/provider.dart';
 
 import '../components/get_custom_toolbar.dart';
-import '../services/files_repository.dart';
+import '../providers/files_repository.dart';
 import 'package:mixin_logger/mixin_logger.dart' as log;
 
-class FileContentPage extends StatefulWidget {
+class FileContentPage extends ConsumerStatefulWidget {
   const FileContentPage({super.key, required this.filePath});
 
   final String filePath;
 
   @override
-  State<FileContentPage> createState() => _FileContentPageState();
+  ConsumerState<FileContentPage> createState() => _FileContentPageState();
 }
 
-class _FileContentPageState extends State<FileContentPage> {
+class _FileContentPageState extends ConsumerState<FileContentPage> {
   void _refresh() {
     setState(() {});
   }
@@ -28,7 +29,7 @@ class _FileContentPageState extends State<FileContentPage> {
     double windowHeight = MediaQuery.of(context).size.height;
     log.i('MediaQuery.height $windowHeight');
     return MacosScaffold(
-      toolBar: getCustomToolBar(context),
+      toolBar: getCustomToolBar(context, ref),
       children: [
         ContentArea(
           minWidth: 500,

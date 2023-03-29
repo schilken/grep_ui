@@ -5,39 +5,40 @@ version: 1.0.0+1
 environment:
   sdk: ">=2.19.0 <3.0.0"
 dependencies:
+  bloc: ^8.0.3
+  collection: ^1.16.0
+  cupertino_icons: ^1.0.4
+  desktop_multi_window: ^0.2.0
+  equatable: ^2.0.3
+  event_bus: ^2.0.0
+  file_picker: ^5.2.6
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.4
-  collection: ^1.16.0
-  desktop_multi_window: ^0.2.0
-  macos_ui: ^1.12.2  
-  provider: ^6.0.2
   flutter_bloc: ^8.0.1
-  file_picker: ^5.2.6
   flutter_hooks: ^0.18.5
+  flutter_markdown: ^0.6.10+5
   flutter_svg: ^1.1.0
-  shared_preferences: ^2.0.18
-  equatable: ^2.0.3
-  yaml: ^3.1.1
-  path: ^1.8.1
-  path_provider: ^2.0.11
-  bloc: ^8.0.3
-  meta: ^1.7.0
-  event_bus: ^2.0.0
+  hooks_riverpod: ^2.3.2
   intl: ^0.17.0
-  mixin_logger: 
+  macos_ui: ^1.12.2
+  meta: ^1.7.0
+  mixin_logger:
     git:
       url: https://github.com/schilken/flutter-plugins.git
       path: packages/mixin_logger
       ref: main
-  flutter_markdown: ^0.6.10+5
+  path: ^1.8.1
+  path_provider: ^2.0.11
+  provider: ^6.0.2
+  shared_preferences: ^2.0.18
+  yaml: ^3.1.1
 dependency_overrides:
   file: ^6.1.4
 
 dev_dependencies:
+  flutter_lints: ^2.0.1
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.1
-  
+
 flutter:
   uses-material-design: true

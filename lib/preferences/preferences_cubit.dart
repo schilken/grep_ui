@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../services/files_repository.dart';
+import '../providers/files_repository.dart';
 
-import 'preferences_repository.dart';
+import '../providers/preferences_repository.dart';
 
 part 'preferences_state.dart';
 

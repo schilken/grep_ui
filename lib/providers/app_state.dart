@@ -1,5 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-part of 'app_cubit.dart';
+
+import 'package:flutter/foundation.dart';
+
+import '../models/detail.dart';
 
 class AppState {
   final List<Detail> details;
@@ -50,15 +53,30 @@ class AppState {
   }
 
   @override
-  List<Object?> get props => [
-        fileCount,
-        message,
-        details,
-        sidebarPageIndex,
-        commandAsString,
-        currentFolder,
-        highlights,
-        isLoading,
-        searchWord,
-      ];
+  bool operator ==(covariant AppState other) {
+    if (identical(this, other)) return true;
+
+    return listEquals(other.details, details) &&
+        other.fileCount == fileCount &&
+        other.message == message &&
+        other.sidebarPageIndex == sidebarPageIndex &&
+        other.commandAsString == commandAsString &&
+        other.searchWord == searchWord &&
+        other.currentFolder == currentFolder &&
+        listEquals(other.highlights, highlights) &&
+        other.isLoading == isLoading;
+  }
+
+  @override
+  int get hashCode {
+    return details.hashCode ^
+        fileCount.hashCode ^
+        message.hashCode ^
+        sidebarPageIndex.hashCode ^
+        commandAsString.hashCode ^
+        searchWord.hashCode ^
+        currentFolder.hashCode ^
+        highlights.hashCode ^
+        isLoading.hashCode;
+  }
 }

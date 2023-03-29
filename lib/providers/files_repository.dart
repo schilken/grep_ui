@@ -3,7 +3,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'event_bus.dart';
+import 'package:grep_ui/providers/providers.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import '../services/event_bus.dart';
 
 class FilesRepository {
   Future<int> runCommand(
@@ -57,3 +60,7 @@ class FilesRepository {
     }
   }
 }
+
+final filesRepositoryProvider = Provider<FilesRepository>(
+  (ref) => FilesRepository(),
+);

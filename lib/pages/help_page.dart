@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
 
 import '../components/get_custom_toolbar.dart';
@@ -17,13 +18,13 @@ This project is a stripped down skeleton which I use as a starting poiubt for a 
 
 ''';
 
-class HelpPage extends StatelessWidget {
+class HelpPage extends ConsumerWidget {
   const HelpPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MacosScaffold(
-      toolBar: getCustomToolBar(context),
+      toolBar: getCustomToolBar(context, ref),
       children: [
         ContentArea(
           minWidth: 500,

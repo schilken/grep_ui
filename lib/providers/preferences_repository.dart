@@ -1,25 +1,15 @@
 import 'dart:io';
 
+import 'package:grep_ui/providers/providers.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/event_bus.dart';
 
 class PreferencesRepository {
-  PreferencesRepository() {
-    print('create PreferencesRepository');
-    eventBus.on<PreferencesTrigger>().listen((event) async {
-      _firePreferencesChanged();
-    });
-  }
-  late SharedPreferences _prefs;
+  PreferencesRepository(this._prefs);
+  final SharedPreferences _prefs;
 
   get fileTypeFilter => _prefs.getString('fileTypeFilter') ?? 'dart';
-
-  Future<PreferencesRepository> initialize() async {
-    await Future.delayed(const Duration(milliseconds: 1000));
-    _prefs = await SharedPreferences.getInstance();
-    _firePreferencesChanged();
-    return this;
-  }
 
   Future<void> setFileTypeFilter(value) async {
     await _prefs.setString('fileTypeFilter', value);
@@ -43,6 +33,10 @@ class PreferencesRepository {
     await _prefs.setBool(option, value);
     _firePreferencesChanged();
   }
+
+  bool get showWithContext => getSearchOption('showWithContext');
+  bool get ignoreCase => getSearchOption('ignoreCase');
+  bool get combineIntersection => getSearchOption('combineIntersection');
 
   bool getSearchOption(String option) {
     return _prefs.getBool(option) ?? false;
@@ -98,3 +92,9 @@ class PreferencesRepository {
     return currentFolder;
   }
 }
+
+final preferencesRepositoryProvider = Provider<PreferencesRepository>(
+  (ref) => PreferencesRepository(
+    ref.read(sharedPreferencesProvider),
+  ),
+);

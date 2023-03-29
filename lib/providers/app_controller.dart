@@ -1,70 +1,43 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:grep_ui/providers/providers.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mixin_logger/mixin_logger.dart' as log;
 import 'package:path/path.dart' as p;
-import 'package:bloc/bloc.dart';
-import '../preferences/preferences_repository.dart';
-import '../services/event_bus.dart';
-import '../services/files_repository.dart';
+import 'app_state.dart';
 import '../models/detail.dart';
+import '../services/event_bus.dart';
 
-part 'app_state.dart';
-
-class AppCubit extends Cubit<AppState> {
-  AppCubit(
-    this.filesRepository,
-    this.preferencesRepository,
-  )
-      : super(AppState(
-          fileCount: 0,
-          details: [],
-          isLoading: false,
-          currentFolder: preferencesRepository.getCurrentFolder(),
-          searchWord: '',
-        )) {
-//    print('create AppCubit');
-    eventBus.on<PreferencesChanged>().listen((event) async {
-      _applyFilters(event);
-    });
-    Future.delayed(const Duration(milliseconds: 100),
-        () => eventBus.fire(PreferencesTrigger()));
-  }
-  final FilesRepository filesRepository;
-  final PreferencesRepository preferencesRepository;
+class AppController extends AsyncNotifier<AppState> {
+  late FilesRepository _filesRepository;
+  late PreferencesRepository _preferencesRepository;
+//  late FilterController _filterController;
 
 // from ToolBar
   bool _searchCaseSensitiv = false;
 
-  // from SideBar
-  String? _fileExtension = 'dart';
-  bool _showWithContext = false;
-  bool _combineIntersection = false;
-
-  // from Preferences
-  var _ignoredFolders = <String>[];
-
   final _sectionsMap = <String, List<String>>{};
   final _searchResult = <String>[];
 
-  void _applyFilters(PreferencesChanged newSettings) {
-    log.i('_applyFilters: $newSettings');
-    _fileExtension = newSettings.fileTypeFilter;
-    _showWithContext = newSettings.showWithContext;
-    _combineIntersection = newSettings.combineIntersection;
-    _ignoredFolders = newSettings.ignoredFolders;
-    emit(
-      state.copyWith(
-        currentFolder: newSettings.currentFolder,
-      ),
+  @override
+  AppState build() {
+    _preferencesRepository = ref.watch(preferencesRepositoryProvider);
+    _filesRepository = ref.watch(filesRepositoryProvider);
+//    _filterController = ref.watch(filterControllerProvider);
+    return AppState(
+      fileCount: 0,
+      details: [],
+      isLoading: false,
+      currentFolder: _preferencesRepository.getCurrentFolder(),
+      searchWord: '',
     );
-    search();
   }
 
   void setSearchWord(String? word) {
     log.i('setSearchWord: $word');
-    emit(
-      state.copyWith(
+    state = AsyncValue.data(
+      state.value!.copyWith(
         searchWord: word,
       ),
     );
@@ -72,10 +45,10 @@ class AppCubit extends Cubit<AppState> {
 
   Future<void> setFolder({required String folderPath}) async {
     log.i('setFolder: $folderPath');
-    preferencesRepository.setCurrentFolder(folderPath);
-    emit(
-      state.copyWith(
-        currentFolder: folderPath,
+    _preferencesRepository.setCurrentFolder(folderPath);
+    state = AsyncValue.data(
+      state.value!.copyWith(
+        searchWord: folderPath,
       ),
     );
     search();
@@ -89,44 +62,47 @@ class AppCubit extends Cubit<AppState> {
 
   grepCall(String exampleParameter) async {
     const programm = 'grep';
+    final fileExtension = _preferencesRepository.fileTypeFilter;
     final parameters = [
       '-R',
       '-I',
       '-n',
       '--include',
-      '*.$_fileExtension',
+      '*.$fileExtension',
     ];
     if (_searchCaseSensitiv == false) {
       parameters.add('-i');
     }
-    if (_showWithContext == true) {
+    if (_preferencesRepository.showWithContext == true) {
       parameters.add('-C4');
     }
-    if (_ignoredFolders.isNotEmpty) {
-      _ignoredFolders.forEach((element) {
+    if (_preferencesRepository.ignoredFolders.isNotEmpty) {
+      _preferencesRepository.ignoredFolders.forEach((element) {
         parameters.add('--exclude-dir=$element');
       });
     }
     parameters.add(exampleParameter);
     final commandAsString =
-        '$programm ${parameters.join(' ')} ${state.currentFolder}';
+        '$programm ${parameters.join(' ')} ${state.value!.currentFolder}';
     log.i('call $commandAsString');
-    emit(state.copyWith(
-      message: commandAsString,
-      isLoading: true,
-    ));
+    state = AsyncValue.data(
+      state.value!.copyWith(
+        message: commandAsString,
+        isLoading: true,
+      ),
+    );
     await Future.delayed(const Duration(milliseconds: 500));
     final subscription = handleCommandOutput(eventBus.streamController.stream);
-    final command = await filesRepository.runCommand(
-        programm, parameters, state.currentFolder);
+    final command = await _filesRepository.runCommand(
+        programm, parameters, state.value!.currentFolder);
     log.i('command returns with rc:: $command');
     final details = detailsFromSectionMap();
     subscription.cancel();
-    emit(
-      state.copyWith(
+    state = AsyncValue.data(
+      state.value!.copyWith(
         details: details,
         fileCount: details.length,
-        highlights: [state.searchWord ?? '@@'],
+        highlights: [state.value!.searchWord ?? '@@'],
         isLoading: false,
       ),
     );
@@ -135,7 +111,7 @@ class AppCubit extends Cubit<AppState> {
   StreamSubscription<dynamic> handleCommandOutput(Stream<dynamic> stream) {
     _sectionsMap.clear();
     _searchResult.clear();
-    _searchResult.add(state.searchWord ?? '');
+    _searchResult.add(state.value!.searchWord ?? '');
     final pattern = RegExp(r'^stdout> (.*)(-|:)([0-9]+)(-|:)(.*)$');
     final subscription = stream.listen((line) {
       _searchResult.add(line);
@@ -169,17 +145,17 @@ class AppCubit extends Cubit<AppState> {
   }
 
   showInFinder(String path) {
-    final fullPath = p.join(state.currentFolder, path);
+    final fullPath = p.join(state.value!.currentFolder, path);
     Process.run('open', ['-R', fullPath]);
   }
 
   copyToClipboard(String path) {
-    final fullPath = p.join(state.currentFolder, path);
+    final fullPath = p.join(state.value!.currentFolder, path);
     Clipboard.setData(ClipboardData(text: fullPath));
   }
 
   showInTerminal(String path) {
-    final fullPath = p.join(state.currentFolder, path);
+    final fullPath = p.join(state.value!.currentFolder, path);
     final dirname = p.dirname(fullPath);
     Process.run('open', ['-a', 'iTerm', dirname]);
   }
@@ -189,35 +165,45 @@ class AppCubit extends Cubit<AppState> {
     bool copySearchwordToClipboard = false,
   }) {
     if (copySearchwordToClipboard) {
-      Clipboard.setData(ClipboardData(text: state.searchWord));
+      Clipboard.setData(ClipboardData(text: state.value!.searchWord));
     }
-    final fullPath = p.join(state.currentFolder, path);
+    final fullPath = p.join(state.value!.currentFolder, path);
     Process.run('code', [fullPath]);
   }
 
   void search() {
-    if (state.searchWord == null || state.searchWord!.length < 2) {
-      emit(
-        state.copyWith(message: 'No search word entered or lenght < 2'),
+    if (state.value!.searchWord == null ||
+        state.value!.searchWord!.length < 2) {
+      state = AsyncValue.data(
+        state.value!.copyWith(message: 'No search word entered or lenght < 2'),
       );
       return;
     }
-    grepCall(state.searchWord!);
+    state = const AsyncValue.loading();
+    grepCall(state.value!.searchWord!);
   }
 
   sidebarChanged(int index) {
     log.i('sidebarChanged to index $index');
-    emit(state.copyWith(sidebarPageIndex: index));
+    state = AsyncValue.data(
+      state.value!.copyWith(
+        sidebarPageIndex: index,
+      ),
+    );
   }
 
   void removeMessage() {
     log.i('removeMessage');
-    emit(state.copyWith(message: null));
+    state = AsyncValue.data(
+      state.value!.copyWith(
+        message: null,
+      ),
+    );
   }
 
   void saveSearchResult(String filePath) {
 //    print('saveSearchResult $filePath');
-    filesRepository.writeFile(filePath, _searchResult.join('\n'));
+    _filesRepository.writeFile(filePath, _searchResult.join('\n'));
   }
 
   Future<void> combineSearchResults({required List<String?> filePaths}) async {
@@ -226,21 +212,24 @@ class AppCubit extends Cubit<AppState> {
 //    print('loadSearchResults $filePaths');
     for (final filePath in filePaths) {
       if (filePath != null) {
-        final contents = await filesRepository.readFile(filePath);
+        final contents = await _filesRepository.readFile(filePath);
         final lines = contents.split('\n');
         highLights.add(lines.removeAt(0));
         mergeLinesIntoSectionsMap(lines);
       }
     }
     var details = detailsFromSectionMap();
-    if (_combineIntersection) {
+    if (_preferencesRepository.combineIntersection) {
       details = filterDetails(details, highLights);
     }
-    emit(state.copyWith(
+    state = AsyncValue.data(
+      state.value!.copyWith(
         details: details,
         fileCount: details.length,
         highlights: highLights,
-        message: 'Combined: ${highLights.join(' ')}'));
+        message: 'Combined: ${highLights.join(' ')}',
+      ),
+    );
   }
 
   void mergeLinesIntoSectionsMap(List<String> lines) {
@@ -285,11 +274,11 @@ class AppCubit extends Cubit<AppState> {
   void excludeProject(String title) {
     removeFromSectionsMap(title);
     final details = detailsFromSectionMap();
-    emit(
-      state.copyWith(
+    state = AsyncValue.data(
+      state.value!.copyWith(
         details: details,
         fileCount: details.length,
-        highlights: [state.searchWord ?? '@@'],
+        highlights: [state.value!.searchWord ?? '@@'],
         isLoading: false,
       ),
     );
@@ -309,3 +298,8 @@ class AppCubit extends Cubit<AppState> {
     });
   }
 }
+
+final appControllerProvider =
+    AsyncNotifierProvider<AppController, AppState>(() {
+  return AppController();
+});

@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
-import '../cubit/filter_cubit.dart';
+import '../providers/filter_state.dart';
+import '../providers/providers.dart';
+import 'async_value_widget.dart';
 import 'macos_checkbox_list_tile.dart';
 
-class FilterSidebar extends StatelessWidget {
+class FilterSidebar extends ConsumerWidget {
   const FilterSidebar({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<FilterCubit, FilterState>(
-      builder: (context, state) {
-        print('FilterSidebar builder: $state');
-
-        if (state is FilterLoaded) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final filterState = ref.watch(filterControllerProvider);
+    final filterController = ref.watch(filterControllerProvider.notifier);
+    return AsyncValueWidget<FilterState>(
+        value: filterState,
+        data: (state) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -23,12 +25,11 @@ class FilterSidebar extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 16),
               MacosPopupButton<String>(
-                value: context.read<FilterCubit>().fileTypeFilter,
+                value: state.fileTypeFilter,
                 onChanged: (String? value) async {
-                  await context.read<FilterCubit>().setFileTypeFilter(value);
+                  await filterController.setFileTypeFilter(value);
                 },
-                items: context
-                    .read<FilterCubit>()
+                items: filterController
                     .allFileExtensions
                     .map<MacosPopupMenuItem<String>>((String value) {
                   return MacosPopupMenuItem<String>(
@@ -42,8 +43,7 @@ class FilterSidebar extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(0, 8, 4, 0),
                 child: MacosCheckBoxListTile(
                   title: const Text('Combine intersection'),
-                  onChanged: (value) => context
-                      .read<FilterCubit>()
+                  onChanged: (value) => filterController
                       .toggleSearchOption(
                           'combineIntersection', value ?? false),
                   value: state.combineIntersection,
@@ -53,8 +53,7 @@ class FilterSidebar extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(0, 8, 4, 0),
                 child: MacosCheckBoxListTile(
                   title: const Text('With 4 context lines'),
-                  onChanged: (value) => context
-                      .read<FilterCubit>()
+                  onChanged: (value) => filterController
                       .toggleSearchOption('showWithContext', value ?? false),
                   value: state.showWithContext,
                 ),
@@ -63,8 +62,6 @@ class FilterSidebar extends StatelessWidget {
             ],
           );
         }
-        return Container();
-      },
     );
   }
 }

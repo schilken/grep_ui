@@ -5,27 +5,28 @@ import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:grep_ui/providers/providers.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:mixin_logger/mixin_logger.dart' as log;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'pages/about_window.dart';
-import 'cubit/app_cubit.dart';
 import 'pages/file_content_page.dart';
 import 'pages/help_page.dart';
-import 'preferences/preferences_cubit.dart';
-import 'cubit/filter_cubit.dart';
 import 'services/event_bus.dart';
-import 'services/files_repository.dart';
 import 'components/filter_sidebar.dart';
 import 'pages/main_page.dart';
 import 'preferences/preferences_page.dart';
 
 import 'pages/logger_page.dart';
-import 'preferences/preferences_repository.dart';
 
 const loggerFolder = '/tmp/macos_grep_ui_log';
 
 void main(List<String> args) async {
   print('main: $args');
+  WidgetsFlutterBinding.ensureInitialized();
+  final sharedPreferences = await SharedPreferences.getInstance();
+
   await log.initLogger(loggerFolder);
   log.i('after initLogger');
   if (args.firstOrNull == 'multi_window') {
@@ -40,7 +41,9 @@ void main(List<String> args) async {
       ));
     }
   } else {
-    runApp(const App());
+    runApp(ProviderScope(overrides: [
+      sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+    ], child: const App()));
   }
 }
 
@@ -50,65 +53,29 @@ class App extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<PreferencesRepository>(
-        future: PreferencesRepository().initialize(),
-        builder: (context, snapshot) {
-          print('builder: ${snapshot.hasData}');
-          if (!snapshot.hasData) {
-            return Container();
-          }
-          return MultiRepositoryProvider(
-            providers: [
-              RepositoryProvider(
-                create: (context) => FilesRepository(),
-              ),
-              RepositoryProvider<PreferencesRepository>.value(
-                value: snapshot.data!,
-              ),
-            ],
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider(
-                  create: (context) => FilterCubit(
-                    context.read<PreferencesRepository>(),
-                  )..init(),
-                ),
-                BlocProvider(
-                  create: (context) =>
-                      AppCubit(context.read<FilesRepository>(),
-                      context.read<PreferencesRepository>()),
-                ),
-                BlocProvider(
-                  create: (context) => PreferencesCubit(
-                    context.read<PreferencesRepository>(),
-                    context.read<FilesRepository>(),
-                  )..load(),
-                ),
-              ],
-              child: MacosApp(
-                title: 'grep_ui',
-                theme: MacosThemeData.light(),
-                darkTheme: MacosThemeData.dark(),
-                themeMode: ThemeMode.system,
-                home: const MainView(),
-                debugShowCheckedModeBanner: false,
-              ),
-            ),
-          );
-        });
+    return MacosApp(
+      title: 'grep_ui',
+      theme: MacosThemeData.light(),
+      darkTheme: MacosThemeData.dark(),
+      themeMode: ThemeMode.system,
+      home: const MainView(),
+      debugShowCheckedModeBanner: false,
+    );
   }
 }
 
-class MainView extends StatefulWidget {
+class MainView extends ConsumerStatefulWidget {
   const MainView({super.key});
 
   @override
-  State<MainView> createState() => _MainViewState();
+  ConsumerState<MainView> createState() => _MainViewState();
 }
 
-class _MainViewState extends State<MainView> {
+class _MainViewState extends ConsumerState<MainView> {
   @override
   Widget build(BuildContext context) {
+    final appState = ref.watch(appControllerProvider);
+    final appController = ref.watch(appControllerProvider.notifier);
     return PlatformMenuBar(
       menus: [
         PlatformMenu(
@@ -138,8 +105,7 @@ class _MainViewState extends State<MainView> {
           ],
         ),
       ],
-      child: BlocBuilder<AppCubit, AppState>(builder: (context, state) {
-        return MacosWindow(
+      child: MacosWindow(
           sidebar: Sidebar(
             decoration: BoxDecoration(
               color: Colors.grey.shade200,
@@ -147,10 +113,10 @@ class _MainViewState extends State<MainView> {
             minWidth: 240,
             top: const FilterSidebar(),
             builder: (context, scrollController) => SidebarItems(
-              currentIndex: state.sidebarPageIndex,
+            currentIndex: appState.value!.sidebarPageIndex,
               scrollController: scrollController,
               onChanged: (index) =>
-                  context.read<AppCubit>().sidebarChanged(index),
+                  appController.sidebarChanged(index),
               items: const [
                 SidebarItem(
                   leading: MacosIcon(CupertinoIcons.search),
@@ -181,7 +147,7 @@ class _MainViewState extends State<MainView> {
             ),
           ),
           child: IndexedStack(
-            index: state.sidebarPageIndex,
+          index: appState.value!.sidebarPageIndex,
             children: [
               const MainPage(),
               const PreferencesPage(),
@@ -190,8 +156,7 @@ class _MainViewState extends State<MainView> {
               const HelpPage(),
             ],
           ),
-        );
-      }),
+      ),
     );
   }
 }

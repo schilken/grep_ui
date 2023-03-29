@@ -1,25 +1,30 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
+import '../components/async_value_widget.dart';
 import '../components/message_bar.dart';
-import '../cubit/app_cubit.dart';
 import '../components/detail_tile.dart';
 import '../components/get_custom_toolbar.dart';
+import '../providers/app_state.dart';
+import '../providers/providers.dart';
 
-class MainPage extends StatelessWidget {
+class MainPage extends ConsumerWidget {
   const MainPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appState = ref.watch(appControllerProvider);
+    final appController = ref.watch(appControllerProvider.notifier);
     return Builder(builder: (context) {
       return MacosScaffold(
-        toolBar: getCustomToolBar(context),
+        toolBar: getCustomToolBar(context, ref),
         children: [
           ContentArea(
             builder: (context, scrollController) {
-              return BlocBuilder<AppCubit, AppState>(
-                builder: (context, state) {
+              return AsyncValueWidget<AppState>(
+                value: appState,
+                data: (state) {
                   return Column(
                     children: [
                       Container(
@@ -41,7 +46,7 @@ class MainPage extends StatelessWidget {
                         MessageBar(
                           message: state.message!,
                           onDismiss: () =>
-                              context.read<AppCubit>().removeMessage(),
+                              appController.removeMessage(),
                         ),
                       if (state.isLoading == false && state.details.isEmpty)
                         const Center(

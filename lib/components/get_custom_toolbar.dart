@@ -2,14 +2,14 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
-import 'package:provider/provider.dart';
-import '../cubit/app_cubit.dart';
+import '../providers/providers.dart';
 import 'toolbar_searchfield.dart';
 import 'toolbar_widget_toggle.dart';
 
-ToolBar getCustomToolBar(BuildContext context) {
-  final appCubit = context.read<AppCubit>();
+ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
+  final appController = ref.watch(appControllerProvider.notifier);
   return ToolBar(
     leading: MacosIconButton(
       icon: const MacosIcon(
@@ -39,7 +39,7 @@ ToolBar getCustomToolBar(BuildContext context) {
                       initialDirectory:
                           userHomeDirectory); 
               if (selectedDirectory != null) {
-                appCubit.setFolder(folderPath: selectedDirectory);
+                appController.setFolder(folderPath: selectedDirectory);
               }
             },
           ),
@@ -52,7 +52,7 @@ ToolBar getCustomToolBar(BuildContext context) {
                   dialogTitle: 'Choose file to save search result',
                   fileName: 'search-result.txt');
               if (selectedFile != null) {
-                appCubit.saveSearchResult(selectedFile);
+                appController.saveSearchResult(selectedFile);
               }
             },
           ),
@@ -65,7 +65,8 @@ ToolBar getCustomToolBar(BuildContext context) {
                 allowMultiple: true,
               );
               if (selectedFiles != null) {
-                appCubit.combineSearchResults(filePaths: selectedFiles.paths);
+                appController.combineSearchResults(
+                    filePaths: selectedFiles.paths);
               }
             },
           ),
@@ -76,14 +77,14 @@ ToolBar getCustomToolBar(BuildContext context) {
       const ToolBarSpacer(spacerUnits: 1),
       ToolbarSearchfield(
         placeholder: 'Search word',
-        onChanged: (word) => appCubit.setSearchWord(word),
+        onChanged: (word) => appController.setSearchWord(word),
         onSubmitted: (word) {
-          appCubit.setSearchWord(word);
-          appCubit.search();
+          appController.setSearchWord(word);
+          appController.search();
         },
       ),
       ToolbarWidgetToggle(
-          onChanged: appCubit.setCaseSentitiv,
+          onChanged: appController.setCaseSentitiv,
           child: const Text('Aa'),
           tooltipMessage: 'Search case sentitiv'),
       ToolBarIconButton(
@@ -91,7 +92,7 @@ ToolBar getCustomToolBar(BuildContext context) {
           icon: const MacosIcon(
             CupertinoIcons.search,
           ),
-          onPressed: () => appCubit.search(),
+          onPressed: () => appController.search(),
           showLabel: false,
           tooltipMessage: 'Start new Search'),
     ],
