@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:mixin_logger/mixin_logger.dart' as log;
 import 'package:path/path.dart' as p;
 import 'package:bloc/bloc.dart';
+import '../preferences/preferences_repository.dart';
 import '../services/event_bus.dart';
 import '../services/files_repository.dart';
 import '../models/detail.dart';
@@ -11,14 +12,18 @@ import '../models/detail.dart';
 part 'app_state.dart';
 
 class AppCubit extends Cubit<AppState> {
-  AppCubit(this.filesRepository)
+  AppCubit(
+    this.filesRepository,
+    this.preferencesRepository,
+  )
       : super(AppState(
           fileCount: 0,
           details: [],
           isLoading: false,
-          currentFolder: '.',
+          currentFolder: preferencesRepository.getCurrentFolder(),
           searchWord: '',
         )) {
+    _currentFolder = preferencesRepository.getCurrentFolder();
 //    print('create AppCubit');
     eventBus.on<PreferencesChanged>().listen((event) async {
       _applyFilters(event);
@@ -27,6 +32,7 @@ class AppCubit extends Cubit<AppState> {
         () => eventBus.fire(PreferencesTrigger()));
   }
   final FilesRepository filesRepository;
+  final PreferencesRepository preferencesRepository;
 
 // from ToolBar
   bool _searchCaseSensitiv = false;
@@ -38,9 +44,20 @@ class AppCubit extends Cubit<AppState> {
 
   // from Preferences
   var _ignoredFolders = <String>[];
+  String _currentFolder = '.';
 
   final _sectionsMap = <String, List<String>>{};
   final _searchResult = <String>[];
+
+  void _applyFilters(PreferencesChanged newSettings) {
+    log.i('_applyFilters: $newSettings');
+    _fileExtension = newSettings.fileTypeFilter;
+    _showWithContext = newSettings.showWithContext;
+    _combineIntersection = newSettings.combineIntersection;
+    _ignoredFolders = newSettings.ignoredFolders;
+    _currentFolder = newSettings.currentFolder;
+    search();
+  }
 
   void setSearchWord(String? word) {
     log.i('setSearchWord: $word');
@@ -53,20 +70,12 @@ class AppCubit extends Cubit<AppState> {
 
   Future<void> setFolder({required String folderPath}) async {
     log.i('setFolder: $folderPath');
+    preferencesRepository.setCurrentFolder(folderPath);
     emit(
       state.copyWith(
         currentFolder: folderPath,
       ),
     );
-    search();
-  }
-
-  void _applyFilters(PreferencesChanged newSettings) {
-    log.i('_applyFilters: $newSettings');
-    _fileExtension = newSettings.fileTypeFilter;
-    _showWithContext = newSettings.showWithContext;
-    _combineIntersection = newSettings.combineIntersection;
-    _ignoredFolders = newSettings.ignoredFolders;
     search();
   }
 

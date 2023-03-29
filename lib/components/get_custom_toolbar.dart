@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:macos_ui/macos_ui.dart';
@@ -31,10 +33,11 @@ ToolBar getCustomToolBar(BuildContext context) {
           MacosPulldownMenuItem(
             title: const Text("Choose Folder to scan"),
             onTap: () async {
+              final userHomeDirectory = Platform.environment['HOME'];
               String? selectedDirectory = await FilePicker.platform
                   .getDirectoryPath(
                       initialDirectory:
-                          '/Users/aschilken'); // TODO(as) use HOME from env
+                          userHomeDirectory); 
               if (selectedDirectory != null) {
                 appCubit.setFolder(folderPath: selectedDirectory);
               }

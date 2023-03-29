@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/event_bus.dart';
 
@@ -27,6 +29,7 @@ class PreferencesRepository {
   void _firePreferencesChanged() {
     final settingsLoaded = PreferencesChanged(
       fileTypeFilter: fileTypeFilter,
+      currentFolder: getCurrentFolder(),
       showWithContext: getSearchOption('showWithContext'),
       ignoreCase: getSearchOption('ignoreCase'),
       combineIntersection: getSearchOption('combineIntersection'),
@@ -81,5 +84,17 @@ class PreferencesRepository {
     exclusionWords.remove(exclusionWord);
     await _prefs.setStringList('exclusionWords', exclusionWords);
     _firePreferencesChanged();
+  }
+
+  setCurrentFolder(String folderPath) async {
+    await _prefs.setString('currentFolder', folderPath);
+    _firePreferencesChanged();
+  }
+
+  String getCurrentFolder() {
+    final userHomeDirectory = Platform.environment['HOME'];
+    final currentFolder =
+        _prefs.getString('currentFolder') ?? userHomeDirectory ?? '.';
+    return currentFolder;
   }
 }

@@ -42,4 +42,10 @@ class PreferencesCubit extends Cubit<PreferencesState> {
     await _preferencesRepository.removeExclusionWord(word);
     load();
   }
+
+  Future<void> addCurrentFolder(String folder) async {
+    await _preferencesRepository.setCurrentFolder(folder);
+    load();
+  }
+
 }

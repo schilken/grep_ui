@@ -75,7 +75,8 @@ class App extends StatelessWidget {
                 ),
                 BlocProvider(
                   create: (context) =>
-                      AppCubit(context.read<FilesRepository>()),
+                      AppCubit(context.read<FilesRepository>(),
+                      context.read<PreferencesRepository>()),
                 ),
                 BlocProvider(
                   create: (context) => PreferencesCubit(

@@ -12,6 +12,7 @@ class PreferencesTrigger {}
 
 class PreferencesChanged {
   String fileTypeFilter;
+  String currentFolder;
   bool ignoreCase;
   bool combineIntersection;
   bool showWithContext;
@@ -20,6 +21,7 @@ class PreferencesChanged {
 
   PreferencesChanged({
     required this.fileTypeFilter,
+    required this.currentFolder,
     required this.ignoreCase,
     required this.combineIntersection,
     required this.showWithContext,
