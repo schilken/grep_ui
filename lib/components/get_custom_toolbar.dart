@@ -91,15 +91,6 @@ ToolBar getCustomToolBar(BuildContext context) {
           onPressed: () => appCubit.search(),
           showLabel: false,
           tooltipMessage: 'Start new Search'),
-      const ToolBarDivider(),
-      ToolBarIconButton(
-        label: "Share",
-        icon: const MacosIcon(
-          CupertinoIcons.share,
-        ),
-        onPressed: () => debugPrint("pressed"),
-        showLabel: false,
-      ),
     ],
   );
 }
