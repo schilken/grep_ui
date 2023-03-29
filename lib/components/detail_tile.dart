@@ -85,6 +85,15 @@ class ListTilePullDownMenu extends StatelessWidget {
               ? null
               : context.read<AppCubit>().openEditor(detail.filePathName!),
         ),
+        MacosPulldownMenuItem(
+          title: const Text('Open File in VScode with Searchword on Clipboard'),
+          onTap: () => detail.filePathName == null
+              ? null
+              : context.read<AppCubit>().openEditor(
+                    detail.filePathName!,
+                    copySearchwordToClipboard: true,
+                  ),
+        ),
         const MacosPulldownMenuDivider(),
         MacosPulldownMenuItem(
           title: const Text('Exclude Project in List'),

@@ -182,7 +182,13 @@ class AppCubit extends Cubit<AppState> {
     Process.run('open', ['-a', 'iTerm', dirname]);
   }
 
-  void openEditor(String? path) {
+  void openEditor(
+    String? path, {
+    bool copySearchwordToClipboard = false,
+  }) {
+    if (copySearchwordToClipboard) {
+      Clipboard.setData(ClipboardData(text: state.searchWord));
+    }
     final fullPath = p.join(state.currentFolder, path);
     Process.run('code', [fullPath]);
   }
