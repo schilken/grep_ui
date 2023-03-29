@@ -23,7 +23,6 @@ class AppCubit extends Cubit<AppState> {
           currentFolder: preferencesRepository.getCurrentFolder(),
           searchWord: '',
         )) {
-    _currentFolder = preferencesRepository.getCurrentFolder();
 //    print('create AppCubit');
     eventBus.on<PreferencesChanged>().listen((event) async {
       _applyFilters(event);
@@ -44,7 +43,6 @@ class AppCubit extends Cubit<AppState> {
 
   // from Preferences
   var _ignoredFolders = <String>[];
-  String _currentFolder = '.';
 
   final _sectionsMap = <String, List<String>>{};
   final _searchResult = <String>[];
@@ -55,7 +53,11 @@ class AppCubit extends Cubit<AppState> {
     _showWithContext = newSettings.showWithContext;
     _combineIntersection = newSettings.combineIntersection;
     _ignoredFolders = newSettings.ignoredFolders;
-    _currentFolder = newSettings.currentFolder;
+    emit(
+      state.copyWith(
+        currentFolder: newSettings.currentFolder,
+      ),
+    );
     search();
   }
 
