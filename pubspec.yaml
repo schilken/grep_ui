@@ -1,5 +1,5 @@
-name: cli_wrapper
-description: wrapper on CLI tool
+name: grep_ui
+description: wrapper on grep cli tool
 publish_to: 'none'
 version: 1.0.0+1
 

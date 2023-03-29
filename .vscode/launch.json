@@ -5,18 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "cli_wrapper",
+            "name": "grep_ui",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "cli_wrapper (profile mode)",
+            "name": "grep_ui (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "cli_wrapper (release mode)",
+            "name": "grep_ui (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

@@ -22,7 +22,7 @@ import 'preferences/preferences_page.dart';
 import 'pages/logger_page.dart';
 import 'preferences/preferences_repository.dart';
 
-const loggerFolder = '/tmp/macos_cli_wrapper_log';
+const loggerFolder = '/tmp/macos_grep_ui_log';
 
 void main(List<String> args) async {
   print('main: $args');
@@ -86,7 +86,7 @@ class App extends StatelessWidget {
                 ),
               ],
               child: MacosApp(
-                title: 'cli_wrapper',
+                title: 'grep_ui',
                 theme: MacosThemeData.light(),
                 darkTheme: MacosThemeData.dark(),
                 themeMode: ThemeMode.system,
@@ -128,7 +128,7 @@ class _MainViewState extends State<MainView> {
                 window
                   ..setFrame(const Offset(0, 0) & const Size(350, 350))
                   ..center()
-                  ..setTitle('About cli_wrapper')
+                  ..setTitle('About grep_ui')
                   ..show();
               },
             ),

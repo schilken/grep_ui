@@ -21,7 +21,7 @@ ToolBar getCustomToolBar(BuildContext context) {
         MacosWindowScope.of(context).toggleSidebar();
       },
     ),
-    title: const Text('CLI Wrapper'),
+    title: const Text('Grep UI'),
     titleWidth: 250.0,
     actions: [
       const ToolBarSpacer(spacerUnits: 3),
