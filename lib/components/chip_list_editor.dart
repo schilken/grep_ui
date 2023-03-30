@@ -35,24 +35,19 @@ class _ListEditorState extends ConsumerState<ChipListEditor> {
 
   @override
   Widget build(BuildContext context) {
-//    FocusScope.of(context).requestFocus(_focusNode);
     return Container(
       color: Colors.white,
       child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.only(bottom: 8.0),
-                child: Text('ChipListEditor'),
-              ),
               Expanded(
                 child: Material(
                   color: Colors.white,
                   child: Builder(builder: (context) {
                     var chips = ref
                         .watch(preferencesStateProvider)
-                        .excludedProjects
+                        .fileExtensions
                         .map((item) => Chip(
                               label: Text(item),
                               deleteIcon:

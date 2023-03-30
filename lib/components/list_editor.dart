@@ -53,10 +53,6 @@ class _ListEditorState extends ConsumerState<ListEditor> {
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.only(bottom: 8.0),
-              child: Text('ListEditor'),
-            ),
             Expanded(
               child: Material(
                 child: Builder(

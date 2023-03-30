@@ -5,20 +5,20 @@ import 'providers.dart';
 
 class PreferencesState {
   final List<String> ignoredFolders;
-  final List<String> excludedProjects;
+  final List<String> fileExtensions;
 
   PreferencesState({
     required this.ignoredFolders,
-    required this.excludedProjects,
+    required this.fileExtensions,
   });
 
   PreferencesState copyWith({
     List<String>? ignoredFolders,
-    List<String>? excludedProjects,
+    List<String>? fileExtensions,
   }) {
     return PreferencesState(
       ignoredFolders: ignoredFolders ?? this.ignoredFolders,
-      excludedProjects: excludedProjects ?? this.excludedProjects,
+      fileExtensions: fileExtensions ?? this.fileExtensions,
     );
   }
 }
@@ -33,7 +33,7 @@ class PreferencesController extends Notifier<PreferencesState> {
     _preferencesRepository = ref.watch(preferencesRepositoryProvider);
     return PreferencesState(
       ignoredFolders: _preferencesRepository.ignoredFolders,
-      excludedProjects: _preferencesRepository.excludedProjects,
+      fileExtensions: _preferencesRepository.excludedProjects,
     );
   }
 
@@ -54,14 +54,14 @@ class PreferencesController extends Notifier<PreferencesState> {
   Future<void> addExcludedProject(String word) async {
     await _preferencesRepository.addExcludedProjects(word);
     state = state.copyWith(
-      excludedProjects: _preferencesRepository.excludedProjects,
+      fileExtensions: _preferencesRepository.excludedProjects,
     );
   }
 
   Future<void> removeExcludedProject(String word) async {
     await _preferencesRepository.removeExcludedProjects(word);
     state = state.copyWith(
-      ignoredFolders: _preferencesRepository.ignoredFolders,
+      fileExtensions: _preferencesRepository.excludedProjects,
     );
   }
 }

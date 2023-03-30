@@ -6,36 +6,32 @@ import 'package:flutter/foundation.dart';
 class FilterState {
   final String fileTypeFilter;
   final bool showWithContext;
-  final bool ignoreCase;
   final bool combineIntersection;
   final List<String> ignoredFolders;
-  final List<String> exclusionWords;
+  final List<String> fileExtensions;
 
   const FilterState({
     required this.fileTypeFilter,
     required this.showWithContext,
-    required this.ignoreCase,
     required this.combineIntersection,
     required this.ignoredFolders,
-    required this.exclusionWords,
+    required this.fileExtensions,
   });
 
 
   FilterState copyWith({
     String? fileTypeFilter,
     bool? showWithContext,
-    bool? ignoreCase,
     bool? combineIntersection,
     List<String>? ignoredFolders,
-    List<String>? exclusionWords,
+    List<String>? fileExtensions,
   }) {
     return FilterState(
       fileTypeFilter: fileTypeFilter ?? this.fileTypeFilter,
       showWithContext: showWithContext ?? this.showWithContext,
-      ignoreCase: ignoreCase ?? this.ignoreCase,
       combineIntersection: combineIntersection ?? this.combineIntersection,
       ignoredFolders: ignoredFolders ?? this.ignoredFolders,
-      exclusionWords: exclusionWords ?? this.exclusionWords,
+      fileExtensions: fileExtensions ?? this.fileExtensions,
     );
   }
 
@@ -45,19 +41,17 @@ class FilterState {
 
     return other.fileTypeFilter == fileTypeFilter &&
         other.showWithContext == showWithContext &&
-        other.ignoreCase == ignoreCase &&
         other.combineIntersection == combineIntersection &&
         listEquals(other.ignoredFolders, ignoredFolders) &&
-        listEquals(other.exclusionWords, exclusionWords);
+        listEquals(other.fileExtensions, fileExtensions);
   }
 
   @override
   int get hashCode {
     return fileTypeFilter.hashCode ^
         showWithContext.hashCode ^
-        ignoreCase.hashCode ^
         combineIntersection.hashCode ^
         ignoredFolders.hashCode ^
-        exclusionWords.hashCode;
+        fileExtensions.hashCode;
   }
 }

@@ -32,11 +32,11 @@ class _PreferencesPageState extends State<PreferencesPage> {
                 controller: _controller,
                 tabs: [
                   MacosTab(
-                    label: 'Ignore Folders for Scan',
+                    label: 'Ignored Folders for Scan',
                     active: _controller.index == 1,
                   ),
                   MacosTab(
-                    label: 'Exclude Strings from Search',
+                    label: 'File Extensions',
                     active: _controller.index == 2,
                   ),
                 ],

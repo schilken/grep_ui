@@ -22,11 +22,10 @@ class FilterController extends Notifier<FilterState> {
       showWithContext:
           _preferencesRepository.getSearchOption('showHiddenFiles'),
       fileTypeFilter: fileTypeFilter,
-      ignoreCase: _preferencesRepository.getSearchOption('searchInFilename'),
       combineIntersection:
           _preferencesRepository.getSearchOption('searchInFoldername'),
       ignoredFolders: _preferencesRepository.ignoredFolders,
-      exclusionWords: _preferencesRepository.excludedProjects,
+      fileExtensions: _preferencesRepository.excludedProjects,
     );
   }
 
