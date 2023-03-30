@@ -32,9 +32,9 @@ class PreferencesRepository {
     return ignoredFolders;
   }
 
-  List<String> get exclusionWords {
-    final exclusionWords = _prefs.getStringList('exclusionWords') ?? [];
-    return exclusionWords;
+  List<String> get excludedProjects {
+    final excludedProjects = _prefs.getStringList('excludedProjects') ?? [];
+    return excludedProjects;
   }
 
   Future<void> addIgnoredFolder(String folder) async {
@@ -49,16 +49,16 @@ class PreferencesRepository {
     await _prefs.setStringList('ignoredFolders', ignoredFolders);
   }
 
-  Future<void> addExclusionWord(String exclusionWord) async {
-    final exclusionWords = _prefs.getStringList('exclusionWords') ?? [];
-    exclusionWords.add(exclusionWord);
-    await _prefs.setStringList('exclusionWords', exclusionWords);
+  Future<void> addExcludedProjects(String exclusionWord) async {
+    final excludedProjects = _prefs.getStringList('excludedProjects') ?? [];
+    excludedProjects.add(exclusionWord);
+    await _prefs.setStringList('excludedProjects', excludedProjects);
   }
 
-  Future<void> removeExclusionWord(String exclusionWord) async {
-    final exclusionWords = _prefs.getStringList('exclusionWords') ?? [];
-    exclusionWords.remove(exclusionWord);
-    await _prefs.setStringList('exclusionWords', exclusionWords);
+  Future<void> removeExcludedProjects(String exclusionWord) async {
+    final excludedProjects = _prefs.getStringList('excludedProjects') ?? [];
+    excludedProjects.remove(exclusionWord);
+    await _prefs.setStringList('excludedProjects', excludedProjects);
   }
 
   setCurrentFolder(String folderPath) async {

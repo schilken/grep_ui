@@ -28,7 +28,7 @@ class _ListEditorState extends ConsumerState<ChipListEditor> {
     if (newItem.isEmpty) {
       return;
     }
-    ref.read(settingsControllerProvider.notifier).addExcludedProject(newItem);
+    ref.read(preferencesStateProvider.notifier).addExcludedProject(newItem);
     _textEditingController.clear();
     FocusScope.of(context).requestFocus(_focusNode);
   }
@@ -51,15 +51,15 @@ class _ListEditorState extends ConsumerState<ChipListEditor> {
                   color: Colors.white,
                   child: Builder(builder: (context) {
                     var chips = ref
-                        .watch(settingsControllerProvider)
-                        .exclusionWords
+                        .watch(preferencesStateProvider)
+                        .excludedProjects
                         .map((item) => Chip(
                               label: Text(item),
                               deleteIcon:
                                   const MacosIcon(CupertinoIcons.clear_circled),
                               onDeleted: () {
                                 ref
-                                    .read(settingsControllerProvider.notifier)
+                                    .read(preferencesStateProvider.notifier)
                                     .removeExcludedProject(item);
                               },
                             ))

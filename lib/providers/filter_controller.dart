@@ -26,7 +26,7 @@ class FilterController extends Notifier<FilterState> {
       combineIntersection:
           _preferencesRepository.getSearchOption('searchInFoldername'),
       ignoredFolders: _preferencesRepository.ignoredFolders,
-      exclusionWords: _preferencesRepository.exclusionWords,
+      exclusionWords: _preferencesRepository.excludedProjects,
     );
   }
 

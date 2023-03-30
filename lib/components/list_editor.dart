@@ -30,7 +30,7 @@ class _ListEditorState extends ConsumerState<ListEditor> {
     if (newItem.isEmpty) {
       return;
     }
-    ref.read(settingsControllerProvider.notifier).addIgnoredFolder(newItem);
+    ref.read(preferencesStateProvider.notifier).addIgnoredFolder(newItem);
     _textEditingController.clear();
     Future.delayed(const Duration(milliseconds: 100), () => _scrollToEnd());
     FocusScope.of(context).requestFocus(_focusNode);
@@ -46,7 +46,7 @@ class _ListEditorState extends ConsumerState<ListEditor> {
 
   @override
   Widget build(BuildContext context) {
-//    FocusScope.of(context).requestFocus(_focusNode);
+    final ignoredFolders = ref.watch(preferencesStateProvider).ignoredFolders;
     return Container(
       color: Colors.white,
       child: Padding(
@@ -63,23 +63,16 @@ class _ListEditorState extends ConsumerState<ListEditor> {
                   builder: (context) {
                     return ListView.builder(
                         controller: _scrollController,
-                        itemCount: ref
-                            .watch(settingsControllerProvider)
-                            .ignoredFolders
-                            .length,
+                        itemCount: ignoredFolders.length,
                         itemBuilder: (context, index) {
                           return ListTile(
                             visualDensity: VisualDensity.compact,
-                            title: Text(ref
-                                .watch(settingsControllerProvider)
-                                .ignoredFolders[index]),
+                            title: Text(ignoredFolders[index]),
                             trailing: MacosIconButton(
                               icon: const MacosIcon(CupertinoIcons.delete),
                               onPressed: () => ref
-                                  .watch(settingsControllerProvider.notifier)
-                                  .removeIgnoredFolder(ref
-                                      .watch(settingsControllerProvider)
-                                      .ignoredFolders[index]),
+                                  .read(preferencesStateProvider.notifier)
+                                  .removeIgnoredFolder(ignoredFolders[index]),
                             ),
                           );
                         });
