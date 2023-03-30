@@ -79,7 +79,7 @@ class MainPage extends ConsumerWidget {
                   if (appState.isLoading == true)
                     const Center(
                         child: Padding(
-                      padding: EdgeInsets.only(top: 32),
+                      padding: EdgeInsets.only(top: 48),
                       child: CupertinoActivityIndicator(),
                     ))
                 ],

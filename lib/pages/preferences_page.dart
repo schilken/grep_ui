@@ -14,7 +14,7 @@ class PreferencesPage extends StatefulWidget {
 class _PreferencesPageState extends State<PreferencesPage> {
   final _controller = MacosTabController(
     initialIndex: 0,
-    length: 3,
+    length: 2,
   );
 
   @override
@@ -32,10 +32,6 @@ class _PreferencesPageState extends State<PreferencesPage> {
                 controller: _controller,
                 tabs: [
                   MacosTab(
-                    label: 'General',
-                    active: _controller.index == 0,
-                  ),
-                  MacosTab(
                     label: 'Ignore Folders for Scan',
                     active: _controller.index == 1,
                   ),
@@ -45,9 +41,6 @@ class _PreferencesPageState extends State<PreferencesPage> {
                   ),
                 ],
                 children: const [
-                  Center(
-                    child: Text('Tab 1'),
-                  ),
                   Padding(
                     padding: EdgeInsets.all(20.0),
                     child: ListEditor(),
