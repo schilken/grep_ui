@@ -2,11 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
-import '../components/async_value_widget.dart';
 import '../components/message_bar.dart';
 import '../components/detail_tile.dart';
 import '../components/get_custom_toolbar.dart';
-import '../providers/app_state.dart';
 import '../providers/providers.dart';
 
 class MainPage extends ConsumerWidget {
@@ -14,6 +12,7 @@ class MainPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final currentFolder = ref.watch(currentFolderProvider);
     final appState = ref.watch(appControllerProvider);
     final appController = ref.watch(appControllerProvider.notifier);
     print('MainPage.build: $appState');
@@ -34,7 +33,7 @@ class MainPage extends ConsumerWidget {
                             const SizedBox(
                               width: 8,
                             ),
-                        SelectableText(appState.currentFolder),
+                        SelectableText(currentFolder),
                             const Spacer(),
                         Text('${appState.fileCount} Files'),
                           ],

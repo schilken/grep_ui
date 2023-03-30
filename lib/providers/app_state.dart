@@ -10,14 +10,12 @@ class AppState {
   final String? message;
   final int sidebarPageIndex;
   final String? commandAsString;
-  final String currentFolder;
   final List<String>? highlights;
   final bool isLoading;
 
   AppState({
     required this.details,
     required this.fileCount,
-    required this.currentFolder,
     this.sidebarPageIndex = 0,
     this.message,
     this.commandAsString,
@@ -32,7 +30,6 @@ class AppState {
     String? message,
     int? sidebarPageIndex,
     String? commandAsString,
-    String? currentFolder,
     List<String>? highlights,
     bool? isLoading,
   }) {
@@ -42,7 +39,6 @@ class AppState {
       message: message, // special, because must be settable to null
       sidebarPageIndex: sidebarPageIndex ?? this.sidebarPageIndex,
       commandAsString: commandAsString ?? this.commandAsString,
-      currentFolder: currentFolder ?? this.currentFolder,
       highlights: highlights ?? this.highlights,
       isLoading: isLoading ?? this.isLoading,
     );
@@ -57,7 +53,6 @@ class AppState {
         other.message == message &&
         other.sidebarPageIndex == sidebarPageIndex &&
         other.commandAsString == commandAsString &&
-        other.currentFolder == currentFolder &&
         listEquals(other.highlights, highlights) &&
         other.isLoading == isLoading;
   }
@@ -69,13 +64,12 @@ class AppState {
         message.hashCode ^
         sidebarPageIndex.hashCode ^
         commandAsString.hashCode ^
-        currentFolder.hashCode ^
         highlights.hashCode ^
         isLoading.hashCode;
   }
 
   @override
   String toString() {
-    return 'AppState(fileCount: $fileCount, message: $message, sidebarPageIndex: $sidebarPageIndex, commandAsString: $commandAsString, currentFolder: $currentFolder, highlights: $highlights, isLoading: $isLoading)';
+    return 'AppState(fileCount: $fileCount, message: $message, sidebarPageIndex: $sidebarPageIndex, commandAsString: $commandAsString, highlights: $highlights, isLoading: $isLoading)';
   }
 }

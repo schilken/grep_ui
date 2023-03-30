@@ -10,6 +10,7 @@ import 'toolbar_widget_toggle.dart';
 
 ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
   final appController = ref.watch(appControllerProvider.notifier);
+  final currentFolderNotifier = ref.watch(currentFolderProvider.notifier);
   final searchOptionsNotifier = ref.read(searchOptionsProvider.notifier);
 //  final searchOptions = ref.watch(searchOptionsProvider);
   return ToolBar(
@@ -39,7 +40,7 @@ ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
               String? selectedDirectory = await FilePicker.platform
                   .getDirectoryPath(initialDirectory: userHomeDirectory);
               if (selectedDirectory != null) {
-                appController.setFolder(folderPath: selectedDirectory);
+                currentFolderNotifier.setCurrentFolder(selectedDirectory);
               }
             },
           ),

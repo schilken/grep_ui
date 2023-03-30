@@ -14,6 +14,7 @@ class AppController extends Notifier<AppState> {
   late PreferencesRepository _preferencesRepository;
   late SearchOptions _searchOptions;
   late FilterState _filterState;
+  late String _currentFolder;
 
   final _sectionsMap = <String, List<String>>{};
   final _searchResult = <String>[];
@@ -25,12 +26,12 @@ class AppController extends Notifier<AppState> {
     _filesRepository = ref.watch(filesRepositoryProvider);
     _searchOptions = ref.watch(searchOptionsProvider);
     _filterState = ref.watch(filterControllerProvider);
+    _currentFolder = ref.watch(currentFolderProvider);
     Future<void>.delayed(Duration(milliseconds: 10), () => search());
     return AppState(
       fileCount: 0,
       details: [],
       isLoading: false,
-      currentFolder: _preferencesRepository.getCurrentFolder(),
     );
   }
 
@@ -49,14 +50,14 @@ class AppController extends Notifier<AppState> {
     );
   }
 
-  Future<void> setFolder({required String folderPath}) async {
-    log.i('setFolder: $folderPath');
-    _preferencesRepository.setCurrentFolder(folderPath);
-    state = state.copyWith(
-      currentFolder: folderPath,
-    );
-    search();
-  }
+  // Future<void> setFolder({required String folderPath}) async {
+  //   log.i('setFolder: $folderPath');
+  //   _preferencesRepository.setCurrentFolder(folderPath);
+  //   state = state.copyWith(
+  //     currentFolder: folderPath,
+  //   );
+  //   search();
+  // }
 
   Future<void> _grepCall(String exampleParameter) async {
     const programm = 'grep';
@@ -81,7 +82,7 @@ class AppController extends Notifier<AppState> {
     }
     parameters.add(exampleParameter);
     final commandAsString =
-        '$programm ${parameters.join(' ')} ${state.currentFolder}';
+        '$programm ${parameters.join(' ')} $_currentFolder';
     log.i('call $commandAsString');
     state = state.copyWith(
       message: commandAsString,
@@ -90,7 +91,7 @@ class AppController extends Notifier<AppState> {
     await Future.delayed(const Duration(milliseconds: 500));
     final subscription = _handleCommandOutput(eventBus.streamController.stream);
     final command = await _filesRepository.runCommand(
-        programm, parameters, state.currentFolder);
+        programm, parameters, _currentFolder);
     log.i('command returns with rc:: $command');
     subscription.cancel();
   }
@@ -132,17 +133,17 @@ class AppController extends Notifier<AppState> {
   }
 
   showInFinder(String path) {
-    final fullPath = p.join(state.currentFolder, path);
+    final fullPath = p.join(_currentFolder, path);
     Process.run('open', ['-R', fullPath]);
   }
 
   copyToClipboard(String path) {
-    final fullPath = p.join(state.currentFolder, path);
+    final fullPath = p.join(_currentFolder, path);
     Clipboard.setData(ClipboardData(text: fullPath));
   }
 
   showInTerminal(String path) {
-    final fullPath = p.join(state.currentFolder, path);
+    final fullPath = p.join(_currentFolder, path);
     final dirname = p.dirname(fullPath);
     Process.run('open', ['-a', 'iTerm', dirname]);
   }
@@ -154,7 +155,7 @@ class AppController extends Notifier<AppState> {
     if (copySearchwordToClipboard) {
       Clipboard.setData(ClipboardData(text: _searchOptions.searchWord));
     }
-    final fullPath = p.join(state.currentFolder, path);
+    final fullPath = p.join(_currentFolder, path);
     Process.run('code', [fullPath]);
   }
 
