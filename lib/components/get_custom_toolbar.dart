@@ -90,7 +90,13 @@ ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
       ToolbarWidgetToggle(
           onChanged: searchOptionsNotifier.setCaseSensitiv,
           child: const Text('Aa'),
-          tooltipMessage: 'Search case sentitiv'),
+          tooltipMessage: 'Case sentitive'),
+      ToolbarWidgetToggle(
+          child: const MacosIcon(
+            CupertinoIcons.crop,
+          ),
+          onChanged: searchOptionsNotifier.setWholeWord,
+          tooltipMessage: 'Whole Word'),
       ToolBarIconButton(
           label: "Search",
           icon: const MacosIcon(
