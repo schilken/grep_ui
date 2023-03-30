@@ -14,45 +14,44 @@ class FilterSidebar extends ConsumerWidget {
     final filterState = ref.watch(filterControllerProvider);
     final filterController = ref.watch(filterControllerProvider.notifier);
     return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text('Filter Files with extension',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              const SizedBox(height: 16),
-              MacosPopupButton<String>(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Scan Files with this extension',
+            style: TextStyle(fontWeight: FontWeight.bold)),
+        const SizedBox(height: 16),
+        MacosPopupButton<String>(
           value: filterState.fileTypeFilter,
-                onChanged: (String? value) async {
-                  await filterController.setFileTypeFilter(value);
-                },
-                items: filterController
-                    .allFileExtensions
-                    .map<MacosPopupMenuItem<String>>((String value) {
-                  return MacosPopupMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-              const SizedBox(height: 8),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 8, 4, 0),
-                child: MacosCheckBoxListTile(
-                  title: const Text('Combine intersection'),
-                  onChanged: (value) => filterController
-                      .toggleCombineIntersection(value ?? false),
+          onChanged: (String? value) async {
+            await filterController.setFileTypeFilter(value);
+          },
+          items: filterController.allFileExtensions
+              .map<MacosPopupMenuItem<String>>((String value) {
+            return MacosPopupMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+        ),
+        const SizedBox(height: 8),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 8, 4, 0),
+          child: MacosCheckBoxListTile(
+            title: const Text('Combine intersection'),
+            onChanged: (value) =>
+                filterController.toggleCombineIntersection(value ?? false),
             value: filterState.combineIntersection,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 8, 4, 0),
-                child: MacosCheckBoxListTile(
-                  title: const Text('With 4 context lines'),
-                  onChanged: (value) => filterController
-                      .toggleShowWithContext(value ?? false),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 8, 4, 0),
+          child: MacosCheckBoxListTile(
+            title: const Text('With 4 context lines'),
+            onChanged: (value) =>
+                filterController.toggleShowWithContext(value ?? false),
             value: filterState.showWithContext,
-                ),
-              ),
-              const SizedBox(height: 16),
+          ),
+        ),
+        const SizedBox(height: 16),
       ],
     );
   }
