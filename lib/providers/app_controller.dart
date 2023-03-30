@@ -7,7 +7,6 @@ import 'package:mixin_logger/mixin_logger.dart' as log;
 import 'package:path/path.dart' as p;
 import 'app_state.dart';
 import '../models/detail.dart';
-import '../services/event_bus.dart';
 
 class AppController extends Notifier<AppState> {
   late FilesRepository _filesRepository;
@@ -40,7 +39,7 @@ class AppController extends Notifier<AppState> {
       state = state.copyWith(message: 'No search word entered or lenght < 2');
       return;
     }
-    await _grepCall(_searchOptions.searchWord);
+    await _runGrepCommand(_searchOptions.searchWord);
     final details = _detailsFromSectionMap();
     state = state.copyWith(
       details: details,
@@ -50,16 +49,7 @@ class AppController extends Notifier<AppState> {
     );
   }
 
-  // Future<void> setFolder({required String folderPath}) async {
-  //   log.i('setFolder: $folderPath');
-  //   _preferencesRepository.setCurrentFolder(folderPath);
-  //   state = state.copyWith(
-  //     currentFolder: folderPath,
-  //   );
-  //   search();
-  // }
-
-  Future<void> _grepCall(String exampleParameter) async {
+  Future<void> _runGrepCommand(String searchWord) async {
     const programm = 'grep';
     final fileExtension = _preferencesRepository.fileExtensionFilter;
     final parameters = [
@@ -76,27 +66,32 @@ class AppController extends Notifier<AppState> {
       parameters.add('-C4');
     }
     if (_preferencesRepository.ignoredFolders.isNotEmpty) {
-      _preferencesRepository.ignoredFolders.forEach((element) {
+      for (var element in _preferencesRepository.ignoredFolders) {
         parameters.add('--exclude-dir=$element');
-      });
+      }
     }
-    parameters.add(exampleParameter);
-    final commandAsString =
-        '$programm ${parameters.join(' ')} $_currentFolder';
+    parameters.add(searchWord);
+    final commandAsString = '$programm ${parameters.join(' ')} $_currentFolder';
     log.i('call $commandAsString');
     state = state.copyWith(
       message: commandAsString,
       isLoading: true,
     );
     await Future.delayed(const Duration(milliseconds: 500));
-    final subscription = _handleCommandOutput(eventBus.streamController.stream);
+    final streamController = StreamController<String>();
+    final subscription = _handleCommandOutput(streamController.stream);
     final command = await _filesRepository.runCommand(
-        programm, parameters, _currentFolder);
+      programm,
+      parameters,
+      _currentFolder,
+      streamController,
+    );
     log.i('command returns with rc:: $command');
     subscription.cancel();
+    streamController.close();
   }
 
-  StreamSubscription<dynamic> _handleCommandOutput(Stream<dynamic> stream) {
+  StreamSubscription<dynamic> _handleCommandOutput(Stream<String> stream) {
     _sectionsMap.clear();
     _searchResult.clear();
     _searchResult.add(_searchOptions.searchWord);

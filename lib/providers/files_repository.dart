@@ -5,11 +5,13 @@ import 'dart:io';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../services/event_bus.dart';
-
 class FilesRepository {
   Future<int> runCommand(
-      String programm, List<String> parameters, String workingDirectory) async {
+    String programm,
+    List<String> parameters,
+    String workingDirectory,
+    StreamController streamController,
+  ) async {
     final process = await Process.start(
       programm,
       parameters,
@@ -20,14 +22,14 @@ class FilesRepository {
         .transform(const LineSplitter())
         .forEach(
       (line) {
-        eventBus.fire('stdout> $line');
+        streamController.add('stdout> $line');
       },
     ).whenComplete(() {
-      eventBus.fire('Stream closed in whenComplete');
+      streamController.add('Stream closed in whenComplete');
       return;
     }).onError(
       (error, stackTrace) {
-        eventBus.fire('Stream closed onError');
+        streamController.add('Stream closed onError');
         return;
       },
     );
@@ -35,7 +37,7 @@ class FilesRepository {
         .transform(utf8.decoder)
         .transform(const LineSplitter())
         .forEach((line) {
-      eventBus.fire('stderr> $line');
+      streamController.add('stderr> $line');
     });
     return process.exitCode;
   }
