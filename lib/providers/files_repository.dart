@@ -7,43 +7,48 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class FilesRepository {
 
-  Future<int> runCommand(
+  /// return null on success otherwise with error message
+  Future<String?> runCommand(
     String programm,
     List<String> parameters,
     String workingDirectory,
     StreamController streamController,
   ) async {
-    var completer = Completer<int>();
-    final process = await Process.start(
-      programm,
-      parameters,
-      workingDirectory: workingDirectory,
-    );
-    final stdoutSubscription = process.stdout
-        .transform(utf8.decoder)
-        .transform(const LineSplitter())
-        .listen(
-      (line) {
-        streamController.add('stdout> $line');
-      },
-    );
-    stdoutSubscription.onDone(() {
-      streamController.add('onDone');
-      completer.complete(process.exitCode);
-    });
-    stdoutSubscription.onError(
-      (error, stackTrace) {
-        streamController.add('onError ${error.toString()}');
-        completer.complete(process.exitCode);
-        return;
-      },
-    );
-    process.stderr
-        .transform(utf8.decoder)
-        .transform(const LineSplitter())
-        .forEach((line) {
-      streamController.add('stderr> $line');
-    });
+    var completer = Completer<String?>();
+    try {
+      final process = await Process.start(
+        programm,
+        parameters,
+        workingDirectory: workingDirectory,
+      );
+      final stdoutSubscription = process.stdout
+          .transform(utf8.decoder)
+          .transform(const LineSplitter())
+          .listen(
+        (line) {
+          streamController.add('stdout> $line');
+        },
+      );
+      stdoutSubscription.onDone(() {
+        streamController.add('onDone');
+        completer.complete(null);
+      });
+      stdoutSubscription.onError(
+        (error, stackTrace) {
+          streamController.add('onError ${error.toString()}');
+          completer.complete('Error: failed with exitCode ${process.exitCode}');
+          return;
+        },
+      );
+      process.stderr
+          .transform(utf8.decoder)
+          .transform(const LineSplitter())
+          .forEach((line) {
+        streamController.add('stderr> $line');
+      });
+    } on Exception catch (e) {
+      completer.complete('Error: failed with exception ${e.toString()}');
+    }
     return completer.future;
   }
 

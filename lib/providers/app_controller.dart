@@ -12,6 +12,8 @@ class AppController extends Notifier<AppState> {
   late FilesRepository _filesRepository;
   late PreferencesRepository _preferencesRepository;
   late SearchOptions _searchOptions;
+  // needed for rebuild when filterState is updated
+  // ignore: unused_field
   late FilterState _filterState;
   late String _currentFolder;
 
@@ -26,7 +28,7 @@ class AppController extends Notifier<AppState> {
     _searchOptions = ref.watch(searchOptionsProvider);
     _filterState = ref.watch(filterControllerProvider);
     _currentFolder = ref.watch(currentFolderProvider);
-    Future<void>.delayed(Duration(milliseconds: 10), () => search());
+    Future<void>.delayed(const Duration(milliseconds: 10), () => search());
     return AppState(
       fileCount: 0,
       details: [],
@@ -39,17 +41,18 @@ class AppController extends Notifier<AppState> {
       state = state.copyWith(message: 'No search word entered or lenght < 2');
       return;
     }
-    await _runGrepCommand(_searchOptions.searchWord);
+    final errorMessage = await _runGrepCommand(_searchOptions.searchWord);
     final details = _detailsFromSectionMap();
     state = state.copyWith(
       details: details,
       fileCount: details.length,
       highlights: [_searchOptions.searchWord],
       isLoading: false,
+      message: errorMessage,
     );
   }
 
-  Future<void> _runGrepCommand(String searchWord) async {
+  Future<String?> _runGrepCommand(String searchWord) async {
     const programm = 'grep';
     final fileExtension = _preferencesRepository.fileExtensionFilter;
     final parameters = [
@@ -80,15 +83,16 @@ class AppController extends Notifier<AppState> {
     await Future.delayed(const Duration(milliseconds: 500));
     final streamController = StreamController<String>();
     final subscription = _handleCommandOutput(streamController.stream);
-    final command = await _filesRepository.runCommand(
+    final errorMessage = await _filesRepository.runCommand(
       programm,
       parameters,
       _currentFolder,
       streamController,
     );
-    log.i('command returns with rc:: $command');
+    log.i('command returns with: $errorMessage');
     subscription.cancel();
     streamController.close();
+    return errorMessage;
   }
 
   StreamSubscription<dynamic> _handleCommandOutput(Stream<String> stream) {
@@ -251,14 +255,14 @@ class AppController extends Notifier<AppState> {
     final keysToRemove = <String>[];
     final parts = title.split('/');
     final projectName = parts.first;
-    _sectionsMap.keys.forEach((key) {
+    for (var key in _sectionsMap.keys) {
       if (key.startsWith('./$projectName')) {
         keysToRemove.add(key);
       }
-    });
-    keysToRemove.forEach((key) {
+    }
+    for (var key in keysToRemove) {
       _sectionsMap.remove(key);
-    });
+    }
   }
 }
 

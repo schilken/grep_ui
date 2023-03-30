@@ -15,7 +15,7 @@ class MainPage extends ConsumerWidget {
     final currentFolder = ref.watch(currentFolderProvider);
     final appState = ref.watch(appControllerProvider);
     final appController = ref.watch(appControllerProvider.notifier);
-//    print('MainPage.build: $appState');
+    print('MainPage.build: $appState');
     return Builder(builder: (context) {
       return MacosScaffold(
         toolBar: getCustomToolBar(context, ref),
@@ -23,60 +23,58 @@ class MainPage extends ConsumerWidget {
           ContentArea(
             builder: (context, scrollController) {
               return Column(
-                    children: [
-                      Container(
-                        color: Colors.blueGrey[100],
-                        padding: const EdgeInsets.fromLTRB(12, 20, 20, 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                        Text('Base Directory:'),
-                            const SizedBox(
-                              width: 8,
-                            ),
+                children: [
+                  Container(
+                    color: Colors.blueGrey[100],
+                    padding: const EdgeInsets.fromLTRB(12, 20, 20, 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const Text('Base Directory:'),
+                        const SizedBox(
+                          width: 8,
+                        ),
                         SelectableText(currentFolder),
-                            const Spacer(),
+                        const Spacer(),
                         Text('${appState.fileCount} Files'),
-                          ],
-                        ),
-                      ),
+                      ],
+                    ),
+                  ),
                   if (appState.message != null)
-                        MessageBar(
+                    MessageBar(
                       message: appState.message!,
-                          onDismiss: () =>
-                              appController.removeMessage(),
-                        ),
+                      onDismiss: () => appController.removeMessage(),
+                    ),
                   if (appState.isLoading == false && appState.details.isEmpty)
-                        const Center(
-                            child: Padding(
-                          padding: EdgeInsets.only(top: 32),
-                          child: Text('No search result.'),
-                        )),
+                    const Center(
+                        child: Padding(
+                      padding: EdgeInsets.only(top: 32),
+                      child: Text('No search result.'),
+                    )),
                   if (appState.isLoading == false &&
                       appState.details.isNotEmpty)
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 16),
-                            child: ListView.separated(
-                              controller: ScrollController(),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: ListView.separated(
+                          controller: ScrollController(),
                           itemCount: appState.details.length,
-                              itemBuilder: (context, index) {
+                          itemBuilder: (context, index) {
                             final highlights = appState.highlights ?? [];
                             final detail = appState.details[index];
-                                return DetailTile(
-                                  detail: detail,
-                                  highlights: highlights,
-                                );
-                              },
-                              separatorBuilder:
-                                  (BuildContext context, int index) {
-                                return const Divider(
-                                  thickness: 2,
-                                );
-                              },
-                            ),
-                          ),
+                            return DetailTile(
+                              detail: detail,
+                              highlights: highlights,
+                            );
+                          },
+                          separatorBuilder: (BuildContext context, int index) {
+                            return const Divider(
+                              thickness: 2,
+                            );
+                          },
                         ),
+                      ),
+                    ),
                   if (appState.isLoading == true)
                     const Center(
                         child: Padding(
