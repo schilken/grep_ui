@@ -13,25 +13,10 @@ class PreferencesRepository {
 
   Future<void> setFileTypeFilter(value) async {
     await _prefs.setString('fileTypeFilter', value);
-    _firePreferencesChanged();
-  }
-
-  void _firePreferencesChanged() {
-    final settingsLoaded = PreferencesChanged(
-      fileTypeFilter: fileTypeFilter,
-      currentFolder: getCurrentFolder(),
-      showWithContext: getSearchOption('showWithContext'),
-      ignoreCase: getSearchOption('ignoreCase'),
-      combineIntersection: getSearchOption('combineIntersection'),
-      ignoredFolders: ignoredFolders,
-      exclusionWords: exclusionWords,
-    );
-    eventBus.fire(settingsLoaded);
   }
 
   Future<void> toggleSearchOption(String option, bool value) async {
     await _prefs.setBool(option, value);
-    _firePreferencesChanged();
   }
 
   bool get showWithContext => getSearchOption('showWithContext');
@@ -56,33 +41,28 @@ class PreferencesRepository {
     final ignoredFolders = _prefs.getStringList('ignoredFolders') ?? [];
     ignoredFolders.add(folder);
     await _prefs.setStringList('ignoredFolders', ignoredFolders);
-    _firePreferencesChanged();
   }
 
   Future<void> removeIgnoredFolder(String folder) async {
     final ignoredFolders = _prefs.getStringList('ignoredFolders') ?? [];
     ignoredFolders.remove(folder);
     await _prefs.setStringList('ignoredFolders', ignoredFolders);
-    _firePreferencesChanged();
   }
 
   Future<void> addExclusionWord(String exclusionWord) async {
     final exclusionWords = _prefs.getStringList('exclusionWords') ?? [];
     exclusionWords.add(exclusionWord);
     await _prefs.setStringList('exclusionWords', exclusionWords);
-    _firePreferencesChanged();
   }
 
   Future<void> removeExclusionWord(String exclusionWord) async {
     final exclusionWords = _prefs.getStringList('exclusionWords') ?? [];
     exclusionWords.remove(exclusionWord);
     await _prefs.setStringList('exclusionWords', exclusionWords);
-    _firePreferencesChanged();
   }
 
   setCurrentFolder(String folderPath) async {
     await _prefs.setString('currentFolder', folderPath);
-    _firePreferencesChanged();
   }
 
   String getCurrentFolder() {
