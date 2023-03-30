@@ -22,7 +22,7 @@ class FilterSidebar extends ConsumerWidget {
         MacosPopupButton<String>(
           value: filterState.fileTypeFilter,
           onChanged: (String? value) async {
-            await filterController.setFileTypeFilter(value);
+            await filterController.setFileExtensionFilter(value);
           },
           items: filterController.allFileExtensions
               .map<MacosPopupMenuItem<String>>((String value) {

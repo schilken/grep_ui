@@ -33,7 +33,7 @@ class PreferencesController extends Notifier<PreferencesState> {
     _preferencesRepository = ref.watch(preferencesRepositoryProvider);
     return PreferencesState(
       ignoredFolders: _preferencesRepository.ignoredFolders,
-      fileExtensions: _preferencesRepository.excludedProjects,
+      fileExtensions: _preferencesRepository.fileExtensions,
     );
   }
 
@@ -51,17 +51,17 @@ class PreferencesController extends Notifier<PreferencesState> {
     );
   }
 
-  Future<void> addExcludedProject(String word) async {
-    await _preferencesRepository.addExcludedProjects(word);
+  Future<void> addFileExtension(String word) async {
+    await _preferencesRepository.addFileExtension(word);
     state = state.copyWith(
-      fileExtensions: _preferencesRepository.excludedProjects,
+      fileExtensions: _preferencesRepository.fileExtensions,
     );
   }
 
-  Future<void> removeExcludedProject(String word) async {
-    await _preferencesRepository.removeExcludedProjects(word);
+  Future<void> removeFileExtension(String word) async {
+    await _preferencesRepository.removeFileExtension(word);
     state = state.copyWith(
-      fileExtensions: _preferencesRepository.excludedProjects,
+      fileExtensions: _preferencesRepository.fileExtensions,
     );
   }
 }

@@ -28,7 +28,7 @@ class _ListEditorState extends ConsumerState<ChipListEditor> {
     if (newItem.isEmpty) {
       return;
     }
-    ref.read(preferencesStateProvider.notifier).addExcludedProject(newItem);
+    ref.read(preferencesStateProvider.notifier).addFileExtension(newItem);
     _textEditingController.clear();
     FocusScope.of(context).requestFocus(_focusNode);
   }
@@ -55,7 +55,7 @@ class _ListEditorState extends ConsumerState<ChipListEditor> {
                               onDeleted: () {
                                 ref
                                     .read(preferencesStateProvider.notifier)
-                                    .removeExcludedProject(item);
+                                    .removeFileExtension(item);
                               },
                             ))
                         .toList();

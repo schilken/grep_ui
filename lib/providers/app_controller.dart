@@ -61,7 +61,7 @@ class AppController extends Notifier<AppState> {
 
   Future<void> _grepCall(String exampleParameter) async {
     const programm = 'grep';
-    final fileExtension = _preferencesRepository.fileTypeFilter;
+    final fileExtension = _preferencesRepository.fileExtensionFilter;
     final parameters = [
       '-R',
       '-I',

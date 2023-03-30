@@ -1,38 +1,35 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'preferences_repository.dart';
-import 'filter_state.dart';
+import 'providers.dart';
 
 class FilterController extends Notifier<FilterState> {
+  late PreferencesState _preferencesState;
   late PreferencesRepository _preferencesRepository;
-
-  final allFileExtensions = <String>[
-    'dart',
-    'yaml',
-    'swift',
-    'md',
-    'txt',
-    'http',
-  ];
 
   @override
   FilterState build() {
     _preferencesRepository = ref.watch(preferencesRepositoryProvider);
+    _preferencesState = ref.watch(preferencesStateProvider);
+    print('FilterController.build: ${_preferencesState.fileExtensions}');
     return FilterState(
       showWithContext:
           _preferencesRepository.getSearchOption('showHiddenFiles'),
-      fileTypeFilter: fileTypeFilter,
+      fileTypeFilter: fileExtensionFilter,
       combineIntersection:
           _preferencesRepository.getSearchOption('searchInFoldername'),
-      ignoredFolders: _preferencesRepository.ignoredFolders,
-      fileExtensions: _preferencesRepository.excludedProjects,
+      ignoredFolders: _preferencesState.ignoredFolders,
+      fileExtensions: _preferencesState.fileExtensions,
     );
   }
 
-  get fileTypeFilter => _preferencesRepository.fileTypeFilter;
+  get fileExtensionFilter => _preferencesRepository.fileExtensionFilter;
 
-  Future<void> setFileTypeFilter(value) async {
-    await _preferencesRepository.setFileTypeFilter(value);
+  List<String> get allFileExtensions {
+    return _preferencesRepository.fileExtensions;
+  }
+
+  Future<void> setFileExtensionFilter(value) async {
+    await _preferencesRepository.setFileExtensionFilter(value);
     state = state.copyWith(
       fileTypeFilter: value,
     );

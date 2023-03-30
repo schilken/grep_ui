@@ -3,16 +3,15 @@ import 'dart:io';
 import 'package:grep_ui/providers/providers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../services/event_bus.dart';
 
 class PreferencesRepository {
   PreferencesRepository(this._prefs);
   final SharedPreferences _prefs;
 
-  get fileTypeFilter => _prefs.getString('fileTypeFilter') ?? 'dart';
+  get fileExtensionFilter => _prefs.getString('fileExtensionFilter') ?? 'yaml';
 
-  Future<void> setFileTypeFilter(value) async {
-    await _prefs.setString('fileTypeFilter', value);
+  Future<void> setFileExtensionFilter(value) async {
+    await _prefs.setString('fileExtensionFilter', value);
   }
 
   Future<void> toggleSearchOption(String option, bool value) async {
@@ -32,9 +31,9 @@ class PreferencesRepository {
     return ignoredFolders;
   }
 
-  List<String> get excludedProjects {
-    final excludedProjects = _prefs.getStringList('excludedProjects') ?? [];
-    return excludedProjects;
+  List<String> get fileExtensions {
+    final fileExtensions = _prefs.getStringList('fileExtensions') ?? ['dart'];
+    return fileExtensions;
   }
 
   Future<void> addIgnoredFolder(String folder) async {
@@ -49,16 +48,22 @@ class PreferencesRepository {
     await _prefs.setStringList('ignoredFolders', ignoredFolders);
   }
 
-  Future<void> addExcludedProjects(String exclusionWord) async {
-    final excludedProjects = _prefs.getStringList('excludedProjects') ?? [];
-    excludedProjects.add(exclusionWord);
-    await _prefs.setStringList('excludedProjects', excludedProjects);
+  Future<void> addFileExtension(String fileExtension) async {
+    final fileExtensions = _prefs.getStringList('fileExtensions') ?? [];
+    fileExtensions.add(fileExtension);
+    await _prefs.setStringList('fileExtensions', fileExtensions);
   }
 
-  Future<void> removeExcludedProjects(String exclusionWord) async {
-    final excludedProjects = _prefs.getStringList('excludedProjects') ?? [];
-    excludedProjects.remove(exclusionWord);
-    await _prefs.setStringList('excludedProjects', excludedProjects);
+  Future<void> removeFileExtension(String fileExtension) async {
+    final fileExtensions = _prefs.getStringList('fileExtensions') ?? [];
+    fileExtensions.remove(fileExtension);
+    if (fileExtensions.isEmpty) {
+      fileExtensions.add('txt');
+    }
+    if (!fileExtensions.contains(fileExtensionFilter)) {
+      setFileExtensionFilter(fileExtensions.first);
+    }
+    await _prefs.setStringList('fileExtensions', fileExtensions);
   }
 
   setCurrentFolder(String folderPath) async {
