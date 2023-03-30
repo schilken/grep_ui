@@ -4,7 +4,6 @@ import 'package:collection/collection.dart';
 import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:grep_ui/providers/providers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:mixin_logger/mixin_logger.dart' as log;
@@ -12,10 +11,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'pages/about_window.dart';
 import 'pages/file_content_page.dart';
 import 'pages/help_page.dart';
+import 'providers/providers.dart';
 import 'services/event_bus.dart';
 import 'components/filter_sidebar.dart';
 import 'pages/main_page.dart';
-import 'preferences/preferences_page.dart';
+import 'pages/preferences_page.dart';
 
 import 'pages/logger_page.dart';
 

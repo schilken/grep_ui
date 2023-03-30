@@ -44,8 +44,7 @@ class FilterSidebar extends ConsumerWidget {
                 child: MacosCheckBoxListTile(
                   title: const Text('Combine intersection'),
                   onChanged: (value) => filterController
-                      .toggleSearchOption(
-                          'combineIntersection', value ?? false),
+                      .toggleCombineIntersection(value ?? false),
                   value: state.combineIntersection,
                 ),
               ),
@@ -54,7 +53,7 @@ class FilterSidebar extends ConsumerWidget {
                 child: MacosCheckBoxListTile(
                   title: const Text('With 4 context lines'),
                   onChanged: (value) => filterController
-                      .toggleSearchOption('showWithContext', value ?? false),
+                      .toggleShowWithContext(value ?? false),
                   value: state.showWithContext,
                 ),
               ),

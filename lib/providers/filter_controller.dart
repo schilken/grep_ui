@@ -34,14 +34,30 @@ class FilterController extends AsyncNotifier<FilterState> {
 
   Future<void> setFileTypeFilter(value) async {
     await _preferencesRepository.setFileTypeFilter(value);
+    state = AsyncValue.data(
+      state.value!.copyWith(
+        fileTypeFilter: value,
+      ),
+    );
   }
 
-  Future<void> toggleSearchOption(String option, bool value) async {
-    await _preferencesRepository.toggleSearchOption(option, value);
+  Future<void> toggleCombineIntersection(bool value) async {
+    await _preferencesRepository.toggleSearchOption(
+        'combineIntersection', value);
+    state = AsyncValue.data(
+      state.value!.copyWith(
+        combineIntersection: value,
+      ),
+    );
   }
 
-  bool getSearchOption(String option) {
-    return _preferencesRepository.getSearchOption(option);
+  Future<void> toggleShowWithContext(bool value) async {
+    await _preferencesRepository.toggleSearchOption('showWithContext', value);
+    state = AsyncValue.data(
+      state.value!.copyWith(
+        showWithContext: value,
+      ),
+    );
   }
 }
 
