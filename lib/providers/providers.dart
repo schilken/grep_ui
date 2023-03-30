@@ -6,6 +6,7 @@ export 'files_repository.dart';
 export 'filter_controller.dart';
 export 'filter_state.dart';
 export 'settings_controller.dart';
+export 'search_options_notifier.dart';
 export 'app_controller.dart';
 
 final sharedPreferencesProvider = Provider<SharedPreferences>(

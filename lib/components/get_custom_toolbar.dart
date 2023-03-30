@@ -10,6 +10,8 @@ import 'toolbar_widget_toggle.dart';
 
 ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
   final appController = ref.watch(appControllerProvider.notifier);
+  final searchOptionsNotifier = ref.read(searchOptionsProvider.notifier);
+//  final searchOptions = ref.watch(searchOptionsProvider);
   return ToolBar(
     leading: MacosIconButton(
       icon: const MacosIcon(
@@ -35,15 +37,13 @@ ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
             onTap: () async {
               final userHomeDirectory = Platform.environment['HOME'];
               String? selectedDirectory = await FilePicker.platform
-                  .getDirectoryPath(
-                      initialDirectory:
-                          userHomeDirectory); 
+                  .getDirectoryPath(initialDirectory: userHomeDirectory);
               if (selectedDirectory != null) {
                 appController.setFolder(folderPath: selectedDirectory);
               }
             },
           ),
-          MacosPulldownMenuDivider(),
+          const MacosPulldownMenuDivider(),
           MacosPulldownMenuItem(
             title: const Text("Save last search result"),
             onTap: () async {
@@ -77,14 +77,17 @@ ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
       const ToolBarSpacer(spacerUnits: 1),
       ToolbarSearchfield(
         placeholder: 'Search word',
-        onChanged: (word) => appController.setSearchWord(word),
+        onChanged: (word) {
+          if (word.isEmpty) {
+            searchOptionsNotifier.setSearchWord(word);
+          }
+        },
         onSubmitted: (word) {
-          appController.setSearchWord(word);
-          appController.search();
+          searchOptionsNotifier.setSearchWord(word);
         },
       ),
       ToolbarWidgetToggle(
-          onChanged: appController.setCaseSentitiv,
+          onChanged: searchOptionsNotifier.setCaseSensitiv,
           child: const Text('Aa'),
           tooltipMessage: 'Search case sentitiv'),
       ToolBarIconButton(
