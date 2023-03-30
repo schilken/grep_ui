@@ -12,11 +12,9 @@ import '../services/event_bus.dart';
 class AppController extends Notifier<AppState> {
   late FilesRepository _filesRepository;
   late PreferencesRepository _preferencesRepository;
-//  late FilterState _filterState;
+  late SearchOptions _searchOptions;
+  late FilterState _filterState;
 
-// from ToolBar
-  bool _searchCaseSensitiv = false;
-  String _searchWord = '';
   final _sectionsMap = <String, List<String>>{};
   final _searchResult = <String>[];
 
@@ -25,49 +23,38 @@ class AppController extends Notifier<AppState> {
     print('AppController.build');
     _preferencesRepository = ref.watch(preferencesRepositoryProvider);
     _filesRepository = ref.watch(filesRepositoryProvider);
-//    _filterState = ref.watch(filterControllerProvider);
+    _searchOptions = ref.watch(searchOptionsProvider);
+    _filterState = ref.watch(filterControllerProvider);
+    Future<void>.delayed(Duration(milliseconds: 10), () => search());
     return AppState(
       fileCount: 0,
       details: [],
       isLoading: false,
       currentFolder: _preferencesRepository.getCurrentFolder(),
-      searchWord: '',
     );
   }
 
   void search() async {
-    if (state.searchWord == null || state.searchWord!.length < 2) {
+    if (_searchOptions.searchWord.length < 2) {
       state = state.copyWith(message: 'No search word entered or lenght < 2');
       return;
     }
-    await grepCall(state.searchWord!);
+    await grepCall(_searchOptions.searchWord);
     final details = detailsFromSectionMap();
     state = state.copyWith(
       details: details,
       fileCount: details.length,
-      highlights: [state.searchWord ?? '@@'],
+      highlights: [_searchOptions.searchWord],
       isLoading: false,
     );
-  }
-
-  void setSearchWord(String? word) {
-    log.i('setSearchWord: $word');
-    _searchWord = word ?? ''; // TODO
-    state = state.copyWith(searchWord: word);
   }
 
   Future<void> setFolder({required String folderPath}) async {
     log.i('setFolder: $folderPath');
     _preferencesRepository.setCurrentFolder(folderPath);
     state = state.copyWith(
-      searchWord: folderPath,
+      currentFolder: folderPath,
     );
-    search();
-  }
-
-  void setCaseSentitiv(bool caseSensitiv) {
-    _searchCaseSensitiv = caseSensitiv;
-    log.i('setCaseSentitiv: $_searchCaseSensitiv');
     search();
   }
 
@@ -81,7 +68,7 @@ class AppController extends Notifier<AppState> {
       '--include',
       '*.$fileExtension',
     ];
-    if (_searchCaseSensitiv == false) {
+    if (_searchOptions.caseSensitive == false) {
       parameters.add('-i');
     }
     if (_preferencesRepository.showWithContext == true) {
@@ -111,7 +98,7 @@ class AppController extends Notifier<AppState> {
   StreamSubscription<dynamic> handleCommandOutput(Stream<dynamic> stream) {
     _sectionsMap.clear();
     _searchResult.clear();
-    _searchResult.add(state.searchWord ?? '');
+    _searchResult.add(_searchOptions.searchWord);
     final pattern = RegExp(r'^stdout> (.*)(-|:)([0-9]+)(-|:)(.*)$');
     final subscription = stream.listen((line) {
       _searchResult.add(line);
@@ -165,7 +152,7 @@ class AppController extends Notifier<AppState> {
     bool copySearchwordToClipboard = false,
   }) {
     if (copySearchwordToClipboard) {
-      Clipboard.setData(ClipboardData(text: state.searchWord));
+      Clipboard.setData(ClipboardData(text: _searchOptions.searchWord));
     }
     final fullPath = p.join(state.currentFolder, path);
     Process.run('code', [fullPath]);
@@ -259,7 +246,7 @@ class AppController extends Notifier<AppState> {
     state = state.copyWith(
       details: details,
       fileCount: details.length,
-      highlights: [state.searchWord ?? '@@'],
+//      highlights: [_searchOptions.searchWord],
       isLoading: false,
     );
   }
