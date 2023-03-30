@@ -39,8 +39,8 @@ class AppController extends Notifier<AppState> {
       state = state.copyWith(message: 'No search word entered or lenght < 2');
       return;
     }
-    await grepCall(_searchOptions.searchWord);
-    final details = detailsFromSectionMap();
+    await _grepCall(_searchOptions.searchWord);
+    final details = _detailsFromSectionMap();
     state = state.copyWith(
       details: details,
       fileCount: details.length,
@@ -58,7 +58,7 @@ class AppController extends Notifier<AppState> {
     search();
   }
 
-  Future<void> grepCall(String exampleParameter) async {
+  Future<void> _grepCall(String exampleParameter) async {
     const programm = 'grep';
     final fileExtension = _preferencesRepository.fileTypeFilter;
     final parameters = [
@@ -88,14 +88,14 @@ class AppController extends Notifier<AppState> {
       isLoading: true,
     );
     await Future.delayed(const Duration(milliseconds: 500));
-    final subscription = handleCommandOutput(eventBus.streamController.stream);
+    final subscription = _handleCommandOutput(eventBus.streamController.stream);
     final command = await _filesRepository.runCommand(
         programm, parameters, state.currentFolder);
     log.i('command returns with rc:: $command');
     subscription.cancel();
   }
 
-  StreamSubscription<dynamic> handleCommandOutput(Stream<dynamic> stream) {
+  StreamSubscription<dynamic> _handleCommandOutput(Stream<dynamic> stream) {
     _sectionsMap.clear();
     _searchResult.clear();
     _searchResult.add(_searchOptions.searchWord);
@@ -121,7 +121,7 @@ class AppController extends Notifier<AppState> {
     return subscription;
   }
 
-  List<Detail> detailsFromSectionMap() {
+  List<Detail> _detailsFromSectionMap() {
     return _sectionsMap.keys
         .map((key) => Detail(
               title: p.dirname(key).replaceFirst('./', ''),
@@ -186,12 +186,12 @@ class AppController extends Notifier<AppState> {
         final contents = await _filesRepository.readFile(filePath);
         final lines = contents.split('\n');
         highLights.add(lines.removeAt(0));
-        mergeLinesIntoSectionsMap(lines);
+        _mergeLinesIntoSectionsMap(lines);
       }
     }
-    var details = detailsFromSectionMap();
+    var details = _detailsFromSectionMap();
     if (_preferencesRepository.combineIntersection) {
-      details = filterDetails(details, highLights);
+      details = _filterDetails(details, highLights);
     }
     state = state.copyWith(
       details: details,
@@ -201,7 +201,7 @@ class AppController extends Notifier<AppState> {
     );
   }
 
-  void mergeLinesIntoSectionsMap(List<String> lines) {
+  void _mergeLinesIntoSectionsMap(List<String> lines) {
     final pattern = RegExp(r'^stdout> (.*)(-|:)([0-9]+)(-|:)(.*)$');
 
     for (final line in lines) {
@@ -223,7 +223,7 @@ class AppController extends Notifier<AppState> {
     }
   }
 
-  List<Detail> filterDetails(List<Detail> fullList, List<String> highLights) {
+  List<Detail> _filterDetails(List<Detail> fullList, List<String> highLights) {
     final filteredList = <Detail>[];
     for (final detail in fullList) {
       final joinedDetails = detail.lines.join(' ');
@@ -242,7 +242,7 @@ class AppController extends Notifier<AppState> {
 
   void excludeProject(String title) {
     removeFromSectionsMap(title);
-    final details = detailsFromSectionMap();
+    final details = _detailsFromSectionMap();
     state = state.copyWith(
       details: details,
       fileCount: details.length,
