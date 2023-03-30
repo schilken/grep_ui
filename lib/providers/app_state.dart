@@ -79,4 +79,9 @@ class AppState {
         highlights.hashCode ^
         isLoading.hashCode;
   }
+
+  @override
+  String toString() {
+    return 'AppState(fileCount: $fileCount, message: $message, sidebarPageIndex: $sidebarPageIndex, commandAsString: $commandAsString, searchWord: $searchWord, currentFolder: $currentFolder, highlights: $highlights, isLoading: $isLoading)';
+  }
 }

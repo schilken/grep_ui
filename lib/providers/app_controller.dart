@@ -9,22 +9,23 @@ import 'app_state.dart';
 import '../models/detail.dart';
 import '../services/event_bus.dart';
 
-class AppController extends AsyncNotifier<AppState> {
+class AppController extends Notifier<AppState> {
   late FilesRepository _filesRepository;
   late PreferencesRepository _preferencesRepository;
-//  late FilterController _filterController;
+//  late FilterState _filterState;
 
 // from ToolBar
   bool _searchCaseSensitiv = false;
-
+  String _searchWord = '';
   final _sectionsMap = <String, List<String>>{};
   final _searchResult = <String>[];
 
   @override
   AppState build() {
+    print('AppController.build');
     _preferencesRepository = ref.watch(preferencesRepositoryProvider);
     _filesRepository = ref.watch(filesRepositoryProvider);
-//    _filterController = ref.watch(filterControllerProvider);
+//    _filterState = ref.watch(filterControllerProvider);
     return AppState(
       fileCount: 0,
       details: [],
@@ -34,22 +35,32 @@ class AppController extends AsyncNotifier<AppState> {
     );
   }
 
+  void search() async {
+    if (state.searchWord == null || state.searchWord!.length < 2) {
+      state = state.copyWith(message: 'No search word entered or lenght < 2');
+      return;
+    }
+    await grepCall(state.searchWord!);
+    final details = detailsFromSectionMap();
+    state = state.copyWith(
+      details: details,
+      fileCount: details.length,
+      highlights: [state.searchWord ?? '@@'],
+      isLoading: false,
+    );
+  }
+
   void setSearchWord(String? word) {
     log.i('setSearchWord: $word');
-    state = AsyncValue.data(
-      state.value!.copyWith(
-        searchWord: word,
-      ),
-    );
+    _searchWord = word ?? ''; // TODO
+    state = state.copyWith(searchWord: word);
   }
 
   Future<void> setFolder({required String folderPath}) async {
     log.i('setFolder: $folderPath');
     _preferencesRepository.setCurrentFolder(folderPath);
-    state = AsyncValue.data(
-      state.value!.copyWith(
-        searchWord: folderPath,
-      ),
+    state = state.copyWith(
+      searchWord: folderPath,
     );
     search();
   }
@@ -60,7 +71,7 @@ class AppController extends AsyncNotifier<AppState> {
     search();
   }
 
-  grepCall(String exampleParameter) async {
+  Future<void> grepCall(String exampleParameter) async {
     const programm = 'grep';
     final fileExtension = _preferencesRepository.fileTypeFilter;
     final parameters = [
@@ -83,35 +94,24 @@ class AppController extends AsyncNotifier<AppState> {
     }
     parameters.add(exampleParameter);
     final commandAsString =
-        '$programm ${parameters.join(' ')} ${state.value!.currentFolder}';
+        '$programm ${parameters.join(' ')} ${state.currentFolder}';
     log.i('call $commandAsString');
-    state = AsyncValue.data(
-      state.value!.copyWith(
-        message: commandAsString,
-        isLoading: true,
-      ),
+    state = state.copyWith(
+      message: commandAsString,
+      isLoading: true,
     );
     await Future.delayed(const Duration(milliseconds: 500));
     final subscription = handleCommandOutput(eventBus.streamController.stream);
     final command = await _filesRepository.runCommand(
-        programm, parameters, state.value!.currentFolder);
+        programm, parameters, state.currentFolder);
     log.i('command returns with rc:: $command');
-    final details = detailsFromSectionMap();
     subscription.cancel();
-    state = AsyncValue.data(
-      state.value!.copyWith(
-        details: details,
-        fileCount: details.length,
-        highlights: [state.value!.searchWord ?? '@@'],
-        isLoading: false,
-      ),
-    );
   }
 
   StreamSubscription<dynamic> handleCommandOutput(Stream<dynamic> stream) {
     _sectionsMap.clear();
     _searchResult.clear();
-    _searchResult.add(state.value!.searchWord ?? '');
+    _searchResult.add(state.searchWord ?? '');
     final pattern = RegExp(r'^stdout> (.*)(-|:)([0-9]+)(-|:)(.*)$');
     final subscription = stream.listen((line) {
       _searchResult.add(line);
@@ -145,17 +145,17 @@ class AppController extends AsyncNotifier<AppState> {
   }
 
   showInFinder(String path) {
-    final fullPath = p.join(state.value!.currentFolder, path);
+    final fullPath = p.join(state.currentFolder, path);
     Process.run('open', ['-R', fullPath]);
   }
 
   copyToClipboard(String path) {
-    final fullPath = p.join(state.value!.currentFolder, path);
+    final fullPath = p.join(state.currentFolder, path);
     Clipboard.setData(ClipboardData(text: fullPath));
   }
 
   showInTerminal(String path) {
-    final fullPath = p.join(state.value!.currentFolder, path);
+    final fullPath = p.join(state.currentFolder, path);
     final dirname = p.dirname(fullPath);
     Process.run('open', ['-a', 'iTerm', dirname]);
   }
@@ -165,39 +165,23 @@ class AppController extends AsyncNotifier<AppState> {
     bool copySearchwordToClipboard = false,
   }) {
     if (copySearchwordToClipboard) {
-      Clipboard.setData(ClipboardData(text: state.value!.searchWord));
+      Clipboard.setData(ClipboardData(text: state.searchWord));
     }
-    final fullPath = p.join(state.value!.currentFolder, path);
+    final fullPath = p.join(state.currentFolder, path);
     Process.run('code', [fullPath]);
-  }
-
-  void search() {
-    if (state.value!.searchWord == null ||
-        state.value!.searchWord!.length < 2) {
-      state = AsyncValue.data(
-        state.value!.copyWith(message: 'No search word entered or lenght < 2'),
-      );
-      return;
-    }
-    state = const AsyncValue.loading();
-    grepCall(state.value!.searchWord!);
   }
 
   sidebarChanged(int index) {
     log.i('sidebarChanged to index $index');
-    state = AsyncValue.data(
-      state.value!.copyWith(
-        sidebarPageIndex: index,
-      ),
+    state = state.copyWith(
+      sidebarPageIndex: index,
     );
   }
 
   void removeMessage() {
     log.i('removeMessage');
-    state = AsyncValue.data(
-      state.value!.copyWith(
-        message: null,
-      ),
+    state = state.copyWith(
+      message: null,
     );
   }
 
@@ -222,13 +206,11 @@ class AppController extends AsyncNotifier<AppState> {
     if (_preferencesRepository.combineIntersection) {
       details = filterDetails(details, highLights);
     }
-    state = AsyncValue.data(
-      state.value!.copyWith(
-        details: details,
-        fileCount: details.length,
-        highlights: highLights,
-        message: 'Combined: ${highLights.join(' ')}',
-      ),
+    state = state.copyWith(
+      details: details,
+      fileCount: details.length,
+      highlights: highLights,
+      message: 'Combined: ${highLights.join(' ')}',
     );
   }
 
@@ -274,13 +256,11 @@ class AppController extends AsyncNotifier<AppState> {
   void excludeProject(String title) {
     removeFromSectionsMap(title);
     final details = detailsFromSectionMap();
-    state = AsyncValue.data(
-      state.value!.copyWith(
-        details: details,
-        fileCount: details.length,
-        highlights: [state.value!.searchWord ?? '@@'],
-        isLoading: false,
-      ),
+    state = state.copyWith(
+      details: details,
+      fileCount: details.length,
+      highlights: [state.searchWord ?? '@@'],
+      isLoading: false,
     );
   }
 
@@ -299,7 +279,6 @@ class AppController extends AsyncNotifier<AppState> {
   }
 }
 
-final appControllerProvider =
-    AsyncNotifierProvider<AppController, AppState>(() {
+final appControllerProvider = NotifierProvider<AppController, AppState>(() {
   return AppController();
 });

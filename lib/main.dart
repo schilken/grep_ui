@@ -112,7 +112,7 @@ class _MainViewState extends ConsumerState<MainView> {
             minWidth: 240,
             top: const FilterSidebar(),
             builder: (context, scrollController) => SidebarItems(
-            currentIndex: appState.value!.sidebarPageIndex,
+            currentIndex: appState.sidebarPageIndex,
               scrollController: scrollController,
               onChanged: (index) =>
                   appController.sidebarChanged(index),
@@ -146,7 +146,7 @@ class _MainViewState extends ConsumerState<MainView> {
             ),
           ),
           child: IndexedStack(
-          index: appState.value!.sidebarPageIndex,
+          index: appState.sidebarPageIndex,
             children: [
               const MainPage(),
               const PreferencesPage(),

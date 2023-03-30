@@ -16,16 +16,14 @@ class MainPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final appState = ref.watch(appControllerProvider);
     final appController = ref.watch(appControllerProvider.notifier);
+    print('MainPage.build: $appState');
     return Builder(builder: (context) {
       return MacosScaffold(
         toolBar: getCustomToolBar(context, ref),
         children: [
           ContentArea(
             builder: (context, scrollController) {
-              return AsyncValueWidget<AppState>(
-                value: appState,
-                data: (state) {
-                  return Column(
+              return Column(
                     children: [
                       Container(
                         color: Colors.blueGrey[100],
@@ -36,34 +34,35 @@ class MainPage extends ConsumerWidget {
                             const SizedBox(
                               width: 8,
                             ),
-                            SelectableText(state.currentFolder),
+                        SelectableText(appState.currentFolder),
                             const Spacer(),
-                            Text('${state.fileCount} Files'),
+                        Text('${appState.fileCount} Files'),
                           ],
                         ),
                       ),
-                      if (state.message != null)
+                  if (appState.message != null)
                         MessageBar(
-                          message: state.message!,
+                      message: appState.message!,
                           onDismiss: () =>
                               appController.removeMessage(),
                         ),
-                      if (state.isLoading == false && state.details.isEmpty)
+                  if (appState.isLoading == false && appState.details.isEmpty)
                         const Center(
                             child: Padding(
                           padding: EdgeInsets.only(top: 32),
                           child: Text('No search result.'),
                         )),
-                      if (state.isLoading == false && state.details.isNotEmpty)
+                  if (appState.isLoading == false &&
+                      appState.details.isNotEmpty)
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 16),
                             child: ListView.separated(
                               controller: ScrollController(),
-                              itemCount: state.details.length,
+                          itemCount: appState.details.length,
                               itemBuilder: (context, index) {
-                                final highlights = state.highlights ?? [];
-                                final detail = state.details[index];
+                            final highlights = appState.highlights ?? [];
+                            final detail = appState.details[index];
                                 return DetailTile(
                                   detail: detail,
                                   highlights: highlights,
@@ -78,16 +77,13 @@ class MainPage extends ConsumerWidget {
                             ),
                           ),
                         ),
-                      if (state.isLoading == true)
-                        const Center(
-                            child: Padding(
-                          padding: EdgeInsets.only(top: 32),
-                          child: CupertinoActivityIndicator(),
-                        ))
-                    ],
-                  );
-                  return const Center(child: Text('No file selected'));
-                },
+                  if (appState.isLoading == true)
+                    const Center(
+                        child: Padding(
+                      padding: EdgeInsets.only(top: 32),
+                      child: CupertinoActivityIndicator(),
+                    ))
+                ],
               );
             },
           ),

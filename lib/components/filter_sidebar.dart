@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
-import '../providers/filter_state.dart';
 import '../providers/providers.dart';
-import 'async_value_widget.dart';
 import 'macos_checkbox_list_tile.dart';
 
 class FilterSidebar extends ConsumerWidget {
@@ -15,17 +13,14 @@ class FilterSidebar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final filterState = ref.watch(filterControllerProvider);
     final filterController = ref.watch(filterControllerProvider.notifier);
-    return AsyncValueWidget<FilterState>(
-        value: filterState,
-        data: (state) {
-          return Column(
+    return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text('Filter Files with extension',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 16),
               MacosPopupButton<String>(
-                value: state.fileTypeFilter,
+          value: filterState.fileTypeFilter,
                 onChanged: (String? value) async {
                   await filterController.setFileTypeFilter(value);
                 },
@@ -45,7 +40,7 @@ class FilterSidebar extends ConsumerWidget {
                   title: const Text('Combine intersection'),
                   onChanged: (value) => filterController
                       .toggleCombineIntersection(value ?? false),
-                  value: state.combineIntersection,
+            value: filterState.combineIntersection,
                 ),
               ),
               Padding(
@@ -54,13 +49,11 @@ class FilterSidebar extends ConsumerWidget {
                   title: const Text('With 4 context lines'),
                   onChanged: (value) => filterController
                       .toggleShowWithContext(value ?? false),
-                  value: state.showWithContext,
+            value: filterState.showWithContext,
                 ),
               ),
               const SizedBox(height: 16),
-            ],
-          );
-        }
+      ],
     );
   }
 }

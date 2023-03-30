@@ -3,7 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'preferences_repository.dart';
 import 'filter_state.dart';
 
-class FilterController extends AsyncNotifier<FilterState> {
+class FilterController extends Notifier<FilterState> {
   late PreferencesRepository _preferencesRepository;
 
   final allFileExtensions = <String>[
@@ -34,32 +34,26 @@ class FilterController extends AsyncNotifier<FilterState> {
 
   Future<void> setFileTypeFilter(value) async {
     await _preferencesRepository.setFileTypeFilter(value);
-    state = AsyncValue.data(
-      state.value!.copyWith(
-        fileTypeFilter: value,
-      ),
+    state = state.copyWith(
+      fileTypeFilter: value,
     );
   }
 
   Future<void> toggleCombineIntersection(bool value) async {
     await _preferencesRepository.toggleSearchOption(
         'combineIntersection', value);
-    state = AsyncValue.data(
-      state.value!.copyWith(
-        combineIntersection: value,
-      ),
+    state = state.copyWith(
+      combineIntersection: value,
     );
   }
 
   Future<void> toggleShowWithContext(bool value) async {
     await _preferencesRepository.toggleSearchOption('showWithContext', value);
-    state = AsyncValue.data(
-      state.value!.copyWith(
-        showWithContext: value,
-      ),
+    state = state.copyWith(
+      showWithContext: value,
     );
   }
 }
 
 final filterControllerProvider =
-    AsyncNotifierProvider<FilterController, FilterState>(FilterController.new);
+    NotifierProvider<FilterController, FilterState>(FilterController.new);
