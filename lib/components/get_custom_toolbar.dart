@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
 import '../providers/providers.dart';
@@ -92,8 +93,10 @@ ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
           child: const Text('Aa'),
           tooltipMessage: 'Case sentitive'),
       ToolbarWidgetToggle(
-          child: const MacosIcon(
-            CupertinoIcons.crop,
+          child: SvgPicture.asset(
+            'assets/images/whole-word.svg',
+            height: 30.0,
+            width: 30.0,
           ),
           onChanged: searchOptionsNotifier.setWholeWord,
           tooltipMessage: 'Whole Word'),

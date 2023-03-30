@@ -65,6 +65,9 @@ class AppController extends Notifier<AppState> {
     if (_searchOptions.caseSensitive == false) {
       parameters.add('-i');
     }
+    if (_searchOptions.wholeWord == true) {
+      parameters.add('-w');
+    }
     if (_preferencesRepository.showWithContext == true) {
       parameters.add('-C4');
     }
