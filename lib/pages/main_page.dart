@@ -30,6 +30,7 @@ class MainPage extends ConsumerWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
+                        Text('Base Directory:'),
                             const SizedBox(
                               width: 8,
                             ),
