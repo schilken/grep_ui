@@ -3,7 +3,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:grep_ui/providers/providers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../services/event_bus.dart';

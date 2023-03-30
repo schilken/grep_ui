@@ -63,8 +63,8 @@ class _FileContentPageState extends ConsumerState<FileContentPage> {
                       return SingleChildScrollView(
                         controller: ScrollController(),
                         child: FutureBuilder<String>(
-                            future: context
-                                .read<FilesRepository>()
+                            future: ref
+                                .read(filesRepositoryProvider)
                                 .readFile(widget.filePath),
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {

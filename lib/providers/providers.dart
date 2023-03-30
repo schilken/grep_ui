@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 export 'preferences_repository.dart';
 export 'files_repository.dart';
 export 'filter_controller.dart';
+export 'settings_controller.dart';
 export 'app_controller.dart';
 
 final sharedPreferencesProvider = Provider<SharedPreferences>(

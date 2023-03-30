@@ -1,17 +1,18 @@
 import 'package:flutter/cupertino.dart' hide OverlayVisibilityMode;
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
-import '../preferences/preferences_cubit.dart';
 
-class ListEditor extends StatefulWidget {
+import '../providers/providers.dart';
+
+class ListEditor extends ConsumerStatefulWidget {
   const ListEditor({super.key});
 
   @override
-  State<ListEditor> createState() => _ListEditorState();
+  _ListEditorState createState() => _ListEditorState();
 }
 
-class _ListEditorState extends State<ListEditor> {
+class _ListEditorState extends ConsumerState<ListEditor> {
   late TextEditingController _textEditingController;
   late ScrollController _scrollController;
   late FocusNode _focusNode;
@@ -29,7 +30,7 @@ class _ListEditorState extends State<ListEditor> {
     if (newItem.isEmpty) {
       return;
     }
-    context.read<PreferencesCubit>().addIgnoredFolder(newItem);
+    ref.read(settingsControllerProvider.notifier).addIgnoredFolder(newItem);
     _textEditingController.clear();
     Future.delayed(const Duration(milliseconds: 100), () => _scrollToEnd());
     FocusScope.of(context).requestFocus(_focusNode);
@@ -58,36 +59,30 @@ class _ListEditorState extends State<ListEditor> {
             ),
             Expanded(
               child: Material(
-                child: BlocBuilder<PreferencesCubit, PreferencesState>(
-                  builder: (context, state) {
-                    if (state is PreferencesLoaded) {
-                      return ListView.builder(
-                          controller: _scrollController,
-                          itemCount: state.ignoredFolders.length,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              visualDensity: VisualDensity.compact,
-                              title: Text(state.ignoredFolders[index]),
-                              trailing: MacosIconButton(
-                                icon: const MacosIcon(CupertinoIcons.delete),
-                                onPressed: () => context
-                                    .read<PreferencesCubit>()
-                                    .removeIgnoredFolder(
-                                        state.ignoredFolders[index]),
-                              ),
-                            );
-                          });
-                    } else if (state is PreferencesLoading) {
-                      return const Center(
-                        child: CupertinoActivityIndicator(),
-                      );
-                    }
-                    return Center(
-                      child: TextButton(
-                        onPressed: () {},
-                        child: const Text('no data'),
-                      ),
-                    );
+                child: Builder(
+                  builder: (context) {
+                    return ListView.builder(
+                        controller: _scrollController,
+                        itemCount: ref
+                            .watch(settingsControllerProvider)
+                            .ignoredFolders
+                            .length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            visualDensity: VisualDensity.compact,
+                            title: Text(ref
+                                .watch(settingsControllerProvider)
+                                .ignoredFolders[index]),
+                            trailing: MacosIconButton(
+                              icon: const MacosIcon(CupertinoIcons.delete),
+                              onPressed: () => ref
+                                  .watch(settingsControllerProvider.notifier)
+                                  .removeIgnoredFolder(ref
+                                      .watch(settingsControllerProvider)
+                                      .ignoredFolders[index]),
+                            ),
+                          );
+                        });
                   },
                 ),
               ),
