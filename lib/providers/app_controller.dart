@@ -34,6 +34,7 @@ class AppController extends Notifier<AppState> {
       fileCount: 0,
       details: [],
       isLoading: false,
+      appVersion: _preferencesRepository.appVersion,
     );
   }
 
@@ -188,7 +189,6 @@ class AppController extends Notifier<AppState> {
     }
   }
 
-
   sidebarChanged(int index) {
     log.i('sidebarChanged to index $index');
     state = state.copyWith(
@@ -302,7 +302,6 @@ class AppController extends Notifier<AppState> {
       _sectionsMap.remove(key);
     }
   }
-
 }
 
 final appControllerProvider = NotifierProvider<AppController, AppState>(() {

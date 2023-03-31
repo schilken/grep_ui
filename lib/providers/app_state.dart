@@ -12,6 +12,7 @@ class AppState {
   final String? commandAsString;
   final List<String>? highlights;
   final bool isLoading;
+  final String appVersion;
 
   AppState({
     required this.details,
@@ -21,6 +22,7 @@ class AppState {
     this.commandAsString,
     this.highlights,
     required this.isLoading,
+    required this.appVersion,
   });
 
   AppState copyWith({
@@ -32,6 +34,7 @@ class AppState {
     String? commandAsString,
     List<String>? highlights,
     bool? isLoading,
+    String? appVersion,
   }) {
     return AppState(
       details: details ?? this.details,
@@ -41,6 +44,7 @@ class AppState {
       commandAsString: commandAsString ?? this.commandAsString,
       highlights: highlights ?? this.highlights,
       isLoading: isLoading ?? this.isLoading,
+      appVersion: appVersion ?? this.appVersion,
     );
   }
 

@@ -26,6 +26,7 @@ dependencies:
   path: ^1.8.1
   path_provider: ^2.0.11
   provider: ^6.0.2
+  pubspec_parse: ^1.2.2
   shared_preferences: ^2.0.18
   yaml: ^3.1.1
 dependency_overrides:
@@ -40,3 +41,5 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/whole-word.svg
+    - assets/images/app_icon_32x32@2x.png
+    - pubspec.yaml

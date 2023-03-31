@@ -8,6 +8,8 @@ class PreferencesRepository {
   PreferencesRepository(this._prefs);
   final SharedPreferences _prefs;
 
+  String get appVersion => _prefs.getString('appVersion') ?? '?';
+
   get fileExtensionFilter => _prefs.getString('fileExtensionFilter') ?? 'yaml';
 
   Future<void> setFileExtensionFilter(value) async {

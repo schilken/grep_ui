@@ -4,9 +4,11 @@ import 'package:collection/collection.dart';
 import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:mixin_logger/mixin_logger.dart' as log;
+import 'package:pubspec_parse/pubspec_parse.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'pages/about_window.dart';
 import 'pages/help_page.dart';
@@ -21,9 +23,11 @@ void main(List<String> args) async {
   print('main: $args');
   WidgetsFlutterBinding.ensureInitialized();
   final sharedPreferences = await SharedPreferences.getInstance();
-
+  final pubspec = Pubspec.parse(await rootBundle.loadString('pubspec.yaml'));
+  final version = pubspec.version;
   await log.initLogger(loggerFolder);
-  log.i('after initLogger');
+  log.i('version from pubspec.yaml: $version');
+  sharedPreferences.setString('appVersion', version.toString());
   if (args.firstOrNull == 'multi_window') {
     final windowId = int.parse(args[1]);
     final arguments = args[2].isEmpty
@@ -67,6 +71,13 @@ class MainView extends ConsumerStatefulWidget {
 }
 
 class _MainViewState extends ConsumerState<MainView> {
+  final appLegalese = '© ${DateTime.now().year} Alfred Schilken';
+  final apppIcon = Image.asset(
+    'assets/images/app_icon_32x32@2x.png',
+    width: 64,
+    height: 64,
+  );
+  
   @override
   Widget build(BuildContext context) {
     final appState = ref.watch(appControllerProvider);
@@ -126,10 +137,15 @@ class _MainViewState extends ConsumerState<MainView> {
               ),
             ],
           ),
-          bottom: const MacosListTile(
-            leading: MacosIcon(CupertinoIcons.profile_circled),
-            title: Text('Alfred Schilken'),
-            subtitle: Text('alfred@schilken.de'),
+          bottom: MacosListTile(
+            leading: const MacosIcon(CupertinoIcons.info_circle),
+            title: const Text('Grep UI'),
+            subtitle: Text('Version ${appState.appVersion}'),
+            onClick: () => showLicensePage(
+              context: context,
+              applicationLegalese: appLegalese,
+              applicationIcon: apppIcon,
+            ),
           ),
         ),
         child: IndexedStack(
