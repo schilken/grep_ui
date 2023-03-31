@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
+import 'package:path/path.dart' as p;
 class FilesRepository {
 
   /// return null on success otherwise with error message
@@ -69,6 +69,25 @@ class FilesRepository {
     } on Exception catch (e) {
       return e.toString();
     }
+  }
+
+bool _hasPubspecFile(String path) {
+    final pubspecPathname = p.join(path, 'pubspec.yaml');
+    return File(pubspecPathname).existsSync();
+  }
+
+// /Users/aschilken/flutterdev/my_projects/./medium_mate/test/article_model_test.dart
+  /// returns null if no folder with a pubspec file is found, otherwise the path of the project folder
+  String? findProjectDirectory(String fullPath) {
+    var subParts = p.split(fullPath);
+    do {
+      subParts = subParts.sublist(0, subParts.length - 1);
+      final shortenedPath = p.joinAll(subParts);
+      if (_hasPubspecFile(shortenedPath)) {
+        return shortenedPath;
+      }
+    } while (subParts.length > 2);
+    return null;
   }
 }
 

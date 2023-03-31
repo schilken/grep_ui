@@ -75,6 +75,15 @@ ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
           ),
         ],
       ),
+      ToolBarIconButton(
+          label: "Show grep command",
+          icon: const MacosIcon(
+            CupertinoIcons.eye,
+          ),
+          onPressed: () => appController.showGrepCommand(),
+          showLabel: false,
+          tooltipMessage: 'Show grep command'),
+
       const ToolBarSpacer(spacerUnits: 1),
       const ToolBarDivider(),
       const ToolBarSpacer(spacerUnits: 1),

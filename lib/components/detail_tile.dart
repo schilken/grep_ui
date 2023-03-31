@@ -93,6 +93,7 @@ class ListTilePullDownMenu extends ConsumerWidget {
               ? null
               : appController.copyToClipboard(detail.filePathName!),
         ),
+        const MacosPulldownMenuDivider(),
         MacosPulldownMenuItem(
           title: const Text('Open File in VScode'),
           onTap: () => detail.filePathName == null
@@ -107,6 +108,22 @@ class ListTilePullDownMenu extends ConsumerWidget {
                     detail.filePathName!,
                     copySearchwordToClipboard: true,
                   ),
+        ),
+        MacosPulldownMenuItem(
+          title: const Text('Open Project in VScode'),
+          onTap: () => detail.filePathName == null
+              ? null
+              : appController.openProjectInEditor(detail.filePathName!),
+        ),
+        MacosPulldownMenuItem(
+          title:
+              const Text('Open Project in VScode  with Filename on Clipboard'),
+          onTap: () => detail.filePathName == null
+              ? null
+              : appController.openProjectInEditor(
+                  detail.filePathName!,
+                  copyFilenameToClipboard: true,
+                ),
         ),
         const MacosPulldownMenuDivider(),
         MacosPulldownMenuItem(

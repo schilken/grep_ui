@@ -19,6 +19,7 @@ class AppController extends Notifier<AppState> {
 
   final _sectionsMap = <String, List<String>>{};
   final _searchResult = <String>[];
+  String _lastGrepCommand = 'grep is not yet used';
 
   @override
   AppState build() {
@@ -77,10 +78,10 @@ class AppController extends Notifier<AppState> {
       }
     }
     parameters.add(searchWord);
-    final commandAsString = '$programm ${parameters.join(' ')} $_currentFolder';
-    log.i('call $commandAsString');
+    _lastGrepCommand = '$programm ${parameters.join(' ')} $_currentFolder';
+    log.i('call $_lastGrepCommand');
     state = state.copyWith(
-      message: commandAsString,
+      message: _lastGrepCommand,
       isLoading: true,
     );
     await Future.delayed(const Duration(milliseconds: 500));
@@ -161,10 +162,38 @@ class AppController extends Notifier<AppState> {
     Process.run('code', [fullPath]);
   }
 
+  void openProjectInEditor(
+    String path, {
+    bool copyFilenameToClipboard = false,
+  }) {
+    final fullPath = p.join(_currentFolder, path);
+    if (copyFilenameToClipboard) {
+      Clipboard.setData(ClipboardData(text: p.basename(fullPath)));
+    }
+
+    final projectDirectory = _filesRepository.findProjectDirectory(fullPath);
+    if (projectDirectory != null) {
+      Process.run('code', [projectDirectory]);
+    } else {
+      state = state.copyWith(
+        message: 'Error: no folder with a pubspec.yaml found',
+        isLoading: false,
+      );
+    }
+  }
+
+
   sidebarChanged(int index) {
     log.i('sidebarChanged to index $index');
     state = state.copyWith(
       sidebarPageIndex: index,
+    );
+  }
+
+  void showGrepCommand() {
+    log.i('removeMessage');
+    state = state.copyWith(
+      message: _lastGrepCommand,
     );
   }
 
@@ -267,6 +296,7 @@ class AppController extends Notifier<AppState> {
       _sectionsMap.remove(key);
     }
   }
+
 }
 
 final appControllerProvider = NotifierProvider<AppController, AppState>(() {

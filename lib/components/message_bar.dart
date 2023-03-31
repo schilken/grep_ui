@@ -30,9 +30,8 @@ class MessageBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Expanded(
-            child: Text(
+            child: SelectableText(
               message,
-              overflow: TextOverflow.ellipsis,
               maxLines: 2,
             ),
           ),
