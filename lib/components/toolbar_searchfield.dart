@@ -11,15 +11,17 @@ class ToolbarSearchfield extends ToolbarItem {
     this.placeholder,
     required this.onChanged,
     required this.onSubmitted,
+    this.width = 120,
   }) : super(key: key);
   final String? placeholder;
   final StringCallback onChanged;
   final StringCallback onSubmitted;
+  final double width;
 
   @override
   Widget build(BuildContext context, ToolbarItemDisplayMode displayMode) {
     return SizedBox(
-      width: 120,
+      width: width,
       child: _WrappedSearchField(
         placeholder: placeholder,
         onChanged: onChanged,

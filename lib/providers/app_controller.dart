@@ -42,19 +42,23 @@ class AppController extends Notifier<AppState> {
       state = state.copyWith(message: 'No search word entered or lenght < 2');
       return;
     }
+    final highlights = _searchOptions.searchWord.split(' ');
     final errorMessage = await _runGrepCommand(_searchOptions.searchWord);
-    final details = _detailsFromSectionMap();
+    var details = _detailsFromSectionMap();
+    if (_preferencesRepository.combineIntersection) {
+      details = _filterDetails(details, highlights);
+    }
     state = state.copyWith(
       details: details,
       fileCount: details.length,
-      highlights: [_searchOptions.searchWord],
+      highlights: highlights,
       isLoading: false,
       message: errorMessage,
     );
   }
 
   Future<String?> _runGrepCommand(String searchWord) async {
-    const programm = 'grep';
+    const programm = 'fgrep';
     final fileExtension = _preferencesRepository.fileExtensionFilter;
     final parameters = [
       '-R',
@@ -77,7 +81,9 @@ class AppController extends Notifier<AppState> {
         parameters.add('--exclude-dir=$element');
       }
     }
-    parameters.add(searchWord);
+    for (final word in searchWord.split(' ')) {
+      parameters.add('-e $word');
+    }
     _lastGrepCommand = '$programm ${parameters.join(' ')} $_currentFolder';
     log.i('call $_lastGrepCommand');
     state = state.copyWith(
@@ -191,7 +197,6 @@ class AppController extends Notifier<AppState> {
   }
 
   void showGrepCommand() {
-    log.i('removeMessage');
     state = state.copyWith(
       message: _lastGrepCommand,
     );
@@ -205,8 +210,10 @@ class AppController extends Notifier<AppState> {
   }
 
   void saveSearchResult(String filePath) {
-//    print('saveSearchResult $filePath');
     _filesRepository.writeFile(filePath, _searchResult.join('\n'));
+    state = state.copyWith(
+      message: 'Search result saved in $filePath',
+    );
   }
 
   Future<void> combineSearchResults({required List<String?> filePaths}) async {

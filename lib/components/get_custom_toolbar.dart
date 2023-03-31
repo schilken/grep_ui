@@ -27,13 +27,13 @@ ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
       },
     ),
     title: const Text('Grep UI'),
-    titleWidth: 250.0,
+    titleWidth: 80.0,
     actions: [
       const ToolBarSpacer(spacerUnits: 3),
       ToolBarPullDownButton(
         label: "Actions",
         icon: CupertinoIcons.ellipsis_circle,
-        tooltipMessage: "Perform tasks with the selected items",
+        tooltipMessage: "Perform filesystem tasks",
         items: [
           MacosPulldownMenuItem(
             title: const Text("Choose Folder to scan"),
@@ -50,10 +50,11 @@ ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
           MacosPulldownMenuItem(
             title: const Text("Save last search result"),
             onTap: () async {
+              final userHomeDirectory = Platform.environment['HOME'];
               final selectedFile = await FilePicker.platform.saveFile(
-                  initialDirectory: '/Users/aschilken/flutterdev',
+                  initialDirectory: userHomeDirectory,
                   dialogTitle: 'Choose file to save search result',
-                  fileName: 'search-result.txt');
+                  fileName: 'search-result_${searchOptions.searchWord}.txt');
               if (selectedFile != null) {
                 appController.saveSearchResult(selectedFile);
               }
@@ -83,12 +84,12 @@ ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
           onPressed: () => appController.showGrepCommand(),
           showLabel: false,
           tooltipMessage: 'Show grep command'),
-
       const ToolBarSpacer(spacerUnits: 1),
       const ToolBarDivider(),
       const ToolBarSpacer(spacerUnits: 1),
       ToolbarSearchfield(
         placeholder: 'Search word',
+        width: 350,
         onChanged: (word) {
           if (word.isEmpty) {
             searchOptionsNotifier.setSearchWord(word);
@@ -119,7 +120,7 @@ ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
           ),
           onPressed: () => appController.search(),
           showLabel: false,
-          tooltipMessage: 'Start new Search'),
+          tooltipMessage: 'Search again'),
     ],
   );
 }

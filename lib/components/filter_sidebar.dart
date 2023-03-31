@@ -36,7 +36,7 @@ class FilterSidebar extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.fromLTRB(0, 8, 4, 0),
           child: MacosCheckBoxListTile(
-            title: const Text('Combine intersection'),
+            title: const Text('Only Intersection'),
             onChanged: (value) =>
                 filterController.toggleCombineIntersection(value ?? false),
             value: filterState.combineIntersection,
