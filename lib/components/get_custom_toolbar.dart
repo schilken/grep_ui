@@ -54,7 +54,7 @@ ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
               final selectedFile = await FilePicker.platform.saveFile(
                   initialDirectory: userHomeDirectory,
                   dialogTitle: 'Choose file to save search result',
-                  fileName: 'search-result_${searchOptions.searchWord}.txt');
+                  fileName: 'search-result_${searchOptions.searchItems}.txt');
               if (selectedFile != null) {
                 appController.saveSearchResult(selectedFile);
               }
@@ -92,11 +92,11 @@ ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
         width: 350,
         onChanged: (word) {
           if (word.isEmpty) {
-            searchOptionsNotifier.setSearchWord(word);
+            searchOptionsNotifier.setSearchItems(word);
           }
         },
         onSubmitted: (word) {
-          searchOptionsNotifier.setSearchWord(word);
+          searchOptionsNotifier.setSearchItems(word);
         },
       ),
       ToolbarWidgetToggle(

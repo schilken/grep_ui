@@ -13,10 +13,9 @@ class MainPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentFolder = ref.watch(currentFolderProvider);
     final appState = ref.watch(appControllerProvider);
     final appController = ref.watch(appControllerProvider.notifier);
-    print('MainPage.build: $appState');
+//    print('MainPage.build: $appState');
     return Builder(builder: (context) {
       return MacosScaffold(
         toolBar: getCustomToolBar(context, ref),

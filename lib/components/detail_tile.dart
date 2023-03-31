@@ -101,12 +101,12 @@ class ListTilePullDownMenu extends ConsumerWidget {
               : appController.openEditor(detail.filePathName!),
         ),
         MacosPulldownMenuItem(
-          title: const Text('Open File in VScode with Searchword on Clipboard'),
+          title: const Text('Open File in VScode with SearcItems on Clipboard'),
           onTap: () => detail.filePathName == null
               ? null
               : appController.openEditor(
                     detail.filePathName!,
-                    copySearchwordToClipboard: true,
+                  copySearchItemsToClipboard: true,
                   ),
         ),
         MacosPulldownMenuItem(

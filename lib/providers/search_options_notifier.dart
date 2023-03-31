@@ -2,22 +2,22 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class SearchOptions {
-  final String searchWord;
+  final String searchItems;
   final bool caseSensitive;
   final bool wholeWord;
   SearchOptions(
-    this.searchWord,
+    this.searchItems,
     this.caseSensitive,
     this.wholeWord,
   );
 
   SearchOptions copyWith({
-    String? searchWord,
+    String? searchItems,
     bool? caseSensitive,
     bool? wholeWord,
   }) {
     return SearchOptions(
-      searchWord ?? this.searchWord,
+      searchItems ?? this.searchItems,
       caseSensitive ?? this.caseSensitive,
       wholeWord ?? this.wholeWord,
     );
@@ -25,7 +25,7 @@ class SearchOptions {
 
   @override
   String toString() =>
-      'SearchOptions(searchWord: $searchWord, caseSensitive: $caseSensitive, )';
+      'SearchOptions(searchItems: $searchItems, caseSensitive: $caseSensitive, )';
 }
 
 class SearchOptionsNotifier extends Notifier<SearchOptions> {
@@ -34,8 +34,8 @@ class SearchOptionsNotifier extends Notifier<SearchOptions> {
     return SearchOptions('', false, false);
   }
 
-  Future<void> setSearchWord(String newString) async {
-    state = state.copyWith(searchWord: newString);
+  Future<void> setSearchItems(String newString) async {
+    state = state.copyWith(searchItems: newString);
   }
 
   Future<void> setCaseSensitiv(bool newBool) async {

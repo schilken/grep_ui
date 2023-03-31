@@ -38,12 +38,12 @@ class AppController extends Notifier<AppState> {
   }
 
   void search() async {
-    if (_searchOptions.searchWord.length < 2) {
+    if (_searchOptions.searchItems.length < 2) {
       state = state.copyWith(message: 'No search word entered or lenght < 2');
       return;
     }
-    final highlights = _searchOptions.searchWord.split(' ');
-    final errorMessage = await _runGrepCommand(_searchOptions.searchWord);
+    final highlights = _searchOptions.searchItems.split(' ');
+    final errorMessage = await _runGrepCommand(_searchOptions.searchItems);
     var details = _detailsFromSectionMap();
     if (_preferencesRepository.combineIntersection) {
       details = _filterDetails(details, highlights);
@@ -57,7 +57,7 @@ class AppController extends Notifier<AppState> {
     );
   }
 
-  Future<String?> _runGrepCommand(String searchWord) async {
+  Future<String?> _runGrepCommand(String searchItems) async {
     const programm = 'fgrep';
     final fileExtension = _preferencesRepository.fileExtensionFilter;
     final parameters = [
@@ -81,7 +81,7 @@ class AppController extends Notifier<AppState> {
         parameters.add('--exclude-dir=$element');
       }
     }
-    for (final word in searchWord.split(' ')) {
+    for (final word in searchItems.split(' ')) {
       parameters.add('-e $word');
     }
     _lastGrepCommand = '$programm ${parameters.join(' ')} $_currentFolder';
@@ -108,7 +108,7 @@ class AppController extends Notifier<AppState> {
   StreamSubscription<dynamic> _handleCommandOutput(Stream<String> stream) {
     _sectionsMap.clear();
     _searchResult.clear();
-    _searchResult.add(_searchOptions.searchWord);
+    _searchResult.add(_searchOptions.searchItems);
     final pattern = RegExp(r'^stdout> (.*)(-|:)([0-9]+)(-|:)(.*)$');
     final subscription = stream.listen((line) {
       _searchResult.add(line);
@@ -159,10 +159,10 @@ class AppController extends Notifier<AppState> {
 
   void openEditor(
     String? path, {
-    bool copySearchwordToClipboard = false,
+    bool copySearchItemsToClipboard = false,
   }) {
-    if (copySearchwordToClipboard) {
-      Clipboard.setData(ClipboardData(text: _searchOptions.searchWord));
+    if (copySearchItemsToClipboard) {
+      Clipboard.setData(ClipboardData(text: _searchOptions.searchItems));
     }
     final fullPath = p.join(_currentFolder, path);
     Process.run('code', [fullPath]);
@@ -285,7 +285,6 @@ class AppController extends Notifier<AppState> {
     state = state.copyWith(
       details: details,
       fileCount: details.length,
-//      highlights: [_searchOptions.searchWord],
       isLoading: false,
     );
   }
