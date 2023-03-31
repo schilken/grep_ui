@@ -127,7 +127,7 @@ class AppController extends Notifier<AppState> {
   List<Detail> _detailsFromSectionMap() {
     return _sectionsMap.keys
         .map((key) => Detail(
-              title: p.dirname(key).replaceFirst('./', ''),
+              title: p.split(key.replaceAll('./', '')).first,
               filePathName: key,
               lines: _sectionsMap[key] ?? [],
             ))

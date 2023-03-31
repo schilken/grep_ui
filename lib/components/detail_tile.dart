@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:grep_ui/utils/app_sizes.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
 
@@ -27,6 +28,14 @@ class DetailTile extends StatelessWidget {
           children: [
             ListTilePullDownMenu(detail: detail),
             const SizedBox(width: 12),
+            Text(
+              detail.title ?? 'no title',
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            gapWidth8,
             HighlightedText(
               text: detail.filePathName ?? 'no filename',
               highlights: highlights,
