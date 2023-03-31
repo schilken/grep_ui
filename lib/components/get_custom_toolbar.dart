@@ -12,6 +12,7 @@ import 'toolbar_widget_toggle.dart';
 ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
   final appController = ref.watch(appControllerProvider.notifier);
   final currentFolderNotifier = ref.watch(currentFolderProvider.notifier);
+  final searchOptions = ref.read(searchOptionsProvider);
   final searchOptionsNotifier = ref.read(searchOptionsProvider.notifier);
 //  final searchOptions = ref.watch(searchOptionsProvider);
   return ToolBar(
@@ -89,10 +90,12 @@ ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
         },
       ),
       ToolbarWidgetToggle(
+          value: searchOptions.caseSensitive,
           onChanged: searchOptionsNotifier.setCaseSensitiv,
           child: const Text('Aa'),
           tooltipMessage: 'Case sentitive'),
       ToolbarWidgetToggle(
+          value: searchOptions.wholeWord,
           child: SvgPicture.asset(
             'assets/images/whole-word.svg',
             height: 30.0,

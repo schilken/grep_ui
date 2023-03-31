@@ -7,7 +7,7 @@ typedef BoolCallback = void Function(bool);
 class ToolbarWidgetToggle extends ToolbarItem {
   const ToolbarWidgetToggle({
     super.key,
-    this.value = false,
+    required this.value,
     required this.onChanged,
     required this.child,
     this.tooltipMessage,
