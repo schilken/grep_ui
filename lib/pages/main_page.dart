@@ -5,6 +5,7 @@ import 'package:macos_ui/macos_ui.dart';
 import '../components/message_bar.dart';
 import '../components/detail_tile.dart';
 import '../components/get_custom_toolbar.dart';
+import '../components/status_bar_content.dart';
 import '../providers/providers.dart';
 
 class MainPage extends ConsumerWidget {
@@ -24,33 +25,19 @@ class MainPage extends ConsumerWidget {
             builder: (context, scrollController) {
               return Column(
                 children: [
-                  Container(
-                    color: Colors.blueGrey[100],
-                    padding: const EdgeInsets.fromLTRB(12, 20, 20, 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const Text('Base Directory:'),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        SelectableText(currentFolder),
-                        const Spacer(),
-                        Text('${appState.fileCount} Files'),
-                      ],
-                    ),
-                  ),
                   if (appState.message != null)
                     MessageBar(
                       message: appState.message!,
                       onDismiss: () => appController.removeMessage(),
                     ),
                   if (appState.isLoading == false && appState.details.isEmpty)
-                    const Center(
-                        child: Padding(
-                      padding: EdgeInsets.only(top: 32),
-                      child: Text('No search result.'),
-                    )),
+                    const Expanded(
+                      child: Center(
+                          child: Padding(
+                        padding: EdgeInsets.only(top: 32),
+                        child: Text('No search result.'),
+                      )),
+                    ),
                   if (appState.isLoading == false &&
                       appState.details.isNotEmpty)
                     Expanded(
@@ -76,11 +63,24 @@ class MainPage extends ConsumerWidget {
                       ),
                     ),
                   if (appState.isLoading == true)
-                    const Center(
-                        child: Padding(
-                      padding: EdgeInsets.only(top: 48),
-                      child: CupertinoActivityIndicator(),
-                    ))
+                    const Expanded(
+                      child: Center(
+                          child: Padding(
+                        padding: EdgeInsets.only(top: 48),
+                        child: CupertinoActivityIndicator(),
+                      )),
+                    ),
+                  ResizablePane(
+                    minSize: 50,
+                    startSize: 50,
+                    isResizable: false,
+                    //windowBreakpoint: 600,
+                    builder: (_, __) {
+                      return StatusBarContent(ref: ref);
+                    },
+                    resizableSide: ResizableSide.top,
+                  )
+
                 ],
               );
             },
