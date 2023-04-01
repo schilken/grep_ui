@@ -56,7 +56,7 @@ class DetailTile extends StatelessWidget {
             color: Colors.blueGrey,
           ),
           highlights: highlights,
-          caseSensitive: false,
+          caseSensitive: caseSensitive,
         ),
       ),
     );
