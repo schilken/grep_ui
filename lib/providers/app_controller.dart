@@ -39,12 +39,18 @@ class AppController extends Notifier<AppState> {
     );
   }
 
+  List<String> get _highlights => _searchOptions.searchItems.isNotEmpty
+      ? _searchOptions.searchItems
+          .split(' ')
+          .where((item) => item.isNotEmpty)
+          .toList()
+      : [];
+
   void search() async {
     if (_searchOptions.searchItems.length < 2) {
       state = state.copyWith(message: 'No search item entered or lenght < 2');
       return;
     }
-    final highlights = _searchOptions.searchItems.split(' ');
     final errorMessage = await _runGrepCommand(_searchOptions.searchItems);
     var details = _detailsFromSectionMap();
     if (_preferencesRepository.combineIntersection) {
@@ -53,7 +59,7 @@ class AppController extends Notifier<AppState> {
     state = state.copyWith(
       details: details,
       fileCount: details.length,
-      highlights: highlights,
+      highlights: _highlights,
       isLoading: false,
       message: errorMessage,
     );
@@ -218,28 +224,6 @@ class AppController extends Notifier<AppState> {
       message: 'Search result saved in $filePath',
     );
   }
-
-  // void _mergeLinesIntoSectionsMap(List<String> lines) {
-  //   final pattern = RegExp(r'^stdout> (.*)(-|:)([0-9]+)(-|:)(.*)$');
-
-  //   for (final line in lines) {
-  //     final match = pattern.matchAsPrefix(line);
-  //     if (match != null) {
-  //       final String? filepath = match[1];
-  //       // final String? separator1 = match[2];
-  //       // final String? lineNumber = match[3];
-  //       // final String? separator2 = match[4];
-  //       final String? sourceCode = match[5];
-  //       if (filepath != null && sourceCode != null) {
-  //         if (_sectionsMap.containsKey(filepath)) {
-  //           _sectionsMap[filepath]!.add(sourceCode);
-  //         } else {
-  //           _sectionsMap[filepath] = [sourceCode];
-  //         }
-  //       }
-  //     }
-  //   }
-//  }
 
   List<Detail> _filterDetails(List<Detail> fullList, String searchItems) {
     final highLights = _searchOptions.searchItems.toLowerCase().split(' ');
