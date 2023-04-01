@@ -57,10 +57,6 @@ class HighlightedText extends StatelessWidget {
       return _richText(_normalSpan(text));
     }
     for (int i = 0; i < highlights.length; i++) {
-      if (highlights[i] == null) {
-        assert(highlights[i] != null);
-        return _richText(_normalSpan(text));
-      }
       if (highlights[i].isEmpty) {
         assert(highlights[i].isNotEmpty);
         return _richText(_normalSpan(text));
@@ -68,59 +64,58 @@ class HighlightedText extends StatelessWidget {
     }
 
     //Main code
-    var _spans = <TextSpan>[];
-    int _start = 0;
+    var spans = <TextSpan>[];
+    int start = 0;
 
     //For "No Case Sensitive" option
-    String _lowerCaseText = text.toLowerCase();
-    var _lowerCaseHighlights = <String>[];
+    String lowerCaseText = text.toLowerCase();
+    var lowerCaseHighlights = <String>[];
 
-    highlights.forEach((element) {
-      _lowerCaseHighlights.add(element.toLowerCase());
-    });
+    for (var element in highlights) {
+      lowerCaseHighlights.add(element.toLowerCase());
+    }
 
     while (true) {
-      Map<int, String> _highlightsMap = Map(); //key (index), value (highlight).
+      Map<int, String> highlightsMap = {}; //key (index), value (highlight).
 
       if (caseSensitive) {
         for (int i = 0; i < highlights.length; i++) {
-          int _index = text.indexOf(highlights[i], _start);
-          if (_index >= 0) {
-            _highlightsMap.putIfAbsent(_index, () => highlights[i]);
+          int index = text.indexOf(highlights[i], start);
+          if (index >= 0) {
+            highlightsMap[index] = highlights[i];
           }
         }
       } else {
         for (int i = 0; i < highlights.length; i++) {
-          int _index = _lowerCaseText.indexOf(_lowerCaseHighlights[i], _start);
-          if (_index >= 0) {
-            _highlightsMap.putIfAbsent(_index, () => highlights[i]);
+          int index = lowerCaseText.indexOf(lowerCaseHighlights[i], start);
+          if (index >= 0) {
+            highlightsMap[index] = highlights[i];
           }
         }
       }
 
-      if (_highlightsMap.isNotEmpty) {
-        var _indexes = <int>[];
-        _highlightsMap.forEach((key, value) => _indexes.add(key));
+      if (highlightsMap.isNotEmpty) {
+        var indexes = highlightsMap.keys;
 
-        int _currentIndex = _indexes.reduce(min);
-        String _currentHighlight = text.substring(_currentIndex,
-            _currentIndex + _highlightsMap[_currentIndex]!.length);
+        int currentIndex = indexes.reduce(min);
+        String currentHighlight = text.substring(
+            currentIndex, currentIndex + highlightsMap[currentIndex]!.length);
 
-        if (_currentIndex == _start) {
-          _spans.add(_highlightSpan(_currentHighlight));
-          _start += _currentHighlight.length;
+        if (currentIndex == start) {
+          spans.add(_highlightSpan(currentHighlight));
+          start += currentHighlight.length;
         } else {
-          _spans.add(_normalSpan(text.substring(_start, _currentIndex)));
-          _spans.add(_highlightSpan(_currentHighlight));
-          _start = _currentIndex + _currentHighlight.length;
+          spans.add(_normalSpan(text.substring(start, currentIndex)));
+          spans.add(_highlightSpan(currentHighlight));
+          start = currentIndex + currentHighlight.length;
         }
       } else {
-        _spans.add(_normalSpan(text.substring(_start, text.length)));
+        spans.add(_normalSpan(text.substring(start, text.length)));
         break;
       }
     }
 
-    return _richText(TextSpan(children: _spans));
+    return _richText(TextSpan(children: spans));
   }
 
   TextSpan _highlightSpan(String value) {
