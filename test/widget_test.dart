@@ -6,13 +6,12 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:macos_ui/macos_ui.dart';
-
 import 'package:grep_ui/main.dart';
+import 'package:macos_ui/macos_ui.dart';
 
 void main() {
   testWidgets('App is built with a MacosWindow parent widget',
-      (WidgetTester tester) async {
+      (tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const App());
 

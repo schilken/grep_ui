@@ -28,11 +28,11 @@ void main(List<String> args) async {
   final version = pubspec.version;
   await log.initLogger(loggerFolder);
   log.i('version from pubspec.yaml: $version');
-  sharedPreferences.setString('appVersion', version.toString());
+  await sharedPreferences.setString('appVersion', version.toString());
   if (args.firstOrNull == 'multi_window') {
     final windowId = int.parse(args[1]);
     final arguments = args[2].isEmpty
-        ? const {}
+        ? const <String, dynamic>{}
         : jsonDecode(args[2]) as Map<String, dynamic>;
     if (arguments['args1'] == 'About') {
       runApp(AboutWindow(

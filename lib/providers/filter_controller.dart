@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'providers.dart';
@@ -10,7 +11,7 @@ class FilterController extends Notifier<FilterState> {
   FilterState build() {
     _preferencesRepository = ref.watch(preferencesRepositoryProvider);
     _preferencesState = ref.watch(preferencesStateProvider);
-    print('FilterController.build: ${_preferencesState.fileExtensions}');
+    debugPrint('FilterController.build: ${_preferencesState.fileExtensions}');
     return FilterState(
       showWithContext:
           _preferencesRepository.getSearchOption('showWithContext'),
@@ -37,7 +38,9 @@ class FilterController extends Notifier<FilterState> {
 
   Future<void> toggleCombineIntersection(bool value) async {
     await _preferencesRepository.toggleSearchOption(
-        'combineIntersection', value);
+      'combineIntersection',
+      value,
+    );
     state = state.copyWith(
       combineIntersection: value,
     );

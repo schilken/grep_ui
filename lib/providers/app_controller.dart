@@ -265,9 +265,7 @@ class AppController extends Notifier<AppState> {
         keysToRemove.add(key);
       }
     }
-    for (final key in keysToRemove) {
-      _sectionsMap.remove(key);
-    }
+    keysToRemove.forEach(_sectionsMap.remove);
   }
 }
 

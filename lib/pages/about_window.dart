@@ -10,7 +10,7 @@ class AboutWindow extends StatelessWidget {
   });
 
   final WindowController windowController;
-  final Map? args;
+  final Map<String, dynamic>? args;
 
   @override
   Widget build(BuildContext context) {

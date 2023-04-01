@@ -42,7 +42,7 @@ class FilesRepository {
       });
       stdoutSubscription.onError(
         (error, stackTrace) {
-          streamController.add('onError ${error.toString()}');
+          streamController.add('onError $error');
           stdoutSubscription.cancel();
           stderrSubscription.cancel();
           completer.complete('Error: failed with exitCode ${process.exitCode}');
