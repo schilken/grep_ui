@@ -13,10 +13,10 @@ class FilterController extends Notifier<FilterState> {
     print('FilterController.build: ${_preferencesState.fileExtensions}');
     return FilterState(
       showWithContext:
-          _preferencesRepository.getSearchOption('showHiddenFiles'),
+          _preferencesRepository.getSearchOption('showWithContext'),
       fileTypeFilter: fileExtensionFilter,
       combineIntersection:
-          _preferencesRepository.getSearchOption('searchInFoldername'),
+          _preferencesRepository.getSearchOption('combineIntersection'),
       ignoredFolders: _preferencesState.ignoredFolders,
       fileExtensions: _preferencesState.fileExtensions,
     );
