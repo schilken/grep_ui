@@ -15,6 +15,7 @@ class MainPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final appState = ref.watch(appControllerProvider);
     final appController = ref.watch(appControllerProvider.notifier);
+    final searchOptions = ref.read(searchOptionsProvider);
 //    print('MainPage.build: $appState');
     return Builder(builder: (context) {
       return MacosScaffold(
@@ -51,6 +52,7 @@ class MainPage extends ConsumerWidget {
                             return DetailTile(
                               detail: detail,
                               highlights: highlights,
+                              caseSensitive: searchOptions.caseSensitive,
                             );
                           },
                           separatorBuilder: (BuildContext context, int index) {

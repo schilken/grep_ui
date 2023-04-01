@@ -15,10 +15,11 @@ class DetailTile extends StatelessWidget {
     super.key,
     required this.detail,
     required this.highlights,
+    this.caseSensitive = true,
   });
   final Detail detail;
   final List<String> highlights;
-
+  final bool caseSensitive;
   @override
   Widget build(BuildContext context) {
     return MacosListTile(
@@ -39,6 +40,7 @@ class DetailTile extends StatelessWidget {
             HighlightedText(
               text: detail.filePathName ?? 'no filename',
               highlights: highlights,
+              caseSensitive: caseSensitive,
             ),
           ],
         ),

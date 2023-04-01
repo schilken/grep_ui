@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:grep_ui/providers/providers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -40,14 +41,14 @@ class AppController extends Notifier<AppState> {
 
   void search() async {
     if (_searchOptions.searchItems.length < 2) {
-      state = state.copyWith(message: 'No search word entered or lenght < 2');
+      state = state.copyWith(message: 'No search item entered or lenght < 2');
       return;
     }
     final highlights = _searchOptions.searchItems.split(' ');
     final errorMessage = await _runGrepCommand(_searchOptions.searchItems);
     var details = _detailsFromSectionMap();
     if (_preferencesRepository.combineIntersection) {
-      details = _filterDetails(details, highlights);
+      details = _filterDetails(details, _searchOptions.searchItems);
     }
     state = state.copyWith(
       details: details,
@@ -83,7 +84,8 @@ class AppController extends Notifier<AppState> {
       }
     }
     for (final word in searchItems.split(' ')) {
-      parameters.add('-e $word');
+      parameters.add('-e');
+      parameters.add(word);
     }
     _lastGrepCommand = '$programm ${parameters.join(' ')} $_currentFolder';
     log.i('call $_lastGrepCommand');
@@ -112,6 +114,7 @@ class AppController extends Notifier<AppState> {
     _searchResult.add(_searchOptions.searchItems);
     final pattern = RegExp(r'^stdout> (.*)(-|:)([0-9]+)(-|:)(.*)$');
     final subscription = stream.listen((line) {
+      debugPrint(line);
       _searchResult.add(line);
       final match = pattern.matchAsPrefix(line);
       if (match != null) {
@@ -216,56 +219,33 @@ class AppController extends Notifier<AppState> {
     );
   }
 
-  Future<void> combineSearchResults({required List<String?> filePaths}) async {
-    _sectionsMap.clear();
-    final highLights = <String>[];
-//    print('loadSearchResults $filePaths');
-    for (final filePath in filePaths) {
-      if (filePath != null) {
-        final contents = await _filesRepository.readFile(filePath);
-        final lines = contents.split('\n');
-        highLights.add(lines.removeAt(0));
-        _mergeLinesIntoSectionsMap(lines);
-      }
-    }
-    var details = _detailsFromSectionMap();
-    if (_preferencesRepository.combineIntersection) {
-      details = _filterDetails(details, highLights);
-    }
-    state = state.copyWith(
-      details: details,
-      fileCount: details.length,
-      highlights: highLights,
-      message: 'Combined: ${highLights.join(' ')}',
-    );
-  }
+  // void _mergeLinesIntoSectionsMap(List<String> lines) {
+  //   final pattern = RegExp(r'^stdout> (.*)(-|:)([0-9]+)(-|:)(.*)$');
 
-  void _mergeLinesIntoSectionsMap(List<String> lines) {
-    final pattern = RegExp(r'^stdout> (.*)(-|:)([0-9]+)(-|:)(.*)$');
+  //   for (final line in lines) {
+  //     final match = pattern.matchAsPrefix(line);
+  //     if (match != null) {
+  //       final String? filepath = match[1];
+  //       // final String? separator1 = match[2];
+  //       // final String? lineNumber = match[3];
+  //       // final String? separator2 = match[4];
+  //       final String? sourceCode = match[5];
+  //       if (filepath != null && sourceCode != null) {
+  //         if (_sectionsMap.containsKey(filepath)) {
+  //           _sectionsMap[filepath]!.add(sourceCode);
+  //         } else {
+  //           _sectionsMap[filepath] = [sourceCode];
+  //         }
+  //       }
+  //     }
+  //   }
+//  }
 
-    for (final line in lines) {
-      final match = pattern.matchAsPrefix(line);
-      if (match != null) {
-        final String? filepath = match[1];
-        // final String? separator1 = match[2];
-        // final String? lineNumber = match[3];
-        // final String? separator2 = match[4];
-        final String? sourceCode = match[5];
-        if (filepath != null && sourceCode != null) {
-          if (_sectionsMap.containsKey(filepath)) {
-            _sectionsMap[filepath]!.add(sourceCode);
-          } else {
-            _sectionsMap[filepath] = [sourceCode];
-          }
-        }
-      }
-    }
-  }
-
-  List<Detail> _filterDetails(List<Detail> fullList, List<String> highLights) {
+  List<Detail> _filterDetails(List<Detail> fullList, String searchItems) {
+    final highLights = _searchOptions.searchItems.toLowerCase().split(' ');
     final filteredList = <Detail>[];
     for (final detail in fullList) {
-      final joinedDetails = detail.lines.join(' ');
+      final joinedDetails = detail.lines.join(' ').toLowerCase();
       bool skip = false;
       for (var ix = 0; ix < highLights.length && !skip; ix++) {
         if (!joinedDetails.contains(highLights[ix])) {

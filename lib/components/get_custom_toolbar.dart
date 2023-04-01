@@ -60,20 +60,6 @@ ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
               }
             },
           ),
-          MacosPulldownMenuItem(
-            title: const Text("Combine search results"),
-            onTap: () async {
-              final selectedFiles = await FilePicker.platform.pickFiles(
-                initialDirectory: '/Users/aschilken/flutterdev',
-                dialogTitle: 'Choose search results to combine',
-                allowMultiple: true,
-              );
-              if (selectedFiles != null) {
-                appController.combineSearchResults(
-                    filePaths: selectedFiles.paths);
-              }
-            },
-          ),
         ],
       ),
       ToolBarIconButton(
