@@ -7,12 +7,12 @@ typedef StringCallback = void Function(String);
 
 class ToolbarSearchfield extends ToolbarItem {
   const ToolbarSearchfield({
-    Key? key,
+    super.key,
     this.placeholder,
     required this.onChanged,
     required this.onSubmitted,
     this.width = 120,
-  }) : super(key: key);
+  });
   final String? placeholder;
   final StringCallback onChanged;
   final StringCallback onSubmitted;
@@ -33,11 +33,10 @@ class ToolbarSearchfield extends ToolbarItem {
 
 class _WrappedSearchField extends StatelessWidget {
   const _WrappedSearchField({
-    Key? key,
     this.placeholder,
     required this.onChanged,
     required this.onSubmitted,
-  }) : super(key: key);
+  });
   final String? placeholder;
   final StringCallback onChanged;
   final StringCallback onSubmitted;
@@ -46,7 +45,6 @@ class _WrappedSearchField extends StatelessWidget {
   Widget build(BuildContext context) {
     return MacosTextField(
       placeholder: placeholder,
-      maxLines: 1,
       clearButtonMode: OverlayVisibilityMode.editing,
       onTap: () {},
       onChanged: onChanged,

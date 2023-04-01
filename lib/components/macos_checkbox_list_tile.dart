@@ -51,7 +51,6 @@ class MacosCheckBoxListTile extends StatelessWidget {
     return Container(
       color: tileColor,
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           if (leading != null) leading!,
           const SizedBox(width: 4),
@@ -86,7 +85,7 @@ class MacosCheckBoxListTile extends StatelessWidget {
             onChanged: onChanged,
             offBorderColor: Colors.black,
           ),
-          SizedBox(
+          const SizedBox(
             width: 12,
           ),
         ],

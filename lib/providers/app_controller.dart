@@ -1,13 +1,15 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:grep_ui/providers/providers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mixin_logger/mixin_logger.dart' as log;
 import 'package:path/path.dart' as p;
-import 'app_state.dart';
+
 import '../models/detail.dart';
+import 'app_state.dart';
+import 'providers.dart';
 
 class AppController extends Notifier<AppState> {
   late FilesRepository _filesRepository;
@@ -24,13 +26,13 @@ class AppController extends Notifier<AppState> {
 
   @override
   AppState build() {
-    print('AppController.build');
+    debugPrint('AppController.build');
     _preferencesRepository = ref.watch(preferencesRepositoryProvider);
     _filesRepository = ref.watch(filesRepositoryProvider);
     _searchOptions = ref.watch(searchOptionsProvider);
     _filterState = ref.watch(filterControllerProvider);
     _currentFolder = ref.watch(currentFolderProvider);
-    Future<void>.delayed(const Duration(milliseconds: 10), () => search());
+    Future<void>.delayed(const Duration(milliseconds: 10), search);
     return AppState(
       fileCount: 0,
       details: [],
@@ -46,7 +48,7 @@ class AppController extends Notifier<AppState> {
           .toList()
       : [];
 
-  void search() async {
+  Future<void> search() async {
     if (_searchOptions.searchItems.length < 2) {
       state = state.copyWith(message: 'No search item entered or lenght < 2');
       return;
@@ -85,7 +87,7 @@ class AppController extends Notifier<AppState> {
       parameters.add('-C4');
     }
     if (_preferencesRepository.ignoredFolders.isNotEmpty) {
-      for (var element in _preferencesRepository.ignoredFolders) {
+      for (final element in _preferencesRepository.ignoredFolders) {
         parameters.add('--exclude-dir=$element');
       }
     }
@@ -99,7 +101,7 @@ class AppController extends Notifier<AppState> {
       message: _lastGrepCommand,
       isLoading: true,
     );
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future<void>.delayed(const Duration(milliseconds: 500));
     final streamController = StreamController<String>();
     final subscription = _handleCommandOutput(streamController.stream);
     final errorMessage = await _filesRepository.runCommand(
@@ -109,8 +111,8 @@ class AppController extends Notifier<AppState> {
       streamController,
     );
     log.i('command returns with: $errorMessage');
-    subscription.cancel();
-    streamController.close();
+    await subscription.cancel();
+    await streamController.close();
     return errorMessage;
   }
 
@@ -124,11 +126,11 @@ class AppController extends Notifier<AppState> {
       _searchResult.add(line);
       final match = pattern.matchAsPrefix(line);
       if (match != null) {
-        final String? filepath = match[1];
+        final filepath = match[1];
         // final String? separator1 = match[2];
         // final String? lineNumber = match[3];
         // final String? separator2 = match[4];
-        final String? sourceCode = match[5];
+        final sourceCode = match[5];
         if (filepath != null && sourceCode != null) {
           if (_sectionsMap.containsKey(filepath)) {
             _sectionsMap[filepath]!.add(sourceCode);
@@ -147,21 +149,22 @@ class AppController extends Notifier<AppState> {
               title: p.split(key.replaceAll('./', '')).first,
               filePathName: key,
               lines: _sectionsMap[key] ?? [],
-            ))
+          ),
+        )
         .toList();
   }
 
-  showInFinder(String path) {
+  void showInFinder(String path) {
     final fullPath = p.join(_currentFolder, path);
     Process.run('open', ['-R', fullPath]);
   }
 
-  copyToClipboard(String path) {
+  void copyToClipboard(String path) {
     final fullPath = p.join(_currentFolder, path);
     Clipboard.setData(ClipboardData(text: fullPath));
   }
 
-  showInTerminal(String path) {
+  void showInTerminal(String path) {
     final fullPath = p.join(_currentFolder, path);
     final dirname = p.dirname(fullPath);
     Process.run('open', ['-a', 'iTerm', dirname]);
@@ -198,7 +201,7 @@ class AppController extends Notifier<AppState> {
     }
   }
 
-  sidebarChanged(int index) {
+  void sidebarChanged(int index) {
     log.i('sidebarChanged to index $index');
     state = state.copyWith(
       sidebarPageIndex: index,
@@ -230,7 +233,7 @@ class AppController extends Notifier<AppState> {
     final filteredList = <Detail>[];
     for (final detail in fullList) {
       final joinedDetails = detail.lines.join(' ').toLowerCase();
-      bool skip = false;
+      var skip = false;
       for (var ix = 0; ix < highLights.length && !skip; ix++) {
         if (!joinedDetails.contains(highLights[ix])) {
           skip = true;
@@ -257,12 +260,12 @@ class AppController extends Notifier<AppState> {
     final keysToRemove = <String>[];
     final parts = title.split('/');
     final projectName = parts.first;
-    for (var key in _sectionsMap.keys) {
+    for (final key in _sectionsMap.keys) {
       if (key.startsWith('./$projectName')) {
         keysToRemove.add(key);
       }
     }
-    for (var key in keysToRemove) {
+    for (final key in keysToRemove) {
       _sectionsMap.remove(key);
     }
   }

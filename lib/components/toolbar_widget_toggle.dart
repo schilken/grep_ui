@@ -61,7 +61,7 @@ class _WidgetToggleButtonState extends State<WidgetToggleButton> {
     currentValue = widget.value;
   }
 
-  _onPressed() {
+  void _onPressed() {
     setState(() {
       currentValue = !currentValue;
     });

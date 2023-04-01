@@ -2,13 +2,13 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:grep_ui/utils/app_sizes.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
 
-import '../providers/providers.dart';
-import 'highlighted_text.dart';
 import '../models/detail.dart';
+import '../providers/providers.dart';
+import '../utils/app_sizes.dart';
+import 'highlighted_text.dart';
 
 class DetailTile extends StatelessWidget {
   const DetailTile({
@@ -100,14 +100,14 @@ class ListTilePullDownMenu extends ConsumerWidget {
           title: const Text('Open File in VScode'),
           onTap: () => detail.filePathName == null
               ? null
-              : appController.openEditor(detail.filePathName!),
+              : appController.openEditor(detail.filePathName),
         ),
         MacosPulldownMenuItem(
           title: const Text('Open File in VScode with SearcItems on Clipboard'),
           onTap: () => detail.filePathName == null
               ? null
               : appController.openEditor(
-                    detail.filePathName!,
+                  detail.filePathName,
                   copySearchItemsToClipboard: true,
                   ),
         ),

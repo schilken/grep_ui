@@ -1,8 +1,9 @@
 import 'dart:io';
 
-import 'package:grep_ui/providers/providers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'providers.dart';
 
 class PreferencesRepository {
   PreferencesRepository(this._prefs);
@@ -10,9 +11,10 @@ class PreferencesRepository {
 
   String get appVersion => _prefs.getString('appVersion') ?? '?';
 
-  get fileExtensionFilter => _prefs.getString('fileExtensionFilter') ?? 'yaml';
+  String get fileExtensionFilter =>
+      _prefs.getString('fileExtensionFilter') ?? 'yaml';
 
-  Future<void> setFileExtensionFilter(value) async {
+  Future<void> setFileExtensionFilter(String value) async {
     await _prefs.setString('fileExtensionFilter', value);
   }
 
@@ -63,12 +65,12 @@ class PreferencesRepository {
       fileExtensions.add('txt');
     }
     if (!fileExtensions.contains(fileExtensionFilter)) {
-      setFileExtensionFilter(fileExtensions.first);
+      await setFileExtensionFilter(fileExtensions.first);
     }
     await _prefs.setStringList('fileExtensions', fileExtensions);
   }
 
-  setCurrentFolder(String folderPath) async {
+  Future<void> setCurrentFolder(String folderPath) async {
     await _prefs.setString('currentFolder', folderPath);
   }
 

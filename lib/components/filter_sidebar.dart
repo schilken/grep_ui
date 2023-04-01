@@ -17,15 +17,16 @@ class FilterSidebar extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text('Scan Files with this extension',
-            style: TextStyle(fontWeight: FontWeight.bold)),
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         const SizedBox(height: 16),
         MacosPopupButton<String>(
           value: filterState.fileTypeFilter,
-          onChanged: (String? value) async {
-            await filterController.setFileExtensionFilter(value);
+          onChanged: (value) async {
+            await filterController.setFileExtensionFilter(value ?? 'txt');
           },
           items: filterController.allFileExtensions
-              .map<MacosPopupMenuItem<String>>((String value) {
+              .map<MacosPopupMenuItem<String>>((value) {
             return MacosPopupMenuItem<String>(
               value: value,
               child: Text(value),

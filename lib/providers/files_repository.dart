@@ -12,9 +12,9 @@ class FilesRepository {
     String programm,
     List<String> parameters,
     String workingDirectory,
-    StreamController streamController,
+    StreamController<String> streamController,
   ) async {
-    var completer = Completer<String?>();
+    final completer = Completer<String?>();
     try {
       final process = await Process.start(
         programm,
@@ -29,25 +29,28 @@ class FilesRepository {
           streamController.add('stdout> $line');
         },
       );
+      final stderrSubscription = process.stderr
+          .transform(utf8.decoder)
+          .transform(const LineSplitter())
+          .listen((line) {
+        streamController.add('stderr> $line');
+      });
       stdoutSubscription.onDone(() {
-        streamController.add('onDone');
+        stdoutSubscription.cancel();
+        stderrSubscription.cancel();
         completer.complete(null);
       });
       stdoutSubscription.onError(
         (error, stackTrace) {
           streamController.add('onError ${error.toString()}');
+          stdoutSubscription.cancel();
+          stderrSubscription.cancel();
           completer.complete('Error: failed with exitCode ${process.exitCode}');
           return;
         },
       );
-      process.stderr
-          .transform(utf8.decoder)
-          .transform(const LineSplitter())
-          .forEach((line) {
-        streamController.add('stderr> $line');
-      });
     } on Exception catch (e) {
-      completer.complete('Error: failed with exception ${e.toString()}');
+      completer.complete('Error: failed with exception $e');
     }
     return completer.future;
   }

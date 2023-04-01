@@ -2,9 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
-import '../components/message_bar.dart';
+
 import '../components/detail_tile.dart';
 import '../components/get_custom_toolbar.dart';
+import '../components/message_bar.dart';
 import '../components/status_bar_content.dart';
 import '../providers/providers.dart';
 
@@ -28,7 +29,7 @@ class MainPage extends ConsumerWidget {
                   if (appState.message != null)
                     MessageBar(
                       message: appState.message!,
-                      onDismiss: () => appController.removeMessage(),
+                        onDismiss: appController.removeMessage,
                     ),
                   if (appState.isLoading == false && appState.details.isEmpty)
                     const Expanded(
@@ -36,7 +37,8 @@ class MainPage extends ConsumerWidget {
                           child: Padding(
                         padding: EdgeInsets.only(top: 32),
                         child: Text('No search result.'),
-                      )),
+                          ),
+                        ),
                     ),
                   if (appState.isLoading == false &&
                       appState.details.isNotEmpty)
@@ -55,7 +57,7 @@ class MainPage extends ConsumerWidget {
                               caseSensitive: searchOptions.caseSensitive,
                             );
                           },
-                          separatorBuilder: (BuildContext context, int index) {
+                            separatorBuilder: (context, index) {
                             return const Divider(
                               thickness: 2,
                             );
@@ -69,7 +71,8 @@ class MainPage extends ConsumerWidget {
                           child: Padding(
                         padding: EdgeInsets.only(top: 48),
                         child: CupertinoActivityIndicator(),
-                      )),
+                          ),
+                        ),
                     ),
                   ResizablePane(
                     minSize: 50,
@@ -88,6 +91,7 @@ class MainPage extends ConsumerWidget {
           ),
         ],
       );
-    });
+      },
+    );
   }
 }

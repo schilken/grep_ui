@@ -10,17 +10,18 @@ import 'package:macos_ui/macos_ui.dart';
 import 'package:mixin_logger/mixin_logger.dart' as log;
 import 'package:pubspec_parse/pubspec_parse.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'components/filter_sidebar.dart';
 import 'pages/about_window.dart';
 import 'pages/help_page.dart';
-import 'providers/providers.dart';
-import 'components/filter_sidebar.dart';
 import 'pages/main_page.dart';
 import 'pages/preferences_page.dart';
+import 'providers/providers.dart';
 
 const loggerFolder = '/tmp/macos_grep_ui_log';
 
 void main(List<String> args) async {
-  print('main: $args');
+  debugPrint('main: $args');
   WidgetsFlutterBinding.ensureInitialized();
   final sharedPreferences = await SharedPreferences.getInstance();
   final pubspec = Pubspec.parse(await rootBundle.loadString('pubspec.yaml'));
@@ -37,12 +38,16 @@ void main(List<String> args) async {
       runApp(AboutWindow(
         windowController: WindowController.fromWindowId(windowId),
         args: arguments,
-      ));
+        ),
+      );
     }
   } else {
     runApp(ProviderScope(overrides: [
       sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-    ], child: const App()));
+        ],
+        child: const App(),
+      ),
+    );
   }
 }
 
@@ -96,7 +101,8 @@ class _MainViewState extends ConsumerState<MainView> {
                     'args2': 500,
                     'args3': true,
                   },
-                ));
+                  ),
+                );
                 debugPrint('$window');
                 window
                   ..setFrame(const Offset(0, 0) & const Size(350, 350))
@@ -121,7 +127,7 @@ class _MainViewState extends ConsumerState<MainView> {
           builder: (context, scrollController) => SidebarItems(
             currentIndex: appState.sidebarPageIndex,
             scrollController: scrollController,
-            onChanged: (index) => appController.sidebarChanged(index),
+            onChanged: appController.sidebarChanged,
             items: const [
               SidebarItem(
                 leading: MacosIcon(CupertinoIcons.search),
@@ -150,10 +156,10 @@ class _MainViewState extends ConsumerState<MainView> {
         ),
         child: IndexedStack(
           index: appState.sidebarPageIndex,
-          children: [
-            const MainPage(),
-            const PreferencesPage(),
-            const HelpPage(),
+          children: const [
+            MainPage(),
+            PreferencesPage(),
+            HelpPage(),
           ],
         ),
       ),

@@ -1,31 +1,15 @@
 library dynamic_text_highlighting;
 
-import 'package:flutter/material.dart';
 import 'dart:math';
 
-class HighlightedText extends StatelessWidget {
-  //DynamicTextHighlighting
-  final String text;
-  final List<String> highlights;
-  final Color color;
-  final TextStyle style;
-  final bool caseSensitive;
+import 'package:flutter/material.dart';
 
-  //RichText
-  final TextAlign textAlign;
-  final TextDirection textDirection;
-  final bool softWrap;
-  final TextOverflow overflow;
-  final double textScaleFactor;
-  final int maxLines;
-//  final Locale locale;
-//  final StrutStyle strutStyle;
-  final TextWidthBasis textWidthBasis;
+class HighlightedText extends StatelessWidget {
 //  final TextHeightBehavior textHeightBehavior;
 
-  HighlightedText({
+  const HighlightedText({
     //DynamicTextHighlighting
-    Key? key,
+    super.key,
     required this.text,
     required this.highlights,
     this.color = Colors.yellow,
@@ -45,7 +29,24 @@ class HighlightedText extends StatelessWidget {
 //    this.strutStyle,
     this.textWidthBasis = TextWidthBasis.parent,
 //    this.textHeightBehavior,
-  }) : super(key: key);
+  });
+  //DynamicTextHighlighting
+  final String text;
+  final List<String> highlights;
+  final Color color;
+  final TextStyle style;
+  final bool caseSensitive;
+
+  //RichText
+  final TextAlign textAlign;
+  final TextDirection textDirection;
+  final bool softWrap;
+  final TextOverflow overflow;
+  final double textScaleFactor;
+  final int maxLines;
+//  final Locale locale;
+//  final StrutStyle strutStyle;
+  final TextWidthBasis textWidthBasis;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +57,7 @@ class HighlightedText extends StatelessWidget {
     if (highlights.isEmpty) {
       return _richText(_normalSpan(text));
     }
-    for (int i = 0; i < highlights.length; i++) {
+    for (var i = 0; i < highlights.length; i++) {
       if (highlights[i].isEmpty) {
         assert(highlights[i].isNotEmpty);
         return _richText(_normalSpan(text));
@@ -64,30 +65,30 @@ class HighlightedText extends StatelessWidget {
     }
 
     //Main code
-    var spans = <TextSpan>[];
-    int start = 0;
+    final spans = <TextSpan>[];
+    var start = 0;
 
     //For "No Case Sensitive" option
-    String lowerCaseText = text.toLowerCase();
-    var lowerCaseHighlights = <String>[];
+    final lowerCaseText = text.toLowerCase();
+    final lowerCaseHighlights = <String>[];
 
-    for (var element in highlights) {
+    for (final element in highlights) {
       lowerCaseHighlights.add(element.toLowerCase());
     }
 
     while (true) {
-      Map<int, String> highlightsMap = {}; //key (index), value (highlight).
+      final highlightsMap = <int, String>{}; //key (index), value (highlight).
 
       if (caseSensitive) {
-        for (int i = 0; i < highlights.length; i++) {
-          int index = text.indexOf(highlights[i], start);
+        for (var i = 0; i < highlights.length; i++) {
+          final index = text.indexOf(highlights[i], start);
           if (index >= 0) {
             highlightsMap[index] = highlights[i];
           }
         }
       } else {
-        for (int i = 0; i < highlights.length; i++) {
-          int index = lowerCaseText.indexOf(lowerCaseHighlights[i], start);
+        for (var i = 0; i < highlights.length; i++) {
+          final index = lowerCaseText.indexOf(lowerCaseHighlights[i], start);
           if (index >= 0) {
             highlightsMap[index] = highlights[i];
           }
@@ -95,11 +96,13 @@ class HighlightedText extends StatelessWidget {
       }
 
       if (highlightsMap.isNotEmpty) {
-        var indexes = highlightsMap.keys;
+        final indexes = highlightsMap.keys;
 
-        int currentIndex = indexes.reduce(min);
-        String currentHighlight = text.substring(
-            currentIndex, currentIndex + highlightsMap[currentIndex]!.length);
+        final currentIndex = indexes.reduce(min);
+        final currentHighlight = text.substring(
+          currentIndex,
+          currentIndex + highlightsMap[currentIndex]!.length,
+        );
 
         if (currentIndex == start) {
           spans.add(_highlightSpan(currentHighlight));

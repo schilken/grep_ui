@@ -1,9 +1,10 @@
 name: grep_ui
 description: wrapper on grep cli tool
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.1
 environment:
   sdk: ">=2.19.0 <3.0.0"
+  
 dependencies:
   collection: ^1.16.0
   cupertino_icons: ^1.0.4
@@ -29,6 +30,7 @@ dependencies:
   pubspec_parse: ^1.2.2
   shared_preferences: ^2.0.18
   yaml: ^3.1.1
+
 dependency_overrides:
   file: ^6.1.4
 

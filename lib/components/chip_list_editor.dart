@@ -17,13 +17,13 @@ class _ListEditorState extends ConsumerState<ChipListEditor> {
   late FocusNode _focusNode;
 
   @override
-  initState() {
+  void initState() {
     super.initState();
     _textEditingController = TextEditingController();
     _focusNode = FocusNode();
   }
 
-  addItem(BuildContext context, String newItem) {
+  void addItem(BuildContext context, String newItem) {
 //    print('Adding $newItem');
     if (newItem.isEmpty) {
       return;
@@ -38,14 +38,14 @@ class _ListEditorState extends ConsumerState<ChipListEditor> {
     return Container(
       color: Colors.white,
       child: Padding(
-          padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20),
           child: Column(
             children: [
               Expanded(
                 child: Material(
                   color: Colors.white,
                   child: Builder(builder: (context) {
-                    var chips = ref
+                    final chips = ref
                         .watch(preferencesStateProvider)
                         .fileExtensions
                         .map((item) => Chip(
@@ -57,20 +57,22 @@ class _ListEditorState extends ConsumerState<ChipListEditor> {
                                     .read(preferencesStateProvider.notifier)
                                     .removeFileExtension(item);
                               },
-                            ))
+                          ),
+                        )
                         .toList();
                     return Wrap(
                       spacing: 12,
                       runSpacing: 12,
                       children: chips,
                     );
-                  }),
+                  },
+                ),
                 ),
               ),
               Row(
                 children: [
                   const Text('Add String to the List:'),
-                  const SizedBox(width: 20.0),
+                const SizedBox(width: 20),
                   Expanded(
                     child: MacosTextField(
                       controller: _textEditingController,
@@ -83,7 +85,8 @@ class _ListEditorState extends ConsumerState<ChipListEditor> {
                 ],
               ),
             ],
-          )),
+        ),
+      ),
     );
   }
 }

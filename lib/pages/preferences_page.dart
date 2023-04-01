@@ -13,7 +13,6 @@ class PreferencesPage extends StatefulWidget {
 
 class _PreferencesPageState extends State<PreferencesPage> {
   final _controller = MacosTabController(
-    initialIndex: 0,
     length: 2,
   );
 
@@ -27,7 +26,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
         ContentArea(
           builder: (context, scrollController) {
             return Padding(
-              padding: const EdgeInsets.all(24.0),
+              padding: const EdgeInsets.all(24),
               child: MacosTabView(
                 controller: _controller,
                 tabs: [
@@ -42,12 +41,12 @@ class _PreferencesPageState extends State<PreferencesPage> {
                 ],
                 children: const [
                   Padding(
-                    padding: EdgeInsets.all(20.0),
+                    padding: EdgeInsets.all(20),
                     child: ListEditor(),
                   ),
                   Center(
                     child: Padding(
-                      padding: EdgeInsets.all(20.0),
+                      padding: EdgeInsets.all(20),
                       child: ChipListEditor(),
                     ),
                   ),

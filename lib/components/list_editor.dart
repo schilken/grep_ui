@@ -18,21 +18,21 @@ class _ListEditorState extends ConsumerState<ListEditor> {
   late FocusNode _focusNode;
 
   @override
-  initState() {
+  void initState() {
     super.initState();
     _textEditingController = TextEditingController();
     _scrollController = ScrollController();
     _focusNode = FocusNode();
   }
 
-  addItem(String newItem) {
+  void addItem(String newItem) {
 //    print('Adding $newItem');
     if (newItem.isEmpty) {
       return;
     }
     ref.read(preferencesStateProvider.notifier).addIgnoredFolder(newItem);
     _textEditingController.clear();
-    Future.delayed(const Duration(milliseconds: 100), () => _scrollToEnd());
+    Future.delayed(const Duration(milliseconds: 100), _scrollToEnd);
     FocusScope.of(context).requestFocus(_focusNode);
   }
 
@@ -50,7 +50,7 @@ class _ListEditorState extends ConsumerState<ListEditor> {
     return Container(
       color: Colors.white,
       child: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
             Expanded(
@@ -71,7 +71,8 @@ class _ListEditorState extends ConsumerState<ListEditor> {
                                   .removeIgnoredFolder(ignoredFolders[index]),
                             ),
                           );
-                        });
+                      },
+                    );
                   },
                 ),
               ),
@@ -79,7 +80,7 @@ class _ListEditorState extends ConsumerState<ListEditor> {
             Row(
               children: [
                 const Text('Add String to the List:'),
-                const SizedBox(width: 20.0),
+                const SizedBox(width: 20),
                 Expanded(
                   child: MacosTextField(
                     controller: _textEditingController,

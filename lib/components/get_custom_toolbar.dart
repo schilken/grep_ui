@@ -27,19 +27,19 @@ ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
       },
     ),
     title: const Text('Grep UI'),
-    titleWidth: 80.0,
+    titleWidth: 80,
     actions: [
       const ToolBarSpacer(spacerUnits: 3),
       ToolBarPullDownButton(
-        label: "Actions",
+        label: 'Actions',
         icon: CupertinoIcons.ellipsis_circle,
-        tooltipMessage: "Perform filesystem tasks",
+        tooltipMessage: 'Perform filesystem tasks',
         items: [
           MacosPulldownMenuItem(
-            title: const Text("Choose Folder to scan"),
+            title: const Text('Choose Folder to scan'),
             onTap: () async {
               final userHomeDirectory = Platform.environment['HOME'];
-              String? selectedDirectory = await FilePicker.platform
+              final selectedDirectory = await FilePicker.platform
                   .getDirectoryPath(initialDirectory: userHomeDirectory);
               if (selectedDirectory != null) {
                 currentFolderNotifier.setCurrentFolder(selectedDirectory);
@@ -48,13 +48,14 @@ ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
           ),
           const MacosPulldownMenuDivider(),
           MacosPulldownMenuItem(
-            title: const Text("Save last search result"),
+            title: const Text('Save last search result'),
             onTap: () async {
               final userHomeDirectory = Platform.environment['HOME'];
               final selectedFile = await FilePicker.platform.saveFile(
                   initialDirectory: userHomeDirectory,
                   dialogTitle: 'Choose file to save search result',
-                  fileName: 'search-result_${searchOptions.searchItems}.txt');
+                fileName: 'search-result_${searchOptions.searchItems}.txt',
+              );
               if (selectedFile != null) {
                 appController.saveSearchResult(selectedFile);
               }
@@ -63,16 +64,17 @@ ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
         ],
       ),
       ToolBarIconButton(
-          label: "Show grep command",
+        label: 'Show grep command',
           icon: const MacosIcon(
             CupertinoIcons.eye,
           ),
-          onPressed: () => appController.showGrepCommand(),
+        onPressed: appController.showGrepCommand,
           showLabel: false,
-          tooltipMessage: 'Show grep command'),
-      const ToolBarSpacer(spacerUnits: 1),
+        tooltipMessage: 'Show grep command',
+      ),
+      const ToolBarSpacer(),
       const ToolBarDivider(),
-      const ToolBarSpacer(spacerUnits: 1),
+      const ToolBarSpacer(),
       ToolbarSearchfield(
         placeholder: 'Search word',
         width: 350,
@@ -81,32 +83,33 @@ ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
             searchOptionsNotifier.setSearchItems(word);
           }
         },
-        onSubmitted: (word) {
-          searchOptionsNotifier.setSearchItems(word);
-        },
+        onSubmitted: searchOptionsNotifier.setSearchItems,
       ),
       ToolbarWidgetToggle(
           value: searchOptions.caseSensitive,
           onChanged: searchOptionsNotifier.setCaseSensitiv,
           child: const Text('Aa'),
-          tooltipMessage: 'Case sentitive'),
+        tooltipMessage: 'Case sentitive',
+      ),
       ToolbarWidgetToggle(
           value: searchOptions.wholeWord,
           child: SvgPicture.asset(
             'assets/images/whole-word.svg',
-            height: 30.0,
-            width: 30.0,
+          height: 30,
+          width: 30,
           ),
           onChanged: searchOptionsNotifier.setWholeWord,
-          tooltipMessage: 'Whole Word'),
+        tooltipMessage: 'Whole Word',
+      ),
       ToolBarIconButton(
-          label: "Search",
+        label: 'Search',
           icon: const MacosIcon(
             CupertinoIcons.search,
           ),
-          onPressed: () => appController.search(),
+        onPressed: appController.search,
           showLabel: false,
-          tooltipMessage: 'Search again'),
+        tooltipMessage: 'Search again',
+      ),
     ],
   );
 }

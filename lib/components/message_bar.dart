@@ -1,14 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:macos_ui/macos_ui.dart';
-import 'package:mixin_logger/mixin_logger.dart' as log;
 
 class MessageBar extends StatelessWidget {
   const MessageBar({
-    Key? key,
+    super.key,
     required this.message,
     this.onDismiss,
-  }) : super(key: key);
+  });
   final String message;
   final VoidCallback? onDismiss;
 

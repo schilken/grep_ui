@@ -22,13 +22,13 @@ class FilterController extends Notifier<FilterState> {
     );
   }
 
-  get fileExtensionFilter => _preferencesRepository.fileExtensionFilter;
+  String get fileExtensionFilter => _preferencesRepository.fileExtensionFilter;
 
   List<String> get allFileExtensions {
     return _preferencesRepository.fileExtensions;
   }
 
-  Future<void> setFileExtensionFilter(value) async {
+  Future<void> setFileExtensionFilter(String value) async {
     await _preferencesRepository.setFileExtensionFilter(value);
     state = state.copyWith(
       fileTypeFilter: value,
