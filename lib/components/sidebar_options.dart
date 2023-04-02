@@ -4,8 +4,8 @@ import 'package:macos_ui/macos_ui.dart';
 import '../providers/providers.dart';
 import 'macos_checkbox_list_tile.dart';
 
-class FilterSidebar extends ConsumerWidget {
-  const FilterSidebar({
+class SidebarOptions extends ConsumerWidget {
+  const SidebarOptions({
     super.key,
   });
 
@@ -16,7 +16,8 @@ class FilterSidebar extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Scan Files with this extension',
+        const Text(
+          'Scan Files with this extension',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16),
