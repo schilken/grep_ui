@@ -18,7 +18,10 @@ class SidebarOptionsView extends ConsumerWidget {
       children: [
         const Text(
           'Scan this Directory',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.blueGrey,
+          ),
         ),
         const SizedBox(height: 16),
         MacosPopupButton<String>(
@@ -37,7 +40,10 @@ class SidebarOptionsView extends ConsumerWidget {
         const SizedBox(height: 16),
         const Text(
           'Only Files with this extension',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.blueGrey,
+          ),
         ),
         const SizedBox(height: 16),
         MacosPopupButton<String>(
@@ -57,7 +63,10 @@ class SidebarOptionsView extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.fromLTRB(0, 8, 4, 0),
           child: MacosCheckBoxListTile(
-            title: const Text('Only Intersection'),
+            title: const Text('Only Intersection',
+                style: TextStyle(
+                  color: Colors.blueGrey,
+                )),
             onChanged: (value) =>
                 filterController.toggleCombineIntersection(value ?? false),
             value: filterState.combineIntersection,
@@ -66,7 +75,12 @@ class SidebarOptionsView extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.fromLTRB(0, 8, 4, 0),
           child: MacosCheckBoxListTile(
-            title: const Text('With 4 context lines'),
+            title: const Text(
+              'With 4 context lines',
+              style: TextStyle(
+                color: Colors.blueGrey,
+              ),
+            ),
             onChanged: (value) =>
                 filterController.toggleShowWithContext(value ?? false),
             value: filterState.showWithContext,

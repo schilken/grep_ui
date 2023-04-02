@@ -145,7 +145,12 @@ class _MainViewState extends ConsumerState<MainView> {
           ),
           bottom: MacosListTile(
             leading: const MacosIcon(CupertinoIcons.info_circle),
-            title: const Text('Grep UI'),
+            title: const Text(
+              'Grep UI',
+              style: TextStyle(
+                color: Colors.blueGrey,
+              ),
+            ),
             subtitle: Text('Version ${appState.appVersion}'),
             onClick: () => showLicensePage(
               context: context,
