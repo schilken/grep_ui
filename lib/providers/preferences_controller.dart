@@ -1,23 +1,28 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:path/path.dart' as p;
 
 import 'providers.dart';
 
 class PreferencesState {
   final List<String> ignoredFolders;
+  final List<String> sourceFolders;
   final List<String> fileExtensions;
 
   PreferencesState({
     required this.ignoredFolders,
+    required this.sourceFolders,
     required this.fileExtensions,
   });
 
   PreferencesState copyWith({
     List<String>? ignoredFolders,
+    List<String>? sourceFolders,
     List<String>? fileExtensions,
   }) {
     return PreferencesState(
       ignoredFolders: ignoredFolders ?? this.ignoredFolders,
+      sourceFolders: sourceFolders ?? this.sourceFolders,
       fileExtensions: fileExtensions ?? this.fileExtensions,
     );
   }
@@ -33,6 +38,7 @@ class PreferencesController extends Notifier<PreferencesState> {
     _preferencesRepository = ref.watch(preferencesRepositoryProvider);
     return PreferencesState(
       ignoredFolders: _preferencesRepository.ignoredFolders,
+      sourceFolders: _preferencesRepository.sourceFolders,
       fileExtensions: _preferencesRepository.fileExtensions,
     );
   }
@@ -51,6 +57,22 @@ class PreferencesController extends Notifier<PreferencesState> {
     );
   }
 
+  Future<void> addSourceFolder(String fullDirectoryPath) async {
+    final reducedPath = _startWithUsersFolder(fullDirectoryPath);
+    await _preferencesRepository.addSourceFolder(reducedPath);
+    state = state.copyWith(
+      sourceFolders: _preferencesRepository.sourceFolders,
+    );
+  }
+
+  Future<void> removeSourceFolder(String folder) async {
+    await _preferencesRepository.removeSourceFolder(folder);
+    state = state.copyWith(
+      sourceFolders: _preferencesRepository.sourceFolders,
+    );
+  }
+
+
   Future<void> addFileExtension(String word) async {
     await _preferencesRepository.addFileExtension(word);
     state = state.copyWith(
@@ -63,6 +85,14 @@ class PreferencesController extends Notifier<PreferencesState> {
     state = state.copyWith(
       fileExtensions: _preferencesRepository.fileExtensions,
     );
+  }
+
+  String _startWithUsersFolder(String fullPathName) {
+    final parts = p.split(fullPathName);
+    if (parts.length > 3 && parts[3] == 'Users') {
+      return '/${p.joinAll(parts.sublist(3))}';
+    }
+    return fullPathName;
   }
 }
 

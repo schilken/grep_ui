@@ -35,6 +35,11 @@ class PreferencesRepository {
     return ignoredFolders;
   }
 
+  List<String> get sourceFolders {
+    final sourceFolders = _prefs.getStringList('sourceFolders') ?? [];
+    return sourceFolders;
+  }
+
   List<String> get fileExtensions {
     final fileExtensions = _prefs.getStringList('fileExtensions') ?? ['dart'];
     return fileExtensions;
@@ -50,6 +55,18 @@ class PreferencesRepository {
     final ignoredFolders = _prefs.getStringList('ignoredFolders') ?? [];
     ignoredFolders.remove(folder);
     await _prefs.setStringList('ignoredFolders', ignoredFolders);
+  }
+
+  Future<void> addSourceFolder(String folder) async {
+    final sourceFolders = _prefs.getStringList('sourceFolders') ?? [];
+    sourceFolders.add(folder);
+    await _prefs.setStringList('sourceFolders', sourceFolders);
+  }
+
+  Future<void> removeSourceFolder(String folder) async {
+    final sourceFolders = _prefs.getStringList('sourceFolders') ?? [];
+    sourceFolders.remove(folder);
+    await _prefs.setStringList('sourceFolders', sourceFolders);
   }
 
   Future<void> addFileExtension(String fileExtension) async {

@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:macos_ui/macos_ui.dart';
 import '../components/chip_list_editor.dart';
-import '../components/list_editor.dart';
+import '../components/folder_list_editor.dart';
+import '../components/string_list_editor.dart';
 
 class PreferencesPage extends StatefulWidget {
   const PreferencesPage({super.key});
@@ -13,7 +14,7 @@ class PreferencesPage extends StatefulWidget {
 
 class _PreferencesPageState extends State<PreferencesPage> {
   final _controller = MacosTabController(
-    length: 2,
+    length: 3,
   );
 
   @override
@@ -31,6 +32,10 @@ class _PreferencesPageState extends State<PreferencesPage> {
                 controller: _controller,
                 tabs: [
                   MacosTab(
+                    label: 'Folders to Scan',
+                    active: _controller.index == 0,
+                  ),
+                  MacosTab(
                     label: 'Ignored Folders for Scan',
                     active: _controller.index == 1,
                   ),
@@ -42,7 +47,11 @@ class _PreferencesPageState extends State<PreferencesPage> {
                 children: const [
                   Padding(
                     padding: EdgeInsets.all(20),
-                    child: ListEditor(),
+                    child: FolderListEditor(),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(20),
+                    child: StringListEditor(),
                   ),
                   Center(
                     child: Padding(

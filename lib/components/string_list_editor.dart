@@ -5,14 +5,14 @@ import 'package:macos_ui/macos_ui.dart';
 
 import '../providers/providers.dart';
 
-class ListEditor extends ConsumerStatefulWidget {
-  const ListEditor({super.key});
+class StringListEditor extends ConsumerStatefulWidget {
+  const StringListEditor({super.key});
 
   @override
   _ListEditorState createState() => _ListEditorState();
 }
 
-class _ListEditorState extends ConsumerState<ListEditor> {
+class _ListEditorState extends ConsumerState<StringListEditor> {
   late TextEditingController _textEditingController;
   late ScrollController _scrollController;
   late FocusNode _focusNode;
@@ -58,19 +58,19 @@ class _ListEditorState extends ConsumerState<ListEditor> {
                 child: Builder(
                   builder: (context) {
                     return ListView.builder(
-                        controller: _scrollController,
-                        itemCount: ignoredFolders.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            visualDensity: VisualDensity.compact,
-                            title: Text(ignoredFolders[index]),
-                            trailing: MacosIconButton(
-                              icon: const MacosIcon(CupertinoIcons.delete),
-                              onPressed: () => ref
-                                  .read(preferencesStateProvider.notifier)
-                                  .removeIgnoredFolder(ignoredFolders[index]),
-                            ),
-                          );
+                      controller: _scrollController,
+                      itemCount: ignoredFolders.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          visualDensity: VisualDensity.compact,
+                          title: Text(ignoredFolders[index]),
+                          trailing: MacosIconButton(
+                            icon: const MacosIcon(CupertinoIcons.delete),
+                            onPressed: () => ref
+                                .read(preferencesStateProvider.notifier)
+                                .removeIgnoredFolder(ignoredFolders[index]),
+                          ),
+                        );
                       },
                     );
                   },
