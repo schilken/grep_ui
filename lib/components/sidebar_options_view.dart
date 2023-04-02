@@ -114,29 +114,35 @@ class SidebarOptionsView extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 8),
-        MacosCheckBoxListTile(
-          title: const Text(
-            'Only Intersection',
-            style: TextStyle(
-              color: Colors.blueGrey,
-            ),
-          ),
-          onChanged: (value) =>
-              filterController.toggleCombineIntersection(value ?? false),
-          value: filterState.combineIntersection,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 8),
+        SizedBox(
+          width: 180,
           child: MacosCheckBoxListTile(
             title: const Text(
-              'With 4 context lines',
+              'Only Intersection',
               style: TextStyle(
                 color: Colors.blueGrey,
               ),
             ),
             onChanged: (value) =>
-                filterController.toggleShowWithContext(value ?? false),
-            value: filterState.showWithContext,
+                filterController.toggleCombineIntersection(value ?? false),
+            value: filterState.combineIntersection,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: SizedBox(
+            width: 180,
+            child: MacosCheckBoxListTile(
+              title: const Text(
+                'With 4 context lines',
+                style: TextStyle(
+                  color: Colors.blueGrey,
+                ),
+              ),
+              onChanged: (value) =>
+                  filterController.toggleShowWithContext(value ?? false),
+              value: filterState.showWithContext,
+            ),
           ),
         ),
         const SizedBox(height: 16),
