@@ -14,7 +14,7 @@ class CurrentFolderNotifier extends Notifier<String> {
 
   Future<void> setCurrentFolder(String fullDirectoryPath) async {
     final reducedPath = _startWithUsersFolder(fullDirectoryPath);
-    _preferencesRepository.setCurrentFolder(reducedPath);
+    await _preferencesRepository.setCurrentFolder(reducedPath);
     state = reducedPath;
   }
 
