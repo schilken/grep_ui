@@ -122,7 +122,6 @@ class AppController extends Notifier<AppState> {
     _searchResult.add(_searchOptions.searchItems);
     final pattern = RegExp(r'^stdout> (.*)(-|:)([0-9]+)(-|:)(.*)$');
     final subscription = stream.listen((line) {
-      debugPrint(line);
       _searchResult.add(line);
       final match = pattern.matchAsPrefix(line);
       if (match != null) {

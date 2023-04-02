@@ -32,11 +32,11 @@ class _PreferencesPageState extends State<PreferencesPage> {
                 controller: _controller,
                 tabs: [
                   MacosTab(
-                    label: 'Folders to Scan',
+                    label: 'Directories to Scan',
                     active: _controller.index == 0,
                   ),
                   MacosTab(
-                    label: 'Ignored Folders for Scan',
+                    label: 'Ignored SubDirectories',
                     active: _controller.index == 1,
                   ),
                   MacosTab(

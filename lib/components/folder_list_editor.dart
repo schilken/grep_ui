@@ -77,7 +77,7 @@ class _ListEditorState extends ConsumerState<FolderListEditor> {
             ),
             Row(
               children: [
-                const Text('Add Folder to the List of Sources:'),
+                const Text('Add Directory to the List:'),
                 const SizedBox(width: 20),
                 MacosIconButton(
                   icon: const MacosIcon(
