@@ -24,56 +24,109 @@ class SidebarOptionsView extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 16),
-        MacosPopupButton<String>(
-          value: filterState.selectedFolderName,
-          onChanged: (value) async {
-            await filterController.setSelectedFolderName(value ?? '.');
-          },
-          items: filterController.sourceFolderNames
-              .map<MacosPopupMenuItem<String>>((value) {
-            return MacosPopupMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
+        SizedBox(
+          width: 170,
+          child: MacosPopupButton<String>(
+            value: filterState.selectedFolderName,
+            onChanged: (value) async {
+              await filterController.setSelectedFolderName(value ?? '.');
+            },
+            items: filterController.sourceFolderNames
+                .map<MacosPopupMenuItem<String>>((value) {
+              return MacosPopupMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+          ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 24),
         const Text(
-          'Only Files with this extension',
+          'Filter Files',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.blueGrey,
           ),
         ),
         const SizedBox(height: 16),
-        MacosPopupButton<String>(
-          value: filterState.fileTypeFilter,
-          onChanged: (value) async {
-            await filterController.setFileExtensionFilter(value ?? 'txt');
-          },
-          items: filterController.allFileExtensions
-              .map<MacosPopupMenuItem<String>>((value) {
-            return MacosPopupMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-        ),
-        const SizedBox(height: 8),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 8, 4, 0),
-          child: MacosCheckBoxListTile(
-            title: const Text('Only Intersection',
-                style: TextStyle(
-                  color: Colors.blueGrey,
-                )),
-            onChanged: (value) =>
-                filterController.toggleCombineIntersection(value ?? false),
-            value: filterState.combineIntersection,
+        SizedBox(
+          width: 170,
+          child: MacosPopupButton<String>(
+            value: filterState.fileTypeFilter,
+            onChanged: (value) async {
+              await filterController.setFileExtensionFilter(value ?? 'txt');
+            },
+            items: filterController.allFileExtensions
+                .map<MacosPopupMenuItem<String>>((value) {
+              return MacosPopupMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
           ),
         ),
+        const SizedBox(height: 8),
+        SizedBox(
+          width: 170,
+          child: MacosPopupButton<String>(
+            value: filterState.exampleFileFilter,
+            onChanged: (value) async {
+              await filterController.setExampleFileFilter(value ?? '');
+            },
+            items: <String>[
+              'Include Example Files',
+              'Only */example/*',
+              'Without */example/*'
+            ].map<MacosPopupMenuItem<String>>((value) {
+              return MacosPopupMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+          ),
+        ),
+        const SizedBox(height: 8),
+        SizedBox(
+          width: 170,
+          child: MacosPopupButton<String>(
+            value: filterState.testFileFilter,
+            onChanged: (String? newValue) async {
+              await filterController.setTestFileFilter(newValue ?? '');
+            },
+            items: <String>[
+              'Include Test Files',
+              'Only *_test.dart',
+              'Without *_test.dart'
+            ].map<MacosPopupMenuItem<String>>((value) {
+              return MacosPopupMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+          ),
+        ),
+        const SizedBox(height: 24),
+        const Text(
+          'Filter Lines',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.blueGrey,
+          ),
+        ),
+        const SizedBox(height: 8),
+        MacosCheckBoxListTile(
+          title: const Text(
+            'Only Intersection',
+            style: TextStyle(
+              color: Colors.blueGrey,
+            ),
+          ),
+          onChanged: (value) =>
+              filterController.toggleCombineIntersection(value ?? false),
+          value: filterState.combineIntersection,
+        ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(0, 8, 4, 0),
+          padding: const EdgeInsets.only(top: 8),
           child: MacosCheckBoxListTile(
             title: const Text(
               'With 4 context lines',

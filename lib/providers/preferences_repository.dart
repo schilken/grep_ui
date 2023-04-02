@@ -14,8 +14,23 @@ class PreferencesRepository {
   String get fileExtensionFilter =>
       _prefs.getString('fileExtensionFilter') ?? 'yaml';
 
+
   Future<void> setFileExtensionFilter(String value) async {
     await _prefs.setString('fileExtensionFilter', value);
+  }
+
+  String get exampleFileFilter =>
+      _prefs.getString('exampleFileFilter') ?? 'Include Example Files';
+
+  Future<void> setExampleFileFilter(String value) async {
+    await _prefs.setString('exampleFileFilter', value);
+  }
+
+  String get testFileFilter =>
+      _prefs.getString('testFileFilter') ?? 'Include Test Files';
+
+  Future<void> setTestFileFilter(String value) async {
+    await _prefs.setString('testFileFilter', value);
   }
 
   Future<void> toggleSearchOption(String option, bool value) async {

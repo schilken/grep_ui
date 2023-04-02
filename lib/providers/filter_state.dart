@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 @immutable
 class FilterState {
   final String fileTypeFilter;
+  final String exampleFileFilter;
+  final String testFileFilter;
   final String selectedFolderName;
   final bool showWithContext;
   final bool combineIntersection;
@@ -13,6 +15,8 @@ class FilterState {
 
   const FilterState({
     required this.fileTypeFilter,
+    required this.exampleFileFilter,
+    required this.testFileFilter,
     required this.selectedFolderName,
     required this.showWithContext,
     required this.combineIntersection,
@@ -23,6 +27,8 @@ class FilterState {
 
   FilterState copyWith({
     String? fileTypeFilter,
+    String? exampleFileFilter,
+    String? testFileFilter,
     String? selectedFolderName,
     bool? showWithContext,
     bool? combineIntersection,
@@ -31,6 +37,8 @@ class FilterState {
   }) {
     return FilterState(
       fileTypeFilter: fileTypeFilter ?? this.fileTypeFilter,
+      exampleFileFilter: exampleFileFilter ?? this.exampleFileFilter,
+      testFileFilter: testFileFilter ?? this.testFileFilter,
       selectedFolderName: selectedFolderName ?? this.selectedFolderName,
       showWithContext: showWithContext ?? this.showWithContext,
       combineIntersection: combineIntersection ?? this.combineIntersection,
@@ -44,6 +52,8 @@ class FilterState {
     if (identical(this, other)) return true;
 
     return other.fileTypeFilter == fileTypeFilter &&
+        other.exampleFileFilter == exampleFileFilter &&
+        other.testFileFilter == testFileFilter &&
         other.selectedFolderName == selectedFolderName &&
         other.showWithContext == showWithContext &&
         other.combineIntersection == combineIntersection &&
@@ -54,6 +64,8 @@ class FilterState {
   @override
   int get hashCode {
     return fileTypeFilter.hashCode ^
+        exampleFileFilter.hashCode ^
+        testFileFilter.hashCode ^
         selectedFolderName.hashCode ^
         showWithContext.hashCode ^
         combineIntersection.hashCode ^

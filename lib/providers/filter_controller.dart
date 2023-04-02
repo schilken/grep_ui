@@ -19,6 +19,8 @@ class FilterController extends Notifier<FilterState> {
       showWithContext:
           _preferencesRepository.getSearchOption('showWithContext'),
       fileTypeFilter: fileExtensionFilter,
+      exampleFileFilter: exampleFileFilter,
+      testFileFilter: testFileFilter,
       selectedFolderName: selectedFolderName,
       combineIntersection:
           _preferencesRepository.getSearchOption('combineIntersection'),
@@ -28,6 +30,8 @@ class FilterController extends Notifier<FilterState> {
   }
 
   String get fileExtensionFilter => _preferencesRepository.fileExtensionFilter;
+  String get exampleFileFilter => _preferencesRepository.exampleFileFilter;
+  String get testFileFilter => _preferencesRepository.testFileFilter;
 
   List<String> get allFileExtensions {
     return _preferencesRepository.fileExtensions;
@@ -37,6 +41,20 @@ class FilterController extends Notifier<FilterState> {
     await _preferencesRepository.setFileExtensionFilter(value);
     state = state.copyWith(
       fileTypeFilter: value,
+    );
+  }
+
+  Future<void> setExampleFileFilter(String value) async {
+    await _preferencesRepository.setExampleFileFilter(value);
+    state = state.copyWith(
+      exampleFileFilter: value,
+    );
+  }
+
+  Future<void> setTestFileFilter(String value) async {
+    await _preferencesRepository.setTestFileFilter(value);
+    state = state.copyWith(
+      testFileFilter: value,
     );
   }
 
