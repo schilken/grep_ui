@@ -1,14 +1,10 @@
-library dynamic_text_highlighting;
-
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 class HighlightedText extends StatelessWidget {
 //  final TextHeightBehavior textHeightBehavior;
 
   const HighlightedText({
-    //DynamicTextHighlighting
     super.key,
     required this.text,
     required this.highlights,
@@ -21,16 +17,10 @@ class HighlightedText extends StatelessWidget {
     //RichText
     this.textAlign = TextAlign.start,
     this.textDirection = TextDirection.ltr,
-    this.softWrap = true,
-    this.overflow = TextOverflow.clip,
     this.textScaleFactor = 1.0,
-    this.maxLines = 50,
-//    this.locale = Locale,
-//    this.strutStyle,
     this.textWidthBasis = TextWidthBasis.parent,
-//    this.textHeightBehavior,
   });
-  //DynamicTextHighlighting
+
   final String text;
   final List<String> highlights;
   final Color color;
@@ -40,12 +30,7 @@ class HighlightedText extends StatelessWidget {
   //RichText
   final TextAlign textAlign;
   final TextDirection textDirection;
-  final bool softWrap;
-  final TextOverflow overflow;
   final double textScaleFactor;
-  final int maxLines;
-//  final Locale locale;
-//  final StrutStyle strutStyle;
   final TextWidthBasis textWidthBasis;
 
   @override
@@ -156,20 +141,14 @@ class HighlightedText extends StatelessWidget {
     }
   }
 
-  RichText _richText(TextSpan text) {
-    return RichText(
+  Widget _richText(TextSpan text) {
+    return SelectableText.rich(
+      text,
       key: key,
-      text: text,
       textAlign: textAlign,
       textDirection: textDirection,
-      softWrap: softWrap,
-      overflow: overflow,
       textScaleFactor: textScaleFactor,
-      maxLines: maxLines,
-//      locale: locale,
-//      strutStyle: strutStyle,
       textWidthBasis: textWidthBasis,
-//      textHeightBehavior: textHeightBehavior,
     );
   }
 }
