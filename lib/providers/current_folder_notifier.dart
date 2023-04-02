@@ -9,7 +9,7 @@ class CurrentFolderNotifier extends Notifier<String> {
   @override
   String build() {
     _preferencesRepository = ref.watch(preferencesRepositoryProvider);
-    return _preferencesRepository.getCurrentFolder();
+    return _preferencesRepository.currentFolder;
   }
 
   Future<void> setCurrentFolder(String fullDirectoryPath) async {

@@ -16,6 +16,7 @@ class FilterController extends Notifier<FilterState> {
       showWithContext:
           _preferencesRepository.getSearchOption('showWithContext'),
       fileTypeFilter: fileExtensionFilter,
+      currentDirectory: _preferencesRepository.currentFolder,
       combineIntersection:
           _preferencesRepository.getSearchOption('combineIntersection'),
       ignoredFolders: _preferencesState.ignoredFolders,
@@ -52,6 +53,11 @@ class FilterController extends Notifier<FilterState> {
       showWithContext: value,
     );
   }
+
+  List<String> get sourceFolders {
+    return _preferencesRepository.sourceFolders;
+  }
+
 }
 
 final filterControllerProvider =

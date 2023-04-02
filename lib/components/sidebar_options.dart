@@ -13,11 +13,32 @@ class SidebarOptions extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final filterState = ref.watch(filterControllerProvider);
     final filterController = ref.watch(filterControllerProvider.notifier);
+    final currentFolderNotifier = ref.watch(currentFolderProvider.notifier);
+    final currentFolder = ref.watch(currentFolderProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Scan Files with this extension',
+          'Scan this Directory',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 16),
+        MacosPopupButton<String>(
+          value: currentFolder,
+          onChanged: (value) async {
+            await currentFolderNotifier.setCurrentFolder(value ?? '.');
+          },
+          items: filterController.sourceFolders
+              .map<MacosPopupMenuItem<String>>((value) {
+            return MacosPopupMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+        ),
+        const SizedBox(height: 16),
+        const Text(
+          'Only Files with this extension',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16),

@@ -91,12 +91,13 @@ class PreferencesRepository {
     await _prefs.setString('currentFolder', folderPath);
   }
 
-  String getCurrentFolder() {
+  String get currentFolder {
     final userHomeDirectory = Platform.environment['HOME'];
     final currentFolder =
         _prefs.getString('currentFolder') ?? userHomeDirectory ?? '.';
     return currentFolder;
   }
+
 }
 
 final preferencesRepositoryProvider = Provider<PreferencesRepository>(
