@@ -13,8 +13,6 @@ class SidebarOptionsView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final filterState = ref.watch(filterControllerProvider);
     final filterController = ref.watch(filterControllerProvider.notifier);
-    final currentFolderNotifier = ref.watch(currentFolderProvider.notifier);
-    final currentFolder = ref.watch(currentFolderProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -24,11 +22,11 @@ class SidebarOptionsView extends ConsumerWidget {
         ),
         const SizedBox(height: 16),
         MacosPopupButton<String>(
-          value: currentFolder,
+          value: filterState.selectedFolderName,
           onChanged: (value) async {
-            await currentFolderNotifier.setCurrentFolder(value ?? '.');
+            await filterController.setSelectedFolderName(value ?? '.');
           },
-          items: filterController.sourceFolders
+          items: filterController.sourceFolderNames
               .map<MacosPopupMenuItem<String>>((value) {
             return MacosPopupMenuItem<String>(
               value: value,

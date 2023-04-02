@@ -37,6 +37,7 @@ class PreferencesRepository {
 
   List<String> get sourceFolders {
     final sourceFolders = _prefs.getStringList('sourceFolders') ?? [];
+    sourceFolders.add(Platform.environment['HOME']!);
     return sourceFolders;
   }
 
@@ -98,6 +99,17 @@ class PreferencesRepository {
     return currentFolder;
   }
 
+  Future<void> setSelectedFolderName(String folderName) async {
+    await _prefs.setString('selectedFolderName', folderName);
+  }
+
+  String get selectedFolderName {
+    final folderName = _prefs.getString('selectedFolderName') ??
+        Platform.environment['USER'] ??
+        Platform.environment['LOGNAME'] ??
+        'Users';
+    return folderName;
+  }
 }
 
 final preferencesRepositoryProvider = Provider<PreferencesRepository>(

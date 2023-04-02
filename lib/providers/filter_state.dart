@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 @immutable
 class FilterState {
   final String fileTypeFilter;
-  final String currentDirectory;
+  final String selectedFolderName;
   final bool showWithContext;
   final bool combineIntersection;
   final List<String> ignoredFolders;
@@ -13,7 +13,7 @@ class FilterState {
 
   const FilterState({
     required this.fileTypeFilter,
-    required this.currentDirectory,
+    required this.selectedFolderName,
     required this.showWithContext,
     required this.combineIntersection,
     required this.ignoredFolders,
@@ -23,7 +23,7 @@ class FilterState {
 
   FilterState copyWith({
     String? fileTypeFilter,
-    String? currentDirectory,
+    String? selectedFolderName,
     bool? showWithContext,
     bool? combineIntersection,
     List<String>? ignoredFolders,
@@ -31,7 +31,7 @@ class FilterState {
   }) {
     return FilterState(
       fileTypeFilter: fileTypeFilter ?? this.fileTypeFilter,
-      currentDirectory: currentDirectory ?? this.currentDirectory,
+      selectedFolderName: selectedFolderName ?? this.selectedFolderName,
       showWithContext: showWithContext ?? this.showWithContext,
       combineIntersection: combineIntersection ?? this.combineIntersection,
       ignoredFolders: ignoredFolders ?? this.ignoredFolders,
@@ -44,7 +44,7 @@ class FilterState {
     if (identical(this, other)) return true;
 
     return other.fileTypeFilter == fileTypeFilter &&
-        other.currentDirectory == currentDirectory &&
+        other.selectedFolderName == selectedFolderName &&
         other.showWithContext == showWithContext &&
         other.combineIntersection == combineIntersection &&
         listEquals(other.ignoredFolders, ignoredFolders) &&
@@ -54,7 +54,7 @@ class FilterState {
   @override
   int get hashCode {
     return fileTypeFilter.hashCode ^
-        currentDirectory.hashCode ^
+        selectedFolderName.hashCode ^
         showWithContext.hashCode ^
         combineIntersection.hashCode ^
         ignoredFolders.hashCode ^

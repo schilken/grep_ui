@@ -11,7 +11,6 @@ import 'toolbar_widget_toggle.dart';
 
 ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
   final appController = ref.watch(appControllerProvider.notifier);
-  final currentFolderNotifier = ref.watch(currentFolderProvider.notifier);
   final searchOptions = ref.read(searchOptionsProvider);
   final searchOptionsNotifier = ref.read(searchOptionsProvider.notifier);
 //  final searchOptions = ref.watch(searchOptionsProvider);
@@ -35,18 +34,6 @@ ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
         icon: CupertinoIcons.ellipsis_circle,
         tooltipMessage: 'Perform filesystem tasks',
         items: [
-          MacosPulldownMenuItem(
-            title: const Text('Choose Folder to scan'),
-            onTap: () async {
-              final userHomeDirectory = Platform.environment['HOME'];
-              final selectedDirectory = await FilePicker.platform
-                  .getDirectoryPath(initialDirectory: userHomeDirectory);
-              if (selectedDirectory != null) {
-                currentFolderNotifier.setCurrentFolder(selectedDirectory);
-              }
-            },
-          ),
-          const MacosPulldownMenuDivider(),
           MacosPulldownMenuItem(
             title: const Text('Save last search result'),
             onTap: () async {

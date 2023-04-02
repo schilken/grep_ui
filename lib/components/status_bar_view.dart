@@ -19,7 +19,7 @@ class StatusBarView extends StatelessWidget {
 //    final selectedRecordCount = ref.watch(totalRecordCountProvider);
     return Container(
       color: Colors.blueGrey[50],
-      padding: const EdgeInsets.fromLTRB(12, 16, 20, 18),
+      padding: const EdgeInsets.fromLTRB(12, 16, 20, 12),
       child: Row(
         children: [
           const Text('Scanned Directory: '),
