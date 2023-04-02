@@ -6,7 +6,7 @@ import 'package:macos_ui/macos_ui.dart';
 import '../components/detail_tile.dart';
 import '../components/get_custom_toolbar.dart';
 import '../components/message_bar.dart';
-import '../components/status_bar_content.dart';
+import '../components/status_bar_view.dart';
 import '../providers/providers.dart';
 
 class MainPage extends ConsumerWidget {
@@ -80,7 +80,7 @@ class MainPage extends ConsumerWidget {
                     isResizable: false,
                     //windowBreakpoint: 600,
                     builder: (_, __) {
-                      return StatusBarContent(ref: ref);
+                        return StatusBarView(ref: ref);
                     },
                     resizableSide: ResizableSide.top,
                   )

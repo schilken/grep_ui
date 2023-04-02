@@ -4,8 +4,8 @@ import 'package:macos_ui/macos_ui.dart';
 import '../providers/providers.dart';
 import 'macos_checkbox_list_tile.dart';
 
-class SidebarOptions extends ConsumerWidget {
-  const SidebarOptions({
+class SidebarOptionsView extends ConsumerWidget {
+  const SidebarOptionsView({
     super.key,
   });
 

@@ -11,7 +11,7 @@ import 'package:mixin_logger/mixin_logger.dart' as log;
 import 'package:pubspec_parse/pubspec_parse.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'components/sidebar_options.dart';
+import 'components/sidebar_options_view.dart';
 import 'pages/about_window.dart';
 import 'pages/help_page.dart';
 import 'pages/main_page.dart';
@@ -123,7 +123,7 @@ class _MainViewState extends ConsumerState<MainView> {
             color: Colors.grey.shade200,
           ),
           minWidth: 240,
-          top: const SidebarOptions(),
+          top: const SidebarOptionsView(),
           builder: (context, scrollController) => SidebarItems(
             currentIndex: appState.sidebarPageIndex,
             scrollController: scrollController,

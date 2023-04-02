@@ -4,8 +4,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../providers/providers.dart';
 import '../utils/app_sizes.dart';
 
-class StatusBarContent extends StatelessWidget {
-  const StatusBarContent({
+class StatusBarView extends StatelessWidget {
+  const StatusBarView({
     super.key,
     required this.ref,
   });
