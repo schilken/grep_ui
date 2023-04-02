@@ -26,6 +26,7 @@ class DetailTile extends StatelessWidget {
       title: Padding(
         padding: const EdgeInsets.only(top: 8),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             ListTilePullDownMenu(detail: detail),
             const SizedBox(width: 12),
@@ -41,6 +42,10 @@ class DetailTile extends StatelessWidget {
               text: detail.filePathName ?? 'no filename',
               highlights: highlights,
               caseSensitive: caseSensitive,
+              style: const TextStyle(
+                color: Colors.grey,
+                fontSize: 13,
+              ),
             ),
           ],
         ),
@@ -54,6 +59,7 @@ class DetailTile extends StatelessWidget {
           text: detail.lines.join('\n'),
           style: const TextStyle(
             color: Colors.blueGrey,
+            fontSize: 13,
           ),
           highlights: highlights,
           caseSensitive: caseSensitive,
