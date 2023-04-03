@@ -74,9 +74,9 @@ class AppController extends Notifier<AppState> {
       '-R',
       '-I',
       '-n',
-      '--include',
-      '*.$fileExtension',
     ];
+    parameters.add('--include');
+    parameters.add('*.$fileExtension');
     if (_searchOptions.caseSensitive == false) {
       parameters.add('-i');
     }
@@ -91,13 +91,11 @@ class AppController extends Notifier<AppState> {
         parameters.add('--exclude-dir=$element');
       }
     }
-    if (_filterState.exampleFileFilter.toExampleFileFilter() ==
-        ExampleFileFilter.without) {
-      parameters.add('--exclude-dir=example');
-    }
-    if (_filterState.testFileFilter.toTestFileFilter() ==
-        TestFileFilter.without) {
+    if (TestFileFilter.without.matches(_filterState.testFileFilter)) {
       parameters.add('--exclude-dir=test');
+    }
+    if (ExampleFileFilter.without.matches(_filterState.exampleFileFilter)) {
+      parameters.add('--exclude-dir=example');
     }
     for (final word in searchItems.split(' ')) {
       parameters.add('-e');
@@ -138,7 +136,9 @@ class AppController extends Notifier<AppState> {
         // final String? lineNumber = match[3];
         // final String? separator2 = match[4];
         final sourceCode = match[5];
-        if (filepath != null && sourceCode != null) {
+        if (filepath != null &&
+            isFilepathAllowed(filepath) &&
+            sourceCode != null) {
           if (_sectionsMap.containsKey(filepath)) {
             _sectionsMap[filepath]!.add(sourceCode);
           } else {
@@ -148,6 +148,18 @@ class AppController extends Notifier<AppState> {
       }
     });
     return subscription;
+  }
+
+  bool isFilepathAllowed(String filepath) {
+    if (TestFileFilter.only.matches(_filterState.testFileFilter) &&
+        !filepath.contains('/test/')) {
+      return false;
+    }
+    if (ExampleFileFilter.only.matches(_filterState.exampleFileFilter) &&
+        !filepath.contains('/example/')) {
+      return false;
+    }
+    return true;
   }
 
   List<Detail> _detailsFromSectionMap() {
@@ -274,6 +286,7 @@ class AppController extends Notifier<AppState> {
     }
     keysToRemove.forEach(_sectionsMap.remove);
   }
+  
 }
 
 final appControllerProvider = NotifierProvider<AppController, AppState>(() {

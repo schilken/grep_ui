@@ -15,6 +15,23 @@ enum ExampleFileFilter {
   );
   final String displayName;
   final String id;
+
+  bool matches(String id) {
+    return this.id == id;
+  }
+}
+
+extension ToExampleFileFilter on String {
+  ExampleFileFilter toExampleFileFilter() {
+    switch (this) {
+      case 'without':
+        return ExampleFileFilter.without;
+      case 'only':
+        return ExampleFileFilter.only;
+      default:
+        return ExampleFileFilter.include;
+    }
+  }
 }
 
 enum TestFileFilter {
@@ -28,6 +45,23 @@ enum TestFileFilter {
   );
   final String displayName;
   final String id;
+
+  bool matches(String id) {
+    return this.id == id;
+  }
+}
+
+extension ToTestFileFilter on String {
+  TestFileFilter toTestFileFilter() {
+    switch (this) {
+      case 'without':
+        return TestFileFilter.without;
+      case 'only':
+        return TestFileFilter.only;
+      default:
+        return TestFileFilter.include;
+    }
+  }
 }
 
 class FilterController extends Notifier<FilterState> {
