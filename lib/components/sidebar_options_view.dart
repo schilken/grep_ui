@@ -90,14 +90,11 @@ class SidebarOptionsView extends ConsumerWidget {
             onChanged: (String? newValue) async {
               await filterController.setTestFileFilter(newValue ?? '');
             },
-            items: <String>[
-              'Include Test Files',
-              'Only *_test.dart',
-              'Without *_test.dart'
-            ].map<MacosPopupMenuItem<String>>((value) {
+            items: filterController.allTestFileFilters
+                .map<MacosPopupMenuItem<String>>((value) {
               return MacosPopupMenuItem<String>(
-                value: value,
-                child: Text(value),
+                value: value.id,
+                child: Text(value.displayName),
               );
             }).toList(),
           ),

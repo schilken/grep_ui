@@ -27,7 +27,7 @@ class PreferencesRepository {
   }
 
   String get testFileFilter =>
-      _prefs.getString('testFileFilter') ?? 'Include Test Files';
+      _prefs.getString('testFileFilter') ?? 'include';
 
   Future<void> setTestFileFilter(String value) async {
     await _prefs.setString('testFileFilter', value);

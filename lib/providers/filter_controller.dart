@@ -17,6 +17,19 @@ enum ExampleFileFilter {
   final String id;
 }
 
+enum TestFileFilter {
+  include('include', 'Include Test Files'),
+  only('only', 'Only */test/*'),
+  without('without', 'Without */test/*');
+
+  const TestFileFilter(
+    this.id,
+    this.displayName,
+  );
+  final String displayName;
+  final String id;
+}
+
 class FilterController extends Notifier<FilterState> {
   late PreferencesState _preferencesState;
   late PreferencesRepository _preferencesRepository;
@@ -61,6 +74,12 @@ class FilterController extends Notifier<FilterState> {
         ExampleFileFilter.include,
         ExampleFileFilter.only,
         ExampleFileFilter.without,
+      ];
+
+  List<TestFileFilter> get allTestFileFilters => [
+        TestFileFilter.include,
+        TestFileFilter.only,
+        TestFileFilter.without,
       ];
 
   Future<void> setExampleFileFilter(String id) async {
