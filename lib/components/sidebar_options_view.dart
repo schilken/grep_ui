@@ -70,17 +70,14 @@ class SidebarOptionsView extends ConsumerWidget {
           width: 170,
           child: MacosPopupButton<String>(
             value: filterState.exampleFileFilter,
-            onChanged: (value) async {
-              await filterController.setExampleFileFilter(value ?? '');
+            onChanged: (id) async {
+              await filterController.setExampleFileFilter(id ?? '');
             },
-            items: <String>[
-              'Include Example Files',
-              'Only */example/*',
-              'Without */example/*'
-            ].map<MacosPopupMenuItem<String>>((value) {
+            items: filterController.allExampleFileFilters
+                .map<MacosPopupMenuItem<String>>((value) {
               return MacosPopupMenuItem<String>(
-                value: value,
-                child: Text(value),
+                value: value.id,
+                child: Text(value.displayName),
               );
             }).toList(),
           ),
@@ -126,6 +123,7 @@ class SidebarOptionsView extends ConsumerWidget {
             onChanged: (value) =>
                 filterController.toggleCombineIntersection(value ?? false),
             value: filterState.combineIntersection,
+            leadingWhitespace: 0,
           ),
         ),
         Padding(
@@ -142,6 +140,7 @@ class SidebarOptionsView extends ConsumerWidget {
               onChanged: (value) =>
                   filterController.toggleShowWithContext(value ?? false),
               value: filterState.showWithContext,
+              leadingWhitespace: 0,
             ),
           ),
         ),

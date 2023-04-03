@@ -4,6 +4,19 @@ import 'package:path/path.dart' as p;
 
 import 'providers.dart';
 
+enum ExampleFileFilter {
+  include('include', 'Include Example Files'),
+  only('only', 'Only */example/*'),
+  without('without', 'Without */example/*');
+
+  const ExampleFileFilter(
+    this.id,
+    this.displayName,
+  );
+  final String displayName;
+  final String id;
+}
+
 class FilterController extends Notifier<FilterState> {
   late PreferencesState _preferencesState;
   late PreferencesRepository _preferencesRepository;
@@ -44,10 +57,16 @@ class FilterController extends Notifier<FilterState> {
     );
   }
 
-  Future<void> setExampleFileFilter(String value) async {
-    await _preferencesRepository.setExampleFileFilter(value);
+  List<ExampleFileFilter> get allExampleFileFilters => [
+        ExampleFileFilter.include,
+        ExampleFileFilter.only,
+        ExampleFileFilter.without,
+      ];
+
+  Future<void> setExampleFileFilter(String id) async {
+    await _preferencesRepository.setExampleFileFilter(id);
     state = state.copyWith(
-      exampleFileFilter: value,
+      exampleFileFilter: id,
     );
   }
 
