@@ -91,6 +91,14 @@ class AppController extends Notifier<AppState> {
         parameters.add('--exclude-dir=$element');
       }
     }
+    if (_filterState.exampleFileFilter.toExampleFileFilter() ==
+        ExampleFileFilter.without) {
+      parameters.add('--exclude-dir=example');
+    }
+    if (_filterState.testFileFilter.toTestFileFilter() ==
+        TestFileFilter.without) {
+      parameters.add('--exclude-dir=test');
+    }
     for (final word in searchItems.split(' ')) {
       parameters.add('-e');
       parameters.add(word);
