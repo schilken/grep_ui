@@ -6,16 +6,36 @@ import 'package:macos_ui/macos_ui.dart';
 import '../components/get_custom_toolbar.dart';
 
 const _helpMarkdown = '''
-# My Template for Grep UIs
-This project is a stripped down skeleton which I use as a starting poiubt for a new tool which either wraps a command clien tool or uses Dart, Flutter and packages to do something useful. 
+# grepUI for macOS
 
-## Some Hints about this Template App
+## grepUI is a graphical user interface for the standard grep tool of macOS
 
-- select a file type to search in in the sidebar
-- select in the toolbar the folder to scan
-- enter a search word in in the toolbar
-- press enter or click the search icon to start the search
+## Config
+- open the preferences
+- add all directories you want to scan to the list
+- add all file extensions you are interested in
+- in ignored SubDirectories you can add folders like 'Build' or tmp, you don't want to scan
 
+## Use
+- select the directory and file type in the sidebar 
+- enter the search items in the field on the toolbar
+- press enter to start the search
+- the result shows all lines of files that match at least one of the search items
+- you can choose to search case sensitive if you enable Aa
+- search only whole words by enabling the ab icon 
+
+## Tipps
+- the eye icon shows the generated grep command with all its parameters
+- you can save the last search results as a text file using the menu button
+- **Only intersection** means that files are only listed when all search items are found in the file 
+
+## Customize
+Because this is open source you can customize the app according to your needs.
+For example, you can:
+- increase the 4 context lines to more or less lines
+- add other filter criteria
+- add other menu items to the menu button of each file section
+- ...
 ''';
 
 class HelpPage extends ConsumerWidget {
