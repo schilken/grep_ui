@@ -1,17 +1,14 @@
 # grep_ui
 
-A starter Flutter app for macOS with `macos_ui`.
+grepUI is a graphical user interface for the standard **grep** tool of macOS
 
-## Getting Started
+## Install
 
-This project is a starting point for a Flutter application specifically targeting macOS and uses the `macos_ui` plugin
-to achieve UI and UX that match their native AppKit counterparts as closely as possible.
+If you are a Flutter developer build the grepUI app yourself:
+- clone the repository
+- `cd grep_ui`
+- `flutter run -d macos`
 
-A few resources to get you started if this is your first Flutter project:
+Or download an executable from GitHub.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
