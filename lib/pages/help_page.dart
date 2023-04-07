@@ -28,6 +28,7 @@ const _helpMarkdown = '''
 - the eye icon shows the generated grep command with all its parameters
 - you can save the last search results as a text file using the menu button
 - **Only intersection** means that files are only listed when all search items are found in the file 
+- Make sure that **/usr/local/bin/code** opens VSCode or any other editor
 
 ## Customize
 Because this is open source you can customize the app according to your needs.

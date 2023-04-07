@@ -164,10 +164,11 @@ class AppController extends Notifier<AppState> {
 
   List<Detail> _detailsFromSectionMap() {
     return _sectionsMap.keys
-        .map((key) => Detail(
-              title: p.split(key.replaceAll('./', '')).first,
-              filePathName: key,
-              lines: _sectionsMap[key] ?? [],
+        .map(
+          (key) => Detail(
+            title: p.split(key.replaceAll('./', '')).first,
+            filePathName: key,
+            lines: _sectionsMap[key] ?? [],
           ),
         )
         .toList();
@@ -189,15 +190,20 @@ class AppController extends Notifier<AppState> {
     Process.run('open', ['-a', 'iTerm', dirname]);
   }
 
-  void openEditor(
+  Future<void> openEditor(
     String? path, {
     bool copySearchItemsToClipboard = false,
-  }) {
+  }) async {
     if (copySearchItemsToClipboard) {
       Clipboard.setData(ClipboardData(text: _searchOptions.searchItems));
     }
     final fullPath = p.join(_currentFolder, path);
-    Process.run('code', [fullPath]);
+    try {
+      final processResult =
+          await Process.run('/usr/local/bin/code', [fullPath]);
+    } on Exception catch (e) {
+      log.e('Process.run code $fullPath throws exception $e');
+    }
   }
 
   void openProjectInEditor(
@@ -286,7 +292,6 @@ class AppController extends Notifier<AppState> {
     }
     keysToRemove.forEach(_sectionsMap.remove);
   }
-  
 }
 
 final appControllerProvider =
