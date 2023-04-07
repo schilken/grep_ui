@@ -289,6 +289,5 @@ class AppController extends Notifier<AppState> {
   
 }
 
-final appControllerProvider = NotifierProvider<AppController, AppState>(() {
-  return AppController();
-});
+final appControllerProvider =
+    NotifierProvider<AppController, AppState>(AppController.new);
