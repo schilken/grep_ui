@@ -19,11 +19,7 @@ dependencies:
   intl: ^0.17.0
   macos_ui: ^1.12.2
   meta: ^1.7.0
-  mixin_logger:
-    git:
-      url: https://github.com/schilken/flutter-plugins.git
-      path: packages/mixin_logger
-      ref: main
+  mixin_logger: ^0.0.4
   path: ^1.8.1
   path_provider: ^2.0.11
   provider: ^6.0.2
