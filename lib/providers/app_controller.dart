@@ -195,7 +195,7 @@ class AppController extends Notifier<AppState> {
     bool copySearchItemsToClipboard = false,
   }) async {
     if (copySearchItemsToClipboard) {
-      Clipboard.setData(ClipboardData(text: _searchOptions.searchItems));
+      await Clipboard.setData(ClipboardData(text: _searchOptions.searchItems));
     }
     final fullPath = p.join(_currentFolder, path);
     try {
@@ -217,7 +217,7 @@ class AppController extends Notifier<AppState> {
 
     final projectDirectory = _filesRepository.findProjectDirectory(fullPath);
     if (projectDirectory != null) {
-      Process.run('code', [projectDirectory]);
+      Process.run('/usr/local/bin/code', [projectDirectory]);
     } else {
       state = state.copyWith(
         message: 'Error: no folder with a pubspec.yaml found',
