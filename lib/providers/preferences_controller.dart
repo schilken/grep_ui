@@ -98,4 +98,5 @@ class PreferencesController extends Notifier<PreferencesState> {
 
 final preferencesStateProvider =
     NotifierProvider<PreferencesController, PreferencesState>(
-        PreferencesController.new);
+  PreferencesController.new,
+);

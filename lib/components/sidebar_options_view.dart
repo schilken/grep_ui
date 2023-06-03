@@ -87,7 +87,7 @@ class SidebarOptionsView extends ConsumerWidget {
           width: 170,
           child: MacosPopupButton<String>(
             value: filterState.testFileFilter,
-            onChanged: (String? newValue) async {
+            onChanged: (newValue) async {
               await filterController.setTestFileFilter(newValue ?? '');
             },
             items: filterController.allTestFileFilters

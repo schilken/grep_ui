@@ -154,7 +154,7 @@ class FilterController extends Notifier<FilterState> {
     );
     final fullDirectoryPath = _preferencesRepository.sourceFolders
         .firstWhere((path) => path.endsWith(folderName));
-    _currentFolderNotifier.setCurrentFolder(fullDirectoryPath);
+    await _currentFolderNotifier.setCurrentFolder(fullDirectoryPath);
   }
 
   String get selectedFolderName {

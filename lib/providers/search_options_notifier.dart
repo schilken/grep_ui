@@ -50,4 +50,5 @@ class SearchOptionsNotifier extends Notifier<SearchOptions> {
 
 final searchOptionsProvider =
     NotifierProvider<SearchOptionsNotifier, SearchOptions>(
-        SearchOptionsNotifier.new);
+  SearchOptionsNotifier.new,
+);

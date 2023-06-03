@@ -1,6 +1,4 @@
-import 'dart:convert';
 
-import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -72,11 +70,11 @@ class _MainViewState extends ConsumerState<MainView> {
     final appState = ref.watch(appControllerProvider);
     final appController = ref.watch(appControllerProvider.notifier);
     return PlatformMenuBar(
-      menus: [
+      menus: const [
         PlatformMenu(
           label: 'OpenSourceBrowser',
           menus: [
-            const PlatformProvidedMenuItem(
+            PlatformProvidedMenuItem(
               type: PlatformProvidedMenuItemType.quit,
             ),
           ],

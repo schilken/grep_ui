@@ -1,13 +1,13 @@
 class Detail {
-  final String? title;
-  final String? filePathName;
-  final List<String> lines;
 
   Detail({
     this.title,
     this.filePathName,
     this.lines = const [],
   });
+  final String? title;
+  final String? filePathName;
+  final List<String> lines;
 
   Detail copyWith({
     String? title,

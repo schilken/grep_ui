@@ -70,7 +70,8 @@ class _ListEditorState extends ConsumerState<FolderListEditor> {
                                   .removeSourceFolder(sourceFolders[index]),
                             ),
                           );
-                        });
+                      },
+                    );
                   },
                 ),
               ),
@@ -92,7 +93,8 @@ class _ListEditorState extends ConsumerState<FolderListEditor> {
                       dialogTitle: 'Choose Folder with sources',
                     );
                     if (selectedFolder != null) {
-                      preferencesController.addSourceFolder(selectedFolder);
+                      await preferencesController
+                          .addSourceFolder(selectedFolder);
                     }
                   },
                 ),
