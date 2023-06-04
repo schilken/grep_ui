@@ -3,7 +3,7 @@ description: wrapper on grep cli tool
 publish_to: 'none'
 version: 1.0.3
 environment:
-  sdk: ">=2.19.0 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
   
 dependencies:
   collection: ^1.16.0
@@ -17,7 +17,10 @@ dependencies:
   flutter_svg: ^2.0.4
   hooks_riverpod: ^2.3.2
   intl: ^0.17.0
-  macos_ui: ^1.12.2
+  macos_ui: 
+    git:
+      url: https://github.com/macosui/macos_ui
+      ref: dev
   meta: ^1.7.0
   mixin_logger: ^0.0.4
   path: ^1.8.1

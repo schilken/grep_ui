@@ -15,6 +15,8 @@ import 'pages/preferences_page.dart';
 import 'providers/providers.dart';
 
 const loggerFolder = '/tmp/macos_grep_ui_log';
+const Radius _kSideRadius = Radius.circular(5);
+const BorderRadius _kBorderRadius = BorderRadius.all(_kSideRadius);
 
 void main(List<String> args) async {
   debugPrint('main: $args');
@@ -80,55 +82,59 @@ class _MainViewState extends ConsumerState<MainView> {
           ],
         ),
       ],
-      child: MacosWindow(
-        sidebar: Sidebar(
-          decoration: BoxDecoration(
-            color: Colors.grey.shade200,
+      child: MacosOverlayFilter(
+        borderRadius: _kBorderRadius,
+        child: MacosWindow(
+          backgroundColor: Colors.white,
+          sidebar: Sidebar(
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
+            ),
+            minWidth: 240,
+            top: const SidebarOptionsView(),
+            builder: (context, scrollController) => SidebarItems(
+              currentIndex: appState.sidebarPageIndex,
+              scrollController: scrollController,
+              onChanged: appController.sidebarChanged,
+              items: const [
+                SidebarItem(
+                  leading: MacosIcon(CupertinoIcons.search),
+                  label: Text('Search'),
+                ),
+                SidebarItem(
+                  leading: MacosIcon(CupertinoIcons.gear),
+                  label: Text('Preferences'),
+                ),
+                SidebarItem(
+                  leading: MacosIcon(CupertinoIcons.info_circle),
+                  label: Text('Help'),
+                ),
+              ],
+            ),
+            bottom: MacosListTile(
+              leading: const MacosIcon(CupertinoIcons.info_circle),
+              title: const Text(
+                'Grep UI',
+                style: TextStyle(
+                  color: Colors.blueGrey,
+                ),
+              ),
+              subtitle: Text('Version ${appState.appVersion}'),
+              onClick: () => showLicensePage(
+                context: context,
+                applicationLegalese: appLegalese,
+                applicationIcon: apppIcon,
+              ),
+            ),
           ),
-          minWidth: 240,
-          top: const SidebarOptionsView(),
-          builder: (context, scrollController) => SidebarItems(
-            currentIndex: appState.sidebarPageIndex,
-            scrollController: scrollController,
-            onChanged: appController.sidebarChanged,
-            items: const [
-              SidebarItem(
-                leading: MacosIcon(CupertinoIcons.search),
-                label: Text('Search'),
-              ),
-              SidebarItem(
-                leading: MacosIcon(CupertinoIcons.gear),
-                label: Text('Preferences'),
-              ),
-              SidebarItem(
-                leading: MacosIcon(CupertinoIcons.info_circle),
-                label: Text('Help'),
-              ),
+          child: IndexedStack(
+            index: appState.sidebarPageIndex,
+            children: const [
+              MainPage(),
+              PreferencesPage(),
+              HelpPage(),
             ],
           ),
-          bottom: MacosListTile(
-            leading: const MacosIcon(CupertinoIcons.info_circle),
-            title: const Text(
-              'Grep UI',
-              style: TextStyle(
-                color: Colors.blueGrey,
-              ),
-            ),
-            subtitle: Text('Version ${appState.appVersion}'),
-            onClick: () => showLicensePage(
-              context: context,
-              applicationLegalese: appLegalese,
-              applicationIcon: apppIcon,
-            ),
-          ),
-        ),
-        child: IndexedStack(
-          index: appState.sidebarPageIndex,
-          children: const [
-            MainPage(),
-            PreferencesPage(),
-            HelpPage(),
-          ],
         ),
       ),
     );
