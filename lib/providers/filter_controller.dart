@@ -76,8 +76,10 @@ class FilterController extends Notifier<FilterState> {
     _currentFolderNotifier = ref.watch(currentFolderProvider.notifier);
     debugPrint('FilterController.build: ${_preferencesState.fileExtensions}');
     return FilterState(
-      showWithContext:
-          _preferencesRepository.getSearchOption('showWithContext'),
+      showWithContext3:
+          _preferencesRepository.getSearchOption('showWithContext3'),
+      showWithContext6:
+          _preferencesRepository.getSearchOption('showWithContext6'),
       fileTypeFilter: fileExtensionFilter,
       exampleFileFilter: exampleFileFilter,
       testFileFilter: testFileFilter,
@@ -140,10 +142,17 @@ class FilterController extends Notifier<FilterState> {
     );
   }
 
-  Future<void> toggleShowWithContext(bool value) async {
-    await _preferencesRepository.toggleSearchOption('showWithContext', value);
+  Future<void> toggleShowWithContext3(bool value) async {
+    await _preferencesRepository.toggleSearchOption('showWithContext3', value);
     state = state.copyWith(
-      showWithContext: value,
+      showWithContext3: value,
+    );
+  }
+
+  Future<void> toggleShowWithContext6(bool value) async {
+    await _preferencesRepository.toggleSearchOption('showWithContext6', value);
+    state = state.copyWith(
+      showWithContext6: value,
     );
   }
 

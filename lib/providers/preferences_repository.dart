@@ -37,7 +37,8 @@ class PreferencesRepository {
     await _prefs.setBool(option, value);
   }
 
-  bool get showWithContext => getSearchOption('showWithContext');
+  bool get showWithContext3 => getSearchOption('showWithContext3');
+  bool get showWithContext6 => getSearchOption('showWithContext6');
   bool get ignoreCase => getSearchOption('ignoreCase');
   bool get combineIntersection => getSearchOption('combineIntersection');
 

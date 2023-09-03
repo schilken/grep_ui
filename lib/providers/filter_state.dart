@@ -8,7 +8,8 @@ class FilterState {
   final String exampleFileFilter;
   final String testFileFilter;
   final String selectedFolderName;
-  final bool showWithContext;
+  final bool showWithContext3;
+  final bool showWithContext6;
   final bool combineIntersection;
   final List<String> ignoredFolders;
   final List<String> fileExtensions;
@@ -18,7 +19,8 @@ class FilterState {
     required this.exampleFileFilter,
     required this.testFileFilter,
     required this.selectedFolderName,
-    required this.showWithContext,
+    required this.showWithContext3,
+    required this.showWithContext6,
     required this.combineIntersection,
     required this.ignoredFolders,
     required this.fileExtensions,
@@ -30,7 +32,8 @@ class FilterState {
     String? exampleFileFilter,
     String? testFileFilter,
     String? selectedFolderName,
-    bool? showWithContext,
+    bool? showWithContext3,
+    bool? showWithContext6,
     bool? combineIntersection,
     List<String>? ignoredFolders,
     List<String>? fileExtensions,
@@ -40,7 +43,8 @@ class FilterState {
       exampleFileFilter: exampleFileFilter ?? this.exampleFileFilter,
       testFileFilter: testFileFilter ?? this.testFileFilter,
       selectedFolderName: selectedFolderName ?? this.selectedFolderName,
-      showWithContext: showWithContext ?? this.showWithContext,
+      showWithContext3: showWithContext3 ?? this.showWithContext3,
+      showWithContext6: showWithContext6 ?? this.showWithContext6,
       combineIntersection: combineIntersection ?? this.combineIntersection,
       ignoredFolders: ignoredFolders ?? this.ignoredFolders,
       fileExtensions: fileExtensions ?? this.fileExtensions,
@@ -55,7 +59,8 @@ class FilterState {
         other.exampleFileFilter == exampleFileFilter &&
         other.testFileFilter == testFileFilter &&
         other.selectedFolderName == selectedFolderName &&
-        other.showWithContext == showWithContext &&
+        other.showWithContext3 == showWithContext3 &&
+        other.showWithContext6 == showWithContext6 &&
         other.combineIntersection == combineIntersection &&
         listEquals(other.ignoredFolders, ignoredFolders) &&
         listEquals(other.fileExtensions, fileExtensions);
@@ -67,7 +72,8 @@ class FilterState {
         exampleFileFilter.hashCode ^
         testFileFilter.hashCode ^
         selectedFolderName.hashCode ^
-        showWithContext.hashCode ^
+        showWithContext3.hashCode ^
+        showWithContext6.hashCode ^
         combineIntersection.hashCode ^
         ignoredFolders.hashCode ^
         fileExtensions.hashCode;

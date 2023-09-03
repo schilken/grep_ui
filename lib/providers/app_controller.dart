@@ -83,8 +83,11 @@ class AppController extends Notifier<AppState> {
     if (_searchOptions.wholeWord == true) {
       parameters.add('-w');
     }
-    if (_preferencesRepository.showWithContext == true) {
-      parameters.add('-C4');
+    if (_preferencesRepository.showWithContext3 == true) {
+      parameters.add('-C3');
+    }
+    if (_preferencesRepository.showWithContext6 == true) {
+      parameters.add('-C6');
     }
     if (_preferencesRepository.ignoredFolders.isNotEmpty) {
       for (final element in _preferencesRepository.ignoredFolders) {

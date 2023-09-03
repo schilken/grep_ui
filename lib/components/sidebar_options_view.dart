@@ -129,14 +129,32 @@ class SidebarOptionsView extends ConsumerWidget {
             width: 180,
             child: MacosCheckBoxListTile(
               title: const Text(
-                'With 4 context lines',
+                'With 3 context lines',
                 style: TextStyle(
                   color: Colors.blueGrey,
                 ),
               ),
               onChanged: (value) =>
-                  filterController.toggleShowWithContext(value ?? false),
-              value: filterState.showWithContext,
+                  filterController.toggleShowWithContext3(value ?? false),
+              value: filterState.showWithContext3,
+              leadingWhitespace: 0,
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: SizedBox(
+            width: 180,
+            child: MacosCheckBoxListTile(
+              title: const Text(
+                'With 6 context lines',
+                style: TextStyle(
+                  color: Colors.blueGrey,
+                ),
+              ),
+              onChanged: (value) =>
+                  filterController.toggleShowWithContext6(value ?? false),
+              value: filterState.showWithContext6,
               leadingWhitespace: 0,
             ),
           ),
