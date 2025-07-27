@@ -17,10 +17,7 @@ dependencies:
   flutter_svg: ^2.2.0
   hooks_riverpod: ^2.6.1
   intl: ^0.20.2
-  macos_ui: 
-    git:
-      url: https://github.com/macosui/macos_ui
-      ref: dev
+  macos_ui: ^2.2.0
   meta: ^1.16.0
   mixin_logger: ^0.1.2
   path: ^1.9.1

@@ -78,7 +78,7 @@ class _WidgetToggleButtonState extends State<WidgetToggleButton> {
           )
         : PushButton(
             onPressed: _onPressed,
-            buttonSize: ButtonSize.large,
+            controlSize: ControlSize.large,
             color: currentValue ? Colors.green[100] : Colors.white,
             child: widget.child,
           );
