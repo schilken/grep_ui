@@ -24,15 +24,15 @@ void main(List<String> args) async {
   final sharedPreferences = await SharedPreferences.getInstance();
   final pubspec = Pubspec.parse(await rootBundle.loadString('pubspec.yaml'));
   final version = pubspec.version;
-  await log.initLogger(loggerFolder);
+  log.initLogger(loggerFolder);
   log.i('version from pubspec.yaml: $version');
   await sharedPreferences.setString('appVersion', version.toString());
-    runApp(ProviderScope(overrides: [
-      sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-        ],
-        child: const App(),
-      ),
-    );
+  runApp(ProviderScope(overrides: [
+    sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+      ],
+      child: const App(),
+    ),
+  );
 }
 
 class App extends StatelessWidget {

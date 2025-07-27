@@ -96,7 +96,16 @@ class FilterController extends Notifier<FilterState> {
   String get testFileFilter => _preferencesRepository.testFileFilter;
 
   List<String> get allFileExtensions {
-    return _preferencesRepository.fileExtensions;
+    final extensions = _preferencesRepository.fileExtensions.toSet().toList()..sort();
+    final currentFilter = fileExtensionFilter;
+    
+    // Ensure current filter is in the list
+    if (!extensions.contains(currentFilter)) {
+      extensions.add(currentFilter);
+      extensions.sort();
+    }
+    
+    return extensions;
   }
 
   Future<void> setFileExtensionFilter(String value) async {

@@ -12,7 +12,7 @@ class PreferencesRepository {
   String get appVersion => _prefs.getString('appVersion') ?? '?';
 
   String get fileExtensionFilter =>
-      _prefs.getString('fileExtensionFilter') ?? 'yaml';
+      _prefs.getString('fileExtensionFilter') ?? 'dart';
 
 
   Future<void> setFileExtensionFilter(String value) async {
@@ -88,8 +88,10 @@ class PreferencesRepository {
 
   Future<void> addFileExtension(String fileExtension) async {
     final fileExtensions = _prefs.getStringList('fileExtensions') ?? [];
-    fileExtensions.add(fileExtension);
-    await _prefs.setStringList('fileExtensions', fileExtensions);
+    if (!fileExtensions.contains(fileExtension)) {
+      fileExtensions.add(fileExtension);
+      await _prefs.setStringList('fileExtensions', fileExtensions);
+    }
   }
 
   Future<void> removeFileExtension(String fileExtension) async {

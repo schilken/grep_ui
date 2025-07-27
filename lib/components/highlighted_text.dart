@@ -17,7 +17,7 @@ class HighlightedText extends StatelessWidget {
     //RichText
     this.textAlign = TextAlign.start,
     this.textDirection = TextDirection.ltr,
-    this.textScaleFactor = 1.0,
+    this.textScaler = TextScaler.noScaling,
     this.textWidthBasis = TextWidthBasis.parent,
   });
 
@@ -30,7 +30,7 @@ class HighlightedText extends StatelessWidget {
   //RichText
   final TextAlign textAlign;
   final TextDirection textDirection;
-  final double textScaleFactor;
+  final TextScaler textScaler;
   final TextWidthBasis textWidthBasis;
 
   @override
@@ -147,7 +147,7 @@ class HighlightedText extends StatelessWidget {
       key: key,
       textAlign: textAlign,
       textDirection: textDirection,
-      textScaleFactor: textScaleFactor,
+      textScaler: textScaler,
       textWidthBasis: textWidthBasis,
     );
   }
