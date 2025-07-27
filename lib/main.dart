@@ -7,6 +7,7 @@ import 'package:macos_ui/macos_ui.dart';
 import 'package:mixin_logger/mixin_logger.dart' as log;
 import 'package:pubspec_parse/pubspec_parse.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:window_manager/window_manager.dart';
 
 import 'components/sidebar_options_view.dart';
 import 'pages/help_page.dart';
@@ -21,6 +22,23 @@ const BorderRadius _kBorderRadius = BorderRadius.all(_kSideRadius);
 void main(List<String> args) async {
   debugPrint('main: $args');
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize window manager and set window size
+  await windowManager.ensureInitialized();
+  
+  WindowOptions windowOptions = const WindowOptions(
+    size: Size(1100, 600), // Increased width from 800 to 1100 (adding 300 pixels)
+    center: true,
+    backgroundColor: Colors.transparent,
+    skipTaskbar: false,
+    titleBarStyle: TitleBarStyle.normal,
+  );
+  
+  windowManager.waitUntilReadyToShow(windowOptions, () async {
+    await windowManager.show();
+    await windowManager.focus();
+  });
+  
   final sharedPreferences = await SharedPreferences.getInstance();
   final pubspec = Pubspec.parse(await rootBundle.loadString('pubspec.yaml'));
   final version = pubspec.version;
