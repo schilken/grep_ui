@@ -24,7 +24,7 @@ class StatusBarView extends StatelessWidget {
         children: [
           const Text('Scanned Directory: '),
           Expanded(child: Text(currentFolder)),
-          gapWidth16,
+          gapW16,
           Text('found ${appState.fileCount} Files'),
         ],
       ),

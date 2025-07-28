@@ -15,23 +15,23 @@ class Sizes {
 }
 
 /// Constant gap widths
-const gapWidth4 = SizedBox(width: Sizes.p4);
-const gapWidth8 = SizedBox(width: Sizes.p8);
-const gapWidth12 = SizedBox(width: Sizes.p12);
-const gapWidth16 = SizedBox(width: Sizes.p16);
-const gapWidth20 = SizedBox(width: Sizes.p20);
-const gapWidth24 = SizedBox(width: Sizes.p24);
-const gapWidth32 = SizedBox(width: Sizes.p32);
-const gapWidth48 = SizedBox(width: Sizes.p48);
-const gapWidth64 = SizedBox(width: Sizes.p64);
+const gapW4 = SizedBox(width: Sizes.p4);
+const gapW8 = SizedBox(width: Sizes.p8);
+const gapW12 = SizedBox(width: Sizes.p12);
+const gapW16 = SizedBox(width: Sizes.p16);
+const gapW20 = SizedBox(width: Sizes.p20);
+const gapW24 = SizedBox(width: Sizes.p24);
+const gapW32 = SizedBox(width: Sizes.p32);
+const gapW48 = SizedBox(width: Sizes.p48);
+const gapW64 = SizedBox(width: Sizes.p64);
 
 /// Constant gap heights
-const gapHeight4 = SizedBox(height: Sizes.p4);
-const gapHeight8 = SizedBox(height: Sizes.p8);
-const gapHeight12 = SizedBox(height: Sizes.p12);
-const gapHeight16 = SizedBox(height: Sizes.p16);
-const gapHeight20 = SizedBox(height: Sizes.p20);
-const gapHeight24 = SizedBox(height: Sizes.p24);
-const gapHeight32 = SizedBox(height: Sizes.p32);
-const gapHeight48 = SizedBox(height: Sizes.p48);
-const gapHeight64 = SizedBox(height: Sizes.p64);
+const gapH4 = SizedBox(height: Sizes.p4);
+const gapH8 = SizedBox(height: Sizes.p8);
+const gapH12 = SizedBox(height: Sizes.p12);
+const gapH16 = SizedBox(height: Sizes.p16);
+const gapH20 = SizedBox(height: Sizes.p20);
+const gapH24 = SizedBox(height: Sizes.p24);
+const gapH32 = SizedBox(height: Sizes.p32);
+const gapH48 = SizedBox(height: Sizes.p48);
+const gapH64 = SizedBox(height: Sizes.p64);

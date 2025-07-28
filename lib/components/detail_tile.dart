@@ -37,7 +37,7 @@ class DetailTile extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            gapWidth8,
+            gapW8,
             HighlightedText(
               text: detail.filePathName ?? 'no filename',
               highlights: highlights,
