@@ -37,7 +37,7 @@ class ToolbarWidgetToggle extends ToolbarItem {
   }
 }
 
-class WidgetToggleButton extends StatefulWidget {
+class WidgetToggleButton extends StatelessWidget {
   const WidgetToggleButton({
     super.key,
     required this.child,
@@ -48,39 +48,22 @@ class WidgetToggleButton extends StatefulWidget {
   final BoolCallback onChanged;
   final Widget child;
 
-  @override
-  State<WidgetToggleButton> createState() => _WidgetToggleButtonState();
-}
-
-class _WidgetToggleButtonState extends State<WidgetToggleButton> {
-  late bool currentValue;
-
-  @override
-  void initState() {
-    super.initState();
-    currentValue = widget.value;
-  }
-
   void _onPressed() {
-    setState(() {
-      currentValue = !currentValue;
-    });
-    widget.onChanged(currentValue);
+    onChanged(!value);
   }
 
   @override
   Widget build(BuildContext context) {
-    return (widget.child is Icon)
+    return (child is Icon)
         ? MacosIconButton(
             onPressed: _onPressed,
-            backgroundColor: currentValue ? Colors.green[100] : Colors.white,
-            icon: widget.child,
+            icon: child,
           )
         : PushButton(
             onPressed: _onPressed,
             controlSize: ControlSize.large,
-            color: currentValue ? Colors.green[100] : Colors.white,
-            child: widget.child,
+            secondary: value,
+            child: child,
           );
   }
 }

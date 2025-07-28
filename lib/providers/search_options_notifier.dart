@@ -25,7 +25,7 @@ class SearchOptions {
 
   @override
   String toString() =>
-      'SearchOptions(searchItems: $searchItems, caseSensitive: $caseSensitive, )';
+      'SearchOptions(searchItems: $searchItems, caseSensitive: $caseSensitive, wholeWord: $wholeWord)';
 }
 
 class SearchOptionsNotifier extends Notifier<SearchOptions> {

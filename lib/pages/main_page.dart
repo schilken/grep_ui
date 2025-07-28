@@ -16,8 +16,8 @@ class MainPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final appState = ref.watch(appControllerProvider);
     final appController = ref.watch(appControllerProvider.notifier);
-    final searchOptions = ref.read(searchOptionsProvider);
-//    print('MainPage.build: $appState');
+    final searchOptions = ref.watch(searchOptionsProvider);
+    print('MainPage.build: $appState $searchOptions' );
     return Builder(builder: (context) {
       return MacosScaffold(
         toolBar: getCustomToolBar(context, ref),

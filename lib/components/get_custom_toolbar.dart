@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
 import '../providers/providers.dart';
+import '../utils/app_sizes.dart';
 import 'toolbar_searchfield.dart';
 import 'toolbar_widget_toggle.dart';
 
