@@ -83,7 +83,7 @@ class MainPage extends ConsumerWidget {
                         return StatusBarView(ref: ref);
                     },
                     resizableSide: ResizableSide.top,
-                  )
+                    ),
 
                 ],
               );

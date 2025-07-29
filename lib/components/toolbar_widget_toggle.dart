@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:macos_ui/macos_ui.dart';
 
+import '../utils/app_sizes.dart';
+
 typedef BoolCallback = void Function(bool);
 
 class ToolbarWidgetToggle extends ToolbarItem {
@@ -20,11 +22,18 @@ class ToolbarWidgetToggle extends ToolbarItem {
   @override
   Widget build(BuildContext context, ToolbarItemDisplayMode displayMode) {
     Widget widgetToggleButton = SizedBox(
-      width: 40,
-      child: WidgetToggleButton(
-        value: value,
-        onChanged: onChanged,
-        child: child,
+      width: 50,
+      height: 22,
+      child: Row(
+        children: [
+          gapW4,
+          child,
+          gapW4,
+          MacosCheckbox(
+            onChanged: onChanged,
+            value: value,
+          ),
+        ],
       ),
     );
     if (tooltipMessage != null) {
@@ -34,36 +43,5 @@ class ToolbarWidgetToggle extends ToolbarItem {
       );
     }
     return widgetToggleButton;
-  }
-}
-
-class WidgetToggleButton extends StatelessWidget {
-  const WidgetToggleButton({
-    super.key,
-    required this.child,
-    required this.onChanged,
-    required this.value,
-  });
-  final bool value;
-  final BoolCallback onChanged;
-  final Widget child;
-
-  void _onPressed() {
-    onChanged(!value);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return (child is Icon)
-        ? MacosIconButton(
-            onPressed: _onPressed,
-            icon: child,
-          )
-        : PushButton(
-            onPressed: _onPressed,
-            controlSize: ControlSize.large,
-            secondary: value,
-            child: child,
-          );
   }
 }

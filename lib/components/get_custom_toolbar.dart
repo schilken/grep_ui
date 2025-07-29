@@ -29,7 +29,7 @@ ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
     title: const Text('Grep UI'),
     titleWidth: 80,
     actions: [
-      const ToolBarSpacer(spacerUnits: 3),
+      const ToolBarSpacer(spacerUnits: 2),
       ToolBarPullDownButton(
         label: 'Actions',
         icon: CupertinoIcons.ellipsis_circle,
@@ -40,8 +40,8 @@ ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
             onTap: () async {
               final userHomeDirectory = Platform.environment['HOME'];
               final selectedFile = await FilePicker.platform.saveFile(
-                  initialDirectory: userHomeDirectory,
-                  dialogTitle: 'Choose file to save search result',
+                initialDirectory: userHomeDirectory,
+                dialogTitle: 'Choose file to save search result',
                 fileName: 'search-result_${searchOptions.searchItems}.txt',
               );
               if (selectedFile != null) {
@@ -53,11 +53,11 @@ ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
       ),
       ToolBarIconButton(
         label: 'Show grep command',
-          icon: const MacosIcon(
-            CupertinoIcons.eye,
-          ),
+        icon: const MacosIcon(
+          CupertinoIcons.eye,
+        ),
         onPressed: appController.showGrepCommand,
-          showLabel: false,
+        showLabel: false,
         tooltipMessage: 'Show grep command',
       ),
       const ToolBarSpacer(),
@@ -65,7 +65,7 @@ ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
       const ToolBarSpacer(),
       ToolbarSearchfield(
         placeholder: 'Search word',
-        width: 350,
+        width: 250,
         onChanged: (word) {
           if (word.isEmpty) {
             searchOptionsNotifier.setSearchItems(word);
@@ -74,28 +74,28 @@ ToolBar getCustomToolBar(BuildContext context, WidgetRef ref) {
         onSubmitted: searchOptionsNotifier.setSearchItems,
       ),
       ToolbarWidgetToggle(
-          value: searchOptions.caseSensitive,
-          onChanged: searchOptionsNotifier.setCaseSensitiv,
-          child: const Text('Aa'),
+        value: searchOptions.caseSensitive,
+        onChanged: searchOptionsNotifier.setCaseSensitiv,
+        child: const Text('Aa'),
         tooltipMessage: 'Case sentitive',
       ),
       ToolbarWidgetToggle(
-          value: searchOptions.wholeWord,
-          child: SvgPicture.asset(
-            'assets/images/whole-word.svg',
-          height: 30,
-          width: 30,
-          ),
-          onChanged: searchOptionsNotifier.setWholeWord,
+        value: searchOptions.wholeWord,
+        child: SvgPicture.asset(
+          'assets/images/whole-word.svg',
+          height: 22,
+          width: 22,
+        ),
+        onChanged: searchOptionsNotifier.setWholeWord,
         tooltipMessage: 'Whole Word',
       ),
       ToolBarIconButton(
         label: 'Search',
-          icon: const MacosIcon(
-            CupertinoIcons.search,
-          ),
+        icon: const MacosIcon(
+          CupertinoIcons.search,
+        ),
         onPressed: appController.search,
-          showLabel: false,
+        showLabel: false,
         tooltipMessage: 'Search again',
       ),
     ],

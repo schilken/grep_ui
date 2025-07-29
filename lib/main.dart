@@ -19,14 +19,20 @@ const loggerFolder = '/tmp/macos_grep_ui_log';
 const Radius _kSideRadius = Radius.circular(5);
 const BorderRadius _kBorderRadius = BorderRadius.all(_kSideRadius);
 
+/// This method initializes macos_window_utils and styles the window.
+Future<void> _configureMacosWindowUtils() async {
+  const config = MacosWindowUtilsConfig();
+  await config.apply();
+}
+
 void main(List<String> args) async {
   debugPrint('main: $args');
   WidgetsFlutterBinding.ensureInitialized();
-  
+  await _configureMacosWindowUtils();
   // Initialize window manager and set window size
   await windowManager.ensureInitialized();
   
-  WindowOptions windowOptions = const WindowOptions(
+  const windowOptions = WindowOptions(
     size: Size(1100, 600), // Increased width from 800 to 1100 (adding 300 pixels)
     center: true,
     backgroundColor: Colors.transparent,
@@ -34,7 +40,7 @@ void main(List<String> args) async {
     titleBarStyle: TitleBarStyle.normal,
   );
   
-  windowManager.waitUntilReadyToShow(windowOptions, () async {
+  await windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();
     await windowManager.focus();
   });
